@@ -19,19 +19,19 @@ public class MetricsTransfer {
             
             var measurementsArrayJson: [[String: Any]] = []
             let appBundleIdentifierJson: [String: String] = ["name": "bundle_identifier", "type": "string", "value": metric.bundleIdentifier ?? ""]
-            let appBundleURLJson: [String: String] = ["name": "bundle_url", "type": "string", "value": metric.bundleURL ?? ""]
-            let appDurationJson: [String: String] = ["name": "activity_duration", "type": "double", "value": String(format:"%f", metric.duration)]
+            let appBundleURLJson: [String: String] = ["name": "path", "type": "string", "value": metric.bundleURL ?? ""]
+            let appDurationJson: [String: String] = ["name": "activity_duration", "type": "double", "value": String(format:"%.0f", metric.duration)]
             if metric.tabName != nil {
-                let appTabNameJson: [String: String] = ["name": "browser_tab_name", "type": "string", "value": metric.tabName ?? ""]
+                let appTabNameJson: [String: String] = ["name": "window title", "type": "string", "value": metric.tabName ?? ""]
                 measurementsArrayJson.append(appTabNameJson)
             }
             if metric.tabUrl != nil {
-                let appTabUrlJson: [String: String] = ["name": "browser_tab_url", "type": "string", "value": metric.tabUrl ?? ""]
+                let appTabUrlJson: [String: String] = ["name": "url", "type": "string", "value": metric.tabUrl ?? ""]
                 measurementsArrayJson.append(appTabUrlJson)
             }
-            let appTimestampStartJson: [String: String] = ["name": "activity_end", "type": "string", "value": dateFormatter.string(from: metric.timestampStart as! Date)]
+            let appTimestampStartJson: [String: String] = ["name": "activity end", "type": "epoch_time", "value":  String(format: "%.0f", metric.timestampStart!.timeIntervalSince1970)]
             if metric.timestampEnd != nil {
-                let appTimestampEndJson: [String: String] = ["name": "activity_start", "type": "string", "value":  dateFormatter.string(from: metric.timestampEnd as! Date)]
+                let appTimestampEndJson: [String: String] = ["name": "activity start", "type": "epoch_time", "value":String(format: "%.0f", metric.timestampEnd!.timeIntervalSince1970)]
                 
                 measurementsArrayJson.append(appTimestampEndJson)
             }
@@ -41,20 +41,22 @@ public class MetricsTransfer {
             measurementsArrayJson.append(appTimestampStartJson)
             
             if (metric.session != nil) {
-                let appSessionIpAddress: [String: String] = ["name": "session_ip_address", "type": "string", "value": metric.session!.ipAddress ?? ""]
-                let appSessionMacAddress: [String: String] = ["name": "session_mac_address", "type": "string", "value": metric.session!.macAddress ?? ""]
-                let operatingSystem: [String: String] = ["name": "session_operating_system", "type": "string", "value": metric.session!.operatingSystem ?? ""]
+                let appSessionIpAddress: [String: String] = ["name": "ip address", "type": "string", "value": metric.session!.ipAddress ?? ""]
+                let appSessionMacAddress: [String: String] = ["name": "mac address", "type": "string", "value": metric.session!.macAddress ?? ""]
+                let operatingSystem: [String: String] = ["name": "os name", "type": "string", "value": metric.session!.operatingSystem ?? ""]
                 let userLogin: [String: String] = ["name": "session_user_login", "type": "string", "value": metric.session!.userLogin ?? ""]
-                let userName: [String: String] = ["name": "session_user_name", "type": "string", "value": metric.session!.userName ?? ""]
+                let userName: [String: String] = ["name": "os username", "type": "string", "value": metric.session!.userName ?? ""]
+                let applicationName: [String: String] = ["name": "application name", "type": "string", "value": metric.appName ?? "undefined"]
             
                 measurementsArrayJson.append(appSessionIpAddress)
                 measurementsArrayJson.append(appSessionMacAddress)
                 measurementsArrayJson.append(operatingSystem)
                 measurementsArrayJson.append(userLogin)
                 measurementsArrayJson.append(userName)
+                measurementsArrayJson.append(applicationName)
             }
             
-            activitiesArrayJson.append(["name": metric.appName ?? "undefined" + " application use", "comments": "macOS Environment Collection", "measurements": measurementsArrayJson])
+            activitiesArrayJson.append(["name": "MacOS Agent", "measurements": measurementsArrayJson])
         }
         
         let finalJson: [String: [Any]] = ["activities": activitiesArrayJson]
