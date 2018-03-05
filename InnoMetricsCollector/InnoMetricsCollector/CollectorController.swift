@@ -17,7 +17,6 @@ class CollectorController: NSObject {
     var currentWorkingApplicationMenuItem: NSMenuItem!
     
     @IBOutlet weak var currentWorkingSessionView: CurrentWorkingSessionController!
-    
     var currentWorkingSessionMenuItem: NSMenuItem!
     
     @IBOutlet weak var pausePlayBtn: NSButton!
@@ -29,6 +28,8 @@ class CollectorController: NSObject {
     private var context: NSManagedObjectContext!
     private var isPaused: Bool = false
     
+    private var currentIdleMetric: IdleMetric?
+    
     private var isCollectingBrowserInfo: Bool = false
     private var isCollecting: Bool = true
     
@@ -37,7 +38,7 @@ class CollectorController: NSObject {
     let statusItem = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
     
     override func awakeFromNib() {
-        
+        //print("Foo")
         setUpLaunchAtLogin()
         
         let icon = NSImage(named: "statusIcon")

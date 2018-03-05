@@ -21,7 +21,7 @@ extension Session {
     @NSManaged public var userLogin: String?
     @NSManaged public var userName: String?
     @NSManaged public var metric: NSSet?
-
+    @NSManaged public var idleMetric: NSSet?
 }
 
 // MARK: Generated accessors for metric

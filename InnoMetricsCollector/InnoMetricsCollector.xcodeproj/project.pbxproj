@@ -22,6 +22,8 @@
 		25D57A911E1D6F7700B2265D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 25D57A901E1D6F7700B2265D /* Assets.xcassets */; };
 		25D57A941E1D6F7700B2265D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25D57A921E1D6F7700B2265D /* MainMenu.xib */; };
 		3630E8EBEB2F835EF98392C1 /* Pods_InnoMetricsCollector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA14428BFD802AB8F60FE76A /* Pods_InnoMetricsCollector.framework */; };
+		9F8C169F204D53830068CB58 /* IdleMetric+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8C169E204D53830068CB58 /* IdleMetric+CoreDataClass.swift */; };
+		9FDEF757204DB8380012711F /* IdleMetric+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FDEF756204DB8380012711F /* IdleMetric+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,8 @@
 		25D57A931E1D6F7700B2265D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		25D57A951E1D6F7700B2265D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		77C440B57B5DFA283CB21009 /* Pods-InnoMetricsCollector.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InnoMetricsCollector.release.xcconfig"; path = "Pods/Target Support Files/Pods-InnoMetricsCollector/Pods-InnoMetricsCollector.release.xcconfig"; sourceTree = "<group>"; };
+		9F8C169E204D53830068CB58 /* IdleMetric+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IdleMetric+CoreDataClass.swift"; sourceTree = "<group>"; };
+		9FDEF756204DB8380012711F /* IdleMetric+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdleMetric+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		AA14428BFD802AB8F60FE76A /* Pods_InnoMetricsCollector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InnoMetricsCollector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -102,11 +106,13 @@
 		25C5B4F61E2684EF007FF799 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9FDEF756204DB8380012711F /* IdleMetric+CoreDataProperties.swift */,
 				25C5B4EE1E2684DF007FF799 /* Session+CoreDataClass.swift */,
 				25C5B4EF1E2684DF007FF799 /* Session+CoreDataProperties.swift */,
 				25C5B4F01E2684DF007FF799 /* Metric+CoreDataClass.swift */,
 				25C5B4F11E2684DF007FF799 /* Metric+CoreDataProperties.swift */,
 				25D57A8D1E1D6F7700B2265D /* InnoMetricsCollector.xcdatamodeld */,
+				9F8C169E204D53830068CB58 /* IdleMetric+CoreDataClass.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -306,7 +312,9 @@
 				25C5B4F31E2684DF007FF799 /* Session+CoreDataProperties.swift in Sources */,
 				25C5B4F51E2684DF007FF799 /* Metric+CoreDataProperties.swift in Sources */,
 				255312D91E27C13100674DF3 /* CurrentWorkingSessionController.swift in Sources */,
+				9F8C169F204D53830068CB58 /* IdleMetric+CoreDataClass.swift in Sources */,
 				25C5B4F41E2684DF007FF799 /* Metric+CoreDataClass.swift in Sources */,
+				9FDEF757204DB8380012711F /* IdleMetric+CoreDataProperties.swift in Sources */,
 				250D88F31E27A5F2009E5F32 /* CurrentWorkingApplicationController.swift in Sources */,
 				25AB378D1E2FAF1400174767 /* BrowserInfoUtils.swift in Sources */,
 				25D57A8C1E1D6F7700B2265D /* AppDelegate.swift in Sources */,
