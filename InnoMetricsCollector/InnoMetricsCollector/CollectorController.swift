@@ -13,12 +13,15 @@ class CollectorController: NSObject {
     
     @IBOutlet weak var statusMenu: NSMenu!
     
-    @IBOutlet weak var currentWorkingApplicationView: CurrentWorkingApplicationController!
-    var currentWorkingApplicationMenuItem: NSMenuItem!
+    @IBOutlet weak var collectorView: NSView!
+    var metricsCollectorMenuItem: NSMenuItem!
     
     @IBOutlet weak var currentWorkingSessionView: CurrentWorkingSessionController!
     var currentWorkingSessionMenuItem: NSMenuItem!
     
+    @IBOutlet weak var activeApplicationView: ActiveApplicationController!
+    @IBOutlet weak var idleView: IdleController!
+
     @IBOutlet weak var pausePlayBtn: NSButton!
     @IBOutlet weak var pausePlayLabel: NSTextField!
     
@@ -38,7 +41,6 @@ class CollectorController: NSObject {
     let statusItem = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
     
     override func awakeFromNib() {
-        //print("Foo")
         setUpLaunchAtLogin()
         
         let icon = NSImage(named: "statusIcon")
@@ -46,8 +48,8 @@ class CollectorController: NSObject {
         statusItem.image = icon
         statusItem.menu = statusMenu
         
-        currentWorkingApplicationMenuItem = statusMenu.item(withTitle: "CurrentWorkingApplication")
-        currentWorkingApplicationMenuItem.view = currentWorkingApplicationView
+        metricsCollectorMenuItem = statusMenu.item(withTitle: "Collector")
+        metricsCollectorMenuItem.view = collectorView
         
         currentWorkingSessionMenuItem = statusMenu.item(withTitle: "CurrentWorkingSession")
         currentWorkingSessionMenuItem.view = currentWorkingSessionView
@@ -88,20 +90,20 @@ class CollectorController: NSObject {
             return
         }
         
-        let fronmostApp = NSWorkspace.shared().frontmostApplication
-        if (fronmostApp == nil) {
+        let frontmostApp = NSWorkspace.shared().frontmostApplication
+        if (frontmostApp == nil) {
             return
         }
         
-        let foregroundWindowBundleId = fronmostApp?.bundleIdentifier
+        let foregroundWindowBundleId = frontmostApp?.bundleIdentifier
         if (foregroundWindowBundleId == "com.denzap.InnoMetricsCollector") {
             return
         }
         
         setEndTimeOfPrevMetric()
-        currentWorkingApplicationView.update(application: fronmostApp!)
+        activeApplicationView.update(application: frontmostApp!)
         
-        createAndSaveMetric(fronmostApp: fronmostApp!)
+        createAndSaveMetric(frontmostApp: frontmostApp!)
         
         if (browsersId.contains(foregroundWindowBundleId!)) {
             
@@ -133,7 +135,7 @@ class CollectorController: NSObject {
                     }
                     
                     self.setEndTimeOfPrevMetric()
-                    self.createAndSaveMetric(fronmostApp: fronmostApp!)
+                    self.createAndSaveMetric(frontmostApp: fronmostApp!)
                 }
             }
         } else {
@@ -142,13 +144,19 @@ class CollectorController: NSObject {
 
     }
     
-    func createAndSaveMetric(fronmostApp: NSRunningApplication) {
-        let foregroundWindowBundleId = fronmostApp.bundleIdentifier
+    
+    func handleUserMovement() {
+        
+    }
+    
+    
+    func createAndSaveMetric(frontmostApp: NSRunningApplication) {
+        let foregroundWindowBundleId = frontmostApp.bundleIdentifier
         
         let metric = NSEntityDescription.insertNewObject(forEntityName: "Metric", into: context) as! Metric
         metric.bundleIdentifier = foregroundWindowBundleId
-        metric.appName = fronmostApp.localizedName
-        metric.bundleURL = fronmostApp.executableURL?.absoluteString
+        metric.appName = frontmostApp.localizedName
+        metric.bundleURL = frontmostApp.executableURL?.absoluteString
         let foregroundWindowLaunchDate =  NSDate()
         
         metric.timestampStart = foregroundWindowLaunchDate
@@ -256,7 +264,7 @@ class CollectorController: NSObject {
             isPaused = false
             startMetricCollection()
         } else {
-            currentWorkingApplicationView.pauseTime()
+            activeApplicationView.pauseTime()
             pausePlayBtn.image = #imageLiteral(resourceName: "playIcon")
             pausePlayLabel.stringValue = "Start"
             isPaused = true
@@ -269,7 +277,7 @@ class CollectorController: NSObject {
         
         isCollecting = false
         if (!isPaused) {
-            currentWorkingApplicationView.pauseTime()
+            activeApplicationView.pauseTime()
             pausePlayBtn.image = #imageLiteral(resourceName: "playIcon")
             pausePlayLabel.stringValue = "Start"
         }

@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class CurrentWorkingApplicationController: NSView {
+class ActiveApplicationController: NSView {
     
     @IBOutlet weak var appImage: NSImageView!
     @IBOutlet weak var appName: NSTextField!
