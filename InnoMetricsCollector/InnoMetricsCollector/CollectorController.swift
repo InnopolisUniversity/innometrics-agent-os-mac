@@ -32,6 +32,7 @@ class CollectorController: NSObject {
     private var isPaused: Bool = false
     
     private var currentIdleMetric: IdleMetric?
+    private let possibleUserMovements: NSEventMask = [.mouseMoved, .keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown]
     
     private var isCollectingBrowserInfo: Bool = false
     private var isCollecting: Bool = true
@@ -47,6 +48,7 @@ class CollectorController: NSObject {
         icon?.isTemplate = true // best for dark mode
         statusItem.image = icon
         statusItem.menu = statusMenu
+
         
         metricsCollectorMenuItem = statusMenu.item(withTitle: "Collector")
         metricsCollectorMenuItem.view = collectorView
@@ -66,6 +68,12 @@ class CollectorController: NSObject {
         DistributedNotificationCenter.default().addObserver(self, selector: #selector(dbChangeEnd), name: endChangingDbNotificationName, object: transferAppIdentifier)
         
         NSWorkspace.shared().notificationCenter.addObserver(self, selector: #selector(applicationSwitchTriggered), name: NSNotification.Name.NSWorkspaceDidActivateApplication, object: nil)
+        
+        // Monitor for all possible user's movements (actions)
+        NSEvent.addGlobalMonitorForEvents (
+            matching: self.possibleUserMovements,
+            handler: { (event: NSEvent) in self.handleUserMovement()}
+        )
         
         startMetricCollection()
     }
@@ -146,7 +154,28 @@ class CollectorController: NSObject {
     
     
     func handleUserMovement() {
+        if (!isCollecting) {
+            return
+        }
         
+        let idleResult = idleView.userMadeAction()
+        if (!idleResult.0) {
+            return
+        }
+        
+        let idlMetric = NSEntityDescription.insertNewObject(forEntityName: "IdleMetric", into: context)
+        let idleMetric = idlMetric as! IdleMetric
+        idleMetric.appName = idleResult.2!
+        idleMetric.duration = idleResult.1
+        idleMetric.timeStampStart = NSDate(timeIntervalSinceNow: -idleResult.1)
+        idleMetric.timeStampEnd = NSDate()
+        idleMetric.session = self.currentSession
+        
+        do {
+            try self.context.save()
+        } catch {
+            print("Error with idle metric occurred")
+        }
     }
     
     

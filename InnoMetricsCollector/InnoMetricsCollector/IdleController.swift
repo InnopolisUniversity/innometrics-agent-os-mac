@@ -14,26 +14,27 @@ class IdleController: NSView {
     @IBOutlet weak var topTwoIdleApp: NSTextField!
     @IBOutlet weak var topThreeIdleApp: NSTextField!
     
-    private var totalIdleTimeValue: Int!
-    private var topApps: [Int: (String, Int)]?
+    private var totalIdleTimeValue: Int = 0
+    private var topApps = [(String, Int)]()
     
-    private var usersLastActionTime: Date!
-    private let idleTimeout: Int = 15
+    private var usersLastActionTime: Date = NSDate() as Date!
+    private let idleTimeout: Int = 5
     
-    // Return, if user exceeded idle timeout and for how long
-    func userMadeAction() -> (Bool, Int) {
+    // Return, if user exceeded idle timeout and for how long and in which app
+    func userMadeAction() -> (Bool, Double, String?) {
         let currentTime = NSDate()
-        let timeSinceLastAction = (Int) (currentTime.timeIntervalSinceReferenceDate - (usersLastActionTime?.timeIntervalSinceReferenceDate)!)
+        let timeSinceLastAction = (Int) (currentTime.timeIntervalSinceReferenceDate - usersLastActionTime.timeIntervalSinceReferenceDate)
         let timeoutExceeded = timeSinceLastAction > idleTimeout
         usersLastActionTime = currentTime as Date!
         
+        var currentAppName: String? = nil
         if (timeoutExceeded) {
-            updateIdleView(newIdleTime: timeSinceLastAction)
+            currentAppName = updateIdleView(newIdleTime: timeSinceLastAction)
         }
-        return (timeoutExceeded, timeSinceLastAction)
+        return (timeoutExceeded, Double(timeSinceLastAction), currentAppName)
     }
     
-    func updateIdleView(newIdleTime: Int) {
+    func updateIdleView(newIdleTime: Int) -> String {
         var currentAppName = ""
         let currentApp = NSWorkspace.shared().frontmostApplication
         if (currentApp != nil && currentApp?.localizedName != nil) {
@@ -41,16 +42,32 @@ class IdleController: NSView {
         }
         
         // Add current idle time to total and update list of top-3
-        if (topApps == nil) {
-            topApps = [1: (currentAppName, newIdleTime)]
-            totalIdleTimeValue = newIdleTime
-        }
-        else {
-            // Renew list of apps: find the one with such name, update its
-            // idle time and then resort it according to place
-            totalIdleTimeValue! += newIdleTime
+        totalIdleTimeValue += newIdleTime
+        insertToTopApps(appName: currentAppName, idleTime: newIdleTime)
+        
+        // Update UI
+        DispatchQueue.main.async {
+            self.totalIdleTime.stringValue = String(self.totalIdleTimeValue)
+            self.topOneIdleApp.stringValue = self.topApps[0].0
+            if (self.topApps.indices.contains(1)) {
+                self.topTwoIdleApp.stringValue = self.topApps[1].0
+            }
+            if (self.topApps.indices.contains(2)) {
+                self.topThreeIdleApp.stringValue = self.topApps[2].0
+            }
         }
         
-        totalIdleTime.stringValue = String(totalIdleTimeValue)
+        return currentAppName
+    }
+    
+    // Insert a new app-time pair to a top apps map and sort it
+    private func insertToTopApps(appName: String, idleTime: Int) {
+        if let entry = topApps.first(where: { $0.0 == appName }) {
+            topApps = topApps.filter({ $0.0 != appName }) + [(appName, entry.1 + idleTime)]
+        }
+        else {
+            topApps.append((appName, idleTime))
+        }
+        topApps = topApps.sorted(by: { $0.1 < $1.1 } )
     }
 }
