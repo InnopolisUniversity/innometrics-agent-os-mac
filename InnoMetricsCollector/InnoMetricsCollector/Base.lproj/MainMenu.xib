@@ -54,11 +54,11 @@
                     <tabViewItems>
                         <tabViewItem label="Focus Application Metric" identifier="" id="fw2-gK-aTP" userLabel="Active Application Metric">
                             <view key="view" id="KLV-Ou-b9z" customClass="ActiveApplicationController" customModule="InnoMetricsCollector" customModuleProvider="target">
-                                <rect key="frame" x="10" y="33" width="361" height="161"/>
+                                <rect key="frame" x="10" y="33" width="220" height="0.0"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EgM-CV-eKa">
-                                        <rect key="frame" x="121" y="86" width="228" height="17"/>
+                                        <rect key="frame" x="121" y="-75" width="228" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Application" id="cJr-ll-XNF">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -66,7 +66,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HPT-gi-lBI">
-                                        <rect key="frame" x="121" y="53" width="228" height="17"/>
+                                        <rect key="frame" x="121" y="-108" width="228" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="00:00:00" id="gji-sg-Kqq">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -74,7 +74,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yEj-tb-mBO">
-                                        <rect key="frame" x="27" y="127" width="328" height="17"/>
+                                        <rect key="frame" x="27" y="-34" width="328" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Current process" id="rky-h9-T6g">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -82,7 +82,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u3K-b9-S6v">
-                                        <rect key="frame" x="29" y="53" width="50" height="50"/>
+                                        <rect key="frame" x="29" y="-108" width="50" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="2Z8-r7-vAe"/>
                                             <constraint firstAttribute="width" constant="50" id="R4x-Kr-rs9"/>
@@ -115,7 +115,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cg2-s0-ivw">
-                                        <rect key="frame" x="154" y="124" width="172" height="17"/>
+                                        <rect key="frame" x="154" y="124" width="192" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="IdleTime" placeholderString="0:0:0" id="9HF-RF-gKg">
                                             <font key="font" metaFont="system"/>
@@ -149,7 +149,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JHz-CV-7px">
-                                        <rect key="frame" x="154" y="73" width="170" height="17"/>
+                                        <rect key="frame" x="154" y="73" width="192" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="FirstApp" placeholderString="none yet" id="3PZ-WT-ZBL">
                                             <font key="font" metaFont="system"/>
@@ -158,7 +158,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T6O-6T-REm">
-                                        <rect key="frame" x="154" y="48" width="170" height="17"/>
+                                        <rect key="frame" x="154" y="48" width="192" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="SecondApp" placeholderString="none yet" id="qTY-Kx-Ifs">
                                             <font key="font" metaFont="system"/>
@@ -167,7 +167,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hyw-iL-Bt6">
-                                        <rect key="frame" x="154" y="23" width="170" height="17"/>
+                                        <rect key="frame" x="154" y="23" width="192" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="ThirdApp" placeholderString="none yet" id="wIt-kv-kWP">
                                             <font key="font" metaFont="system"/>

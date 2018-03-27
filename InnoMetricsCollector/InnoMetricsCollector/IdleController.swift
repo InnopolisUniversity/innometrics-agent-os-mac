@@ -47,13 +47,16 @@ class IdleController: NSView {
         
         // Update UI
         DispatchQueue.main.async {
-            self.totalIdleTime.stringValue = String(self.totalIdleTimeValue)
-            self.topOneIdleApp.stringValue = self.topApps[0].0
+            self.totalIdleTime.stringValue = self.stringFromSeconds(time: self.totalIdleTimeValue)
+            self.topOneIdleApp.stringValue = self.topApps[0].0 + " with " +
+                self.stringFromSeconds(time: self.topApps[0].1)
             if (self.topApps.indices.contains(1)) {
-                self.topTwoIdleApp.stringValue = self.topApps[1].0
+                self.topTwoIdleApp.stringValue = self.topApps[1].0 + " with " +
+                    self.stringFromSeconds(time: self.topApps[1].1)
             }
             if (self.topApps.indices.contains(2)) {
-                self.topThreeIdleApp.stringValue = self.topApps[2].0
+                self.topThreeIdleApp.stringValue = self.topApps[2].0 + " with " +
+                    self.stringFromSeconds(time: self.topApps[2].1)
             }
         }
         
@@ -63,11 +66,24 @@ class IdleController: NSView {
     // Insert a new app-time pair to a top apps map and sort it
     private func insertToTopApps(appName: String, idleTime: Int) {
         if let entry = topApps.first(where: { $0.0 == appName }) {
+            // If there is already such app, take it out and insert again with changed
+            // idle time value (immutability, yeah!)
             topApps = topApps.filter({ $0.0 != appName }) + [(appName, entry.1 + idleTime)]
         }
         else {
+            // If no such app found, just insert it
             topApps.append((appName, idleTime))
         }
-        topApps = topApps.sorted(by: { $0.1 < $1.1 } )
+        // Resort the list of apps
+        topApps = topApps.sorted(by: { $0.1 > $1.1 } )
+    }
+    
+    // Convert seconds into pretty 00:00:00 time string
+    private func stringFromSeconds(time: Int) -> String {
+        let seconds = time % 60
+        let minutes = (time / 60) % 60
+        let hours = (time / 3600)
+        
+        return String(format: "%0.2d:%0.2d:%0.2d",hours,minutes,seconds)
     }
 }

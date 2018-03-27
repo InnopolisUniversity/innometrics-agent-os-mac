@@ -200,6 +200,11 @@ class MainController: NSViewController {
             return
         }
         
+        if AuthorizationUtils.offlineModeEnabled() {
+            dialogOKCancel(question: "Warning", text: "Offline mode enabled")
+            return
+        }
+        
         let alert: NSAlert = NSAlert()
         alert.messageText = "Would you like to send metrics to the remote server?"
         alert.informativeText = "All metrics that you see on the screen would be send to the remote server."
@@ -253,6 +258,14 @@ class MainController: NSViewController {
             
             for metric in metricsToDelete {
                 context.delete(metric)
+            }
+            
+            let idleMetricsFetch: NSFetchRequest<IdleMetric> = IdleMetric.fetchRequest()
+            idleMetricsFetch.includesPropertyValues = false
+            let idleMetricsToDelete = try context.fetch(idleMetricsFetch as! NSFetchRequest<NSFetchRequestResult>) as! [NSManagedObject]
+            
+            for idleMetric in idleMetricsToDelete {
+                context.delete(idleMetric)
             }
             
             let sessionsFetch: NSFetchRequest<Session> = Session.fetchRequest()

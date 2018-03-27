@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16D32" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11201"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
         <capability name="box content view" minToolsVersion="7.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
         <capability name="system font weights other than Regular or Bold" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
@@ -353,6 +355,9 @@ CA
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="420" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+                        <connections>
+                            <outlet property="delegate" destination="B8D-0N-5wS" id="UgI-EU-x4u"/>
+                        </connections>
                     </window>
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -493,8 +498,8 @@ CA
                                                 <constraint firstItem="4dB-at-aGK" firstAttribute="top" secondItem="fd3-3f-9gC" secondAttribute="top" id="ynN-P3-WZe"/>
                                             </constraints>
                                         </customView>
-                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mNe-60-zPM">
-                                            <rect key="frame" x="268" y="32" width="51" height="32"/>
+                                        <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mNe-60-zPM">
+                                            <rect key="frame" x="321" y="32" width="51" height="32"/>
                                             <buttonCell key="cell" type="bevel" title="Log in" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="7Yk-yi-D4f">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system" size="17"/>
@@ -503,9 +508,20 @@ CA
                                                 <action selector="loginBtn_Clicked:" target="5nH-7v-2vR" id="Uu3-T5-uIX"/>
                                             </connections>
                                         </button>
-                                        <progressIndicator hidden="YES" wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="ReE-ed-LCY">
-                                            <rect key="frame" x="327" y="40" width="16" height="16"/>
+                                        <progressIndicator hidden="YES" wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" maxValue="100" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="ReE-ed-LCY">
+                                            <rect key="frame" x="380" y="40" width="16" height="16"/>
                                         </progressIndicator>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tjP-jx-3Rh" userLabel="Offline Btn">
+                                            <rect key="frame" x="189" y="32" width="103" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" title="Offline mode" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="cYo-70-3Ug">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system" size="17"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="offlineBtn_Clicked:" target="5nH-7v-2vR" id="8fV-r2-8wA"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="mNe-60-zPM" firstAttribute="centerX" secondItem="gPQ-x8-q5A" secondAttribute="centerX" id="2Td-X3-HCe"/>
@@ -536,6 +552,7 @@ CA
                         <outlet property="loaderIndicator" destination="ReE-ed-LCY" id="rlN-IC-7zD"/>
                         <outlet property="loginBtn" destination="mNe-60-zPM" id="Duh-X2-3td"/>
                         <outlet property="loginTextField" destination="9DK-jV-n9Y" id="EC3-Hd-t1n"/>
+                        <outlet property="offlineModeBtn" destination="tjP-jx-3Rh" id="V52-OG-8Zq"/>
                         <outlet property="passwordTextField" destination="YnM-FT-2IL" id="R7T-vw-oR7"/>
                     </connections>
                 </viewController>
@@ -572,10 +589,9 @@ CA
                                             <rect key="frame" x="20" y="87" width="163" height="27"/>
                                             <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="lub-zY-aBM">
                                                 <font key="font" metaFont="system"/>
-                                                <calendarDate key="date" timeIntervalSinceReferenceDate="-595929600" calendarFormat="%Y-%m-%d %H:%M:%S %z">
-                                                    <!--1982-02-12 08:00:00 -0800-->
-                                                    <timeZone key="timeZone" name="US/Pacific"/>
-                                                </calendarDate>
+                                                <date key="date" timeIntervalSinceReferenceDate="-595929600">
+                                                    <!--1982-02-12 16:00:00 +0000-->
+                                                </date>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <datePickerElements key="datePickerElements" year="YES" month="YES" day="YES" hour="YES" minute="YES" second="YES"/>
@@ -613,7 +629,7 @@ CA
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                         <tableColumns>
-                                                            <tableColumn width="155" minWidth="40" maxWidth="1000" id="bl0-d4-fqm">
+                                                            <tableColumn identifier="" width="155" minWidth="40" maxWidth="1000" id="bl0-d4-fqm">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Name">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -719,7 +735,7 @@ CA
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                         <tableColumns>
-                                                            <tableColumn width="155" minWidth="40" maxWidth="1000" id="hHO-e7-H7T">
+                                                            <tableColumn identifier="" width="155" minWidth="40" maxWidth="1000" id="hHO-e7-H7T">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -832,10 +848,9 @@ CA
                                             <rect key="frame" x="20" y="143" width="163" height="27"/>
                                             <datePickerCell key="cell" borderStyle="bezel" alignment="left" id="Lbv-nQ-MPl">
                                                 <font key="font" metaFont="system"/>
-                                                <calendarDate key="date" timeIntervalSinceReferenceDate="-595929600" calendarFormat="%Y-%m-%d %H:%M:%S %z">
-                                                    <!--1982-02-12 08:00:00 -0800-->
-                                                    <timeZone key="timeZone" name="US/Pacific"/>
-                                                </calendarDate>
+                                                <date key="date" timeIntervalSinceReferenceDate="-595929600">
+                                                    <!--1982-02-12 16:00:00 +0000-->
+                                                </date>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <datePickerElements key="datePickerElements" year="YES" month="YES" day="YES" hour="YES" minute="YES" second="YES"/>
