@@ -195,7 +195,7 @@ class MainController: NSViewController {
     }
     
     @IBAction func sendMetricsBtnClicked(_ sender: AnyObject) {
-        if metricsController.metrics.count == 0 {
+        if metricsController.appFocusMetrics.count == 0 {
             dialogOKCancel(question: "Warning", text: "There are no metrics data to send.")
             return
         }

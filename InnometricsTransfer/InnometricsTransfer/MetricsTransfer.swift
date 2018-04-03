@@ -10,12 +10,12 @@ import Foundation
 
 public class MetricsTransfer {
 
-    public static func sendMetrics(token: String, metrics: [Metric], completion: @escaping (_ response: Int) -> Void) {
+    public static func sendMetrics(token: String, focusAppMetrics: [Metric], idleMetrics: [IdleMetric], completion: @escaping (_ response: Int) -> Void) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         
         var activitiesArrayJson: [[String: Any]] = []
-        for metric in metrics {
+        for metric in focusAppMetrics {
             
             var measurementsArrayJson: [[String: Any]] = []
             let appBundleIdentifierJson: [String: String] = ["name": "bundle_identifier", "type": "string", "value": metric.bundleIdentifier ?? ""]
