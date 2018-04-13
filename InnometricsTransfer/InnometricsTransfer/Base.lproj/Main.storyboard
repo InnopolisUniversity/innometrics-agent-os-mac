@@ -498,6 +498,16 @@ CA
                                                 <constraint firstItem="4dB-at-aGK" firstAttribute="top" secondItem="fd3-3f-9gC" secondAttribute="top" id="ynN-P3-WZe"/>
                                             </constraints>
                                         </customView>
+                                        <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tjP-jx-3Rh" userLabel="Offline Btn">
+                                            <rect key="frame" x="173" y="31" width="109" height="33"/>
+                                            <buttonCell key="cell" type="bevel" title="Offline mode" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="cYo-70-3Ug">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system" size="17"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="offlineBtn_Clicked:" target="5nH-7v-2vR" id="8fV-r2-8wA"/>
+                                            </connections>
+                                        </button>
                                         <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mNe-60-zPM">
                                             <rect key="frame" x="321" y="32" width="51" height="32"/>
                                             <buttonCell key="cell" type="bevel" title="Log in" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="7Yk-yi-D4f">
@@ -511,21 +521,11 @@ CA
                                         <progressIndicator hidden="YES" wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" maxValue="100" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="ReE-ed-LCY">
                                             <rect key="frame" x="380" y="40" width="16" height="16"/>
                                         </progressIndicator>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tjP-jx-3Rh" userLabel="Offline Btn">
-                                            <rect key="frame" x="191" y="32" width="103" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="bevel" title="Offline mode" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="cYo-70-3Ug">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system" size="17"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="offlineBtn_Clicked:" target="5nH-7v-2vR" id="8fV-r2-8wA"/>
-                                            </connections>
-                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="mNe-60-zPM" firstAttribute="centerX" secondItem="gPQ-x8-q5A" secondAttribute="centerX" id="2Td-X3-HCe"/>
                                         <constraint firstItem="fd3-3f-9gC" firstAttribute="top" relation="greaterThanOrEqual" secondItem="gPQ-x8-q5A" secondAttribute="top" constant="20" symbolic="YES" id="Cst-Hq-WYK"/>
+                                        <constraint firstItem="mNe-60-zPM" firstAttribute="leading" secondItem="tjP-jx-3Rh" secondAttribute="trailing" constant="21" id="DZU-Sj-grx"/>
                                         <constraint firstItem="MOQ-9N-ZGT" firstAttribute="centerY" secondItem="gPQ-x8-q5A" secondAttribute="centerY" id="DZe-6L-Yv3"/>
                                         <constraint firstItem="mNe-60-zPM" firstAttribute="top" secondItem="MOQ-9N-ZGT" secondAttribute="bottom" constant="30" id="KQg-a1-1si"/>
                                         <constraint firstItem="fd3-3f-9gC" firstAttribute="centerX" secondItem="gPQ-x8-q5A" secondAttribute="centerX" id="TLL-2V-rdk"/>
@@ -535,6 +535,7 @@ CA
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="MOQ-9N-ZGT" secondAttribute="trailing" constant="20" symbolic="YES" id="hPw-YK-YQ5"/>
                                         <constraint firstItem="ReE-ed-LCY" firstAttribute="top" secondItem="MOQ-9N-ZGT" secondAttribute="bottom" constant="38" id="o60-QN-uzd"/>
                                         <constraint firstItem="MOQ-9N-ZGT" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="gPQ-x8-q5A" secondAttribute="leading" constant="20" symbolic="YES" id="pVl-PR-WLo"/>
+                                        <constraint firstItem="tjP-jx-3Rh" firstAttribute="centerY" secondItem="mNe-60-zPM" secondAttribute="centerY" id="tAe-Yb-3xe"/>
                                         <constraint firstItem="MOQ-9N-ZGT" firstAttribute="top" secondItem="fd3-3f-9gC" secondAttribute="bottom" constant="26" id="w79-IP-nj5"/>
                                     </constraints>
                                 </view>
