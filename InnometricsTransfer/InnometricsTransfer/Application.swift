@@ -3,7 +3,7 @@
 //  InnometricsTransfer
 //
 //  Created by Denis Zaplatnikov on 06/02/2017.
-//  Copyright © 2017 Denis Zaplatnikov. All rights reserved.
+//  Copyright © 2018 Denis Zaplatnikov and Pavel Kotov. All rights reserved.
 //
 
 import Foundation

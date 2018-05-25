@@ -48,14 +48,14 @@ class IdleController: NSView {
         // Update UI
         DispatchQueue.main.async {
             self.totalIdleTime.stringValue = self.stringFromSeconds(time: self.totalIdleTimeValue)
-            self.topOneIdleApp.stringValue = self.topApps[0].0 + " with " +
+            self.topOneIdleApp.stringValue = self.topApps[0].0 + ": " +
                 self.stringFromSeconds(time: self.topApps[0].1)
             if (self.topApps.indices.contains(1)) {
-                self.topTwoIdleApp.stringValue = self.topApps[1].0 + " with " +
+                self.topTwoIdleApp.stringValue = self.topApps[1].0 + ": " +
                     self.stringFromSeconds(time: self.topApps[1].1)
             }
             if (self.topApps.indices.contains(2)) {
-                self.topThreeIdleApp.stringValue = self.topApps[2].0 + " with " +
+                self.topThreeIdleApp.stringValue = self.topApps[2].0 + ": " +
                     self.stringFromSeconds(time: self.topApps[2].1)
             }
         }

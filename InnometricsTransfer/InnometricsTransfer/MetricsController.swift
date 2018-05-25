@@ -122,12 +122,16 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
         mergedMetrics = []
         let totalCount = appFocusMetrics.count + idleMetrics.count - 2
         var appFocusPos = 0, idlePos = 0
+        var appFocusIsFilled = false, idleIsFilled = false
         while ((appFocusPos + idlePos) < totalCount) {
-            if(dateIsEarlier(first: appFocusMetrics[appFocusPos].timestampStart!, second: idleMetrics[idlePos].timeStampStart!)) {
+            if((idleIsFilled) || (!appFocusIsFilled && dateIsEarlier(first: appFocusMetrics[appFocusPos].timestampStart!, second: idleMetrics[idlePos].timeStampStart!))) {
                 let metric = appFocusMetrics[appFocusPos]
                 mergedMetrics.append(MergedMetric(_type: MergedMetric.MetricType.appFocus, _appName: metric.appName!, _duration: metric.duration, _start: metric.timestampStart!, _end: metric.timestampEnd!, _bundleId: metric.bundleIdentifier, _bundleURL: metric.bundleURL, _tabName: metric.tabName, _tabURL: metric.tabUrl))
                 if (appFocusPos != appFocusMetrics.count - 1) {
                     appFocusPos += 1
+                }
+                else {
+                    appFocusIsFilled = true
                 }
             }
             else {
@@ -135,6 +139,9 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
                 mergedMetrics.append(MergedMetric(_type: MergedMetric.MetricType.idle, _appName: metric.appName!, _duration: metric.duration, _start: metric.timeStampStart!, _end: metric.timeStampEnd!, _bundleId: nil, _bundleURL: nil, _tabName: nil, _tabURL: nil))
                 if (idlePos != idleMetrics.count - 1) {
                     idlePos += 1
+                }
+                else {
+                    idleIsFilled = true
                 }
             }
         }
