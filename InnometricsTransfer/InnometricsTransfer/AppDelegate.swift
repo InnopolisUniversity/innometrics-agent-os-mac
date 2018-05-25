@@ -13,6 +13,7 @@ import Sparkle
 class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var logOutMenuItem: NSMenuItem!
     @IBOutlet weak var updater: SUUpdater!
+    @IBOutlet weak var window: NSWindow!
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -221,5 +222,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return .terminateNow
     }
 
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if let window = sender.windows.first {
+            if (flag) {
+                window.orderFront(nil)
+            }
+            else {
+                window.makeKeyAndOrderFront(nil)
+            }
+        }
+        return true
+    }
 }
 
