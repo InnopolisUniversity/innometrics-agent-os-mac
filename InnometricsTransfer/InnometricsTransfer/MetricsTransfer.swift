@@ -22,11 +22,29 @@ public class MetricsTransfer {
             let appBundleURLJson: [String: String] = ["name": "path", "type": "string", "value": metric.bundleURL ?? ""]
             let appDurationJson: [String: String] = ["name": "activity_duration", "type": "double", "value": String(format:"%.0f", metric.duration)]
             if metric.tabName != nil {
-                let appTabNameJson: [String: String] = ["name": "window title", "type": "string", "value": metric.tabName ?? ""]
+                var tabName: String = ""
+                if (metric.tabName!.count < 200) {
+                    tabName = metric.tabName!
+                }
+                else {
+                    tabName = String(metric.tabName!.prefix(199))
+                }
+                let appTabNameJson: [String: String] = ["name": "window title", "type": "string", "value": tabName]
                 measurementsArrayJson.append(appTabNameJson)
             }
             if metric.tabUrl != nil {
-                let appTabUrlJson: [String: String] = ["name": "url", "type": "string", "value": metric.tabUrl ?? ""]
+                // Check, if tab's name is greater than 200 - number, which causes error on server. If it is, just
+                // cut it up to the second domain name
+                var tabUrl: String = ""
+                if (metric.tabUrl!.count < 200) {
+                    tabUrl = metric.tabUrl!
+                }
+                else {
+                    if let host = NSURL(string: metric.tabUrl!)?.host {
+                        tabUrl = host
+                    }
+                }
+                let appTabUrlJson: [String: String] = ["name": "url", "type": "string", "value": tabUrl]
                 measurementsArrayJson.append(appTabUrlJson)
             }
             let appTimestampStartJson: [String: String] = ["name": "activity end", "type": "epoch_time", "value":  String(format: "%.0f", metric.timestampStart!.timeIntervalSince1970)]
@@ -79,8 +97,8 @@ public class MetricsTransfer {
         do {
             let jsonData = try! JSONSerialization.data(withJSONObject: finalJson, options: .prettyPrinted)
             
-            //let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
-            //print("jsonData: \(jsonString)")
+//            let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
+//            print("jsonData: \(jsonString)")
             // create post request
             var request = URLRequest(url: URL(string: "\(ServerPrefs.getServerUrl())/activities/")!)
             request.httpMethod = "POST"

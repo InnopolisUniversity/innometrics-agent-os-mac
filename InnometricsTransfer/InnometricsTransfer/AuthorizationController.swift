@@ -71,6 +71,7 @@ class AuthorizationController: NSViewController {
                         let storyboard = NSStoryboard(name: "Main", bundle: nil)
                         let mvc = storyboard.instantiateController(withIdentifier:"MainController") as! MainController
                         self.view.window?.contentViewController = mvc
+                        AuthorizationUtils.disableOfflineMode()
                     }
                 }
             }

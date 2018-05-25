@@ -11,7 +11,7 @@ import Foundation
 public class AuthorizationUtils {
     private static var isAuthorizedAlias: String = "isAuthorized"
     private static var authorizationTokenAlias: String = "authorizationToken"
-    private static var offlineMode: String = "offlineModeEnabled"
+    private static var offlineModeIsEnabled: Bool = false
 
     public static func authorization(username: String, password: String, completion: @escaping (_ token: String?) -> Void) {
         let authorizationJson: [String: String] = ["username": username, "password": password]
@@ -76,17 +76,14 @@ public class AuthorizationUtils {
     }
     
     public static func disableOfflineMode() {
-        let defaults = UserDefaults.standard
-        defaults.set(false, forKey: offlineMode)
+        offlineModeIsEnabled = false
     }
     
     public static func enableOfflineMode() {
-        let defaults = UserDefaults.standard
-        defaults.set(true, forKey: offlineMode)
+        offlineModeIsEnabled = true
     }
     
     public static func offlineModeEnabled() -> Bool {
-        let defaults = UserDefaults.standard
-        return defaults.bool(forKey: offlineMode)
+        return offlineModeIsEnabled
     }
 }

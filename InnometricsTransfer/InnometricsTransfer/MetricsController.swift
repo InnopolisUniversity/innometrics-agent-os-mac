@@ -147,7 +147,6 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
         }
     }
     
-    // TODO: extend this to idle metrics
     public func sendMetrics (completion: @escaping (_ response: Int) -> Void) {
         MetricsTransfer.sendMetrics(token: AuthorizationUtils.getAuthorizationToken()!, focusAppMetrics: appFocusMetrics, idleMetrics: idleMetrics) { (response) in
             completion(response)
