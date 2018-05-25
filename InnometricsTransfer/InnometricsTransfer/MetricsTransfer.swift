@@ -97,13 +97,16 @@ public class MetricsTransfer {
         do {
             let jsonData = try! JSONSerialization.data(withJSONObject: finalJson, options: .prettyPrinted)
             
-//            let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
-//            print("jsonData: \(jsonString)")
+            let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
+            print("jsonData: \(jsonString)")
             // create post request
             var request = URLRequest(url: URL(string: "\(ServerPrefs.getServerUrl())/activities/")!)
             request.httpMethod = "POST"
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+            
+            // Day-long timeout... maybe server will process metrics faster, then this will be to removed
+            request.timeoutInterval = 86400
             
             // insert json data to the request
             request.httpBody = jsonData
@@ -116,6 +119,7 @@ public class MetricsTransfer {
                     return
                 }
                 
+                let responseR = response as! HTTPURLResponse
                 let responseCode = (response as! HTTPURLResponse).statusCode
                 if (responseCode == 201) {
                     completion(1)

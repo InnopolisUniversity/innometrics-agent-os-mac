@@ -356,7 +356,6 @@ CA
                         <rect key="contentRect" x="196" y="240" width="420" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
                         <connections>
-                            <binding destination="B8D-0N-5wS" name="representedFilename" keyPath="self.window" id="vjh-Db-q2S"/>
                             <outlet property="delegate" destination="B8D-0N-5wS" id="UgI-EU-x4u"/>
                         </connections>
                     </window>
