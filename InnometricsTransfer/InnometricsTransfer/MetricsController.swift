@@ -122,7 +122,7 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
         mergedMetrics = []
         let totalCount = appFocusMetrics.count + idleMetrics.count - 2
         var appFocusPos = 0, idlePos = 0
-        var appFocusIsFilled = false, idleIsFilled = false
+        var appFocusIsFilled = appFocusMetrics.isEmpty, idleIsFilled = idleMetrics.isEmpty
         while ((appFocusPos + idlePos) < totalCount) {
             if((idleIsFilled) || (!appFocusIsFilled && dateIsEarlier(first: appFocusMetrics[appFocusPos].timestampStart!, second: idleMetrics[idlePos].timeStampStart!))) {
                 let metric = appFocusMetrics[appFocusPos]
