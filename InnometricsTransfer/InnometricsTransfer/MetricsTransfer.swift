@@ -97,8 +97,8 @@ public class MetricsTransfer {
         do {
             let jsonData = try! JSONSerialization.data(withJSONObject: finalJson, options: .prettyPrinted)
             
-            let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
-            print("jsonData: \(jsonString)")
+//            let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
+//            print("jsonData: \(jsonString)")
             // create post request
             var request = URLRequest(url: URL(string: "\(ServerPrefs.getServerUrl())/activities/")!)
             request.httpMethod = "POST"
@@ -119,7 +119,6 @@ public class MetricsTransfer {
                     return
                 }
                 
-                let responseR = response as! HTTPURLResponse
                 let responseCode = (response as! HTTPURLResponse).statusCode
                 if (responseCode == 201) {
                     completion(1)
