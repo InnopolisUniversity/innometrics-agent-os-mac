@@ -181,11 +181,11 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
                         case .idle:
                             let metric = self.idleMetrics.first(where: { $0.timeStampStart == self.mergedMetrics[i].timeStampStart })
                             context.delete(metric!)
-                            self.idleMetrics.remove(at: i)
+                            self.idleMetrics.remove(at: self.idleMetrics.index(of: metric!)!)
                         case .appFocus:
                             let metric = self.appFocusMetrics.first(where: { $0.timestampStart == self.mergedMetrics[i].timeStampStart })
                             context.delete(metric!)
-                            self.appFocusMetrics.remove(at: i)
+                            self.appFocusMetrics.remove(at: self.appFocusMetrics.index(of: metric!)!)
                         }
                         mergedMetrics.remove(at: i)
                     }
