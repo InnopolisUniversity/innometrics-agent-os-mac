@@ -16,7 +16,6 @@ public class AuthorizationUtils {
         let authorizationJson: [String: String] = ["email": username, "password": password]
         do {
             let jsonData = try! JSONSerialization.data(withJSONObject: authorizationJson, options: .prettyPrinted)
-            print(jsonData)
             // create post request
 
             var request = URLRequest(url: URL(string: "\(ServerPrefs.getServerUrl())/login")!)
