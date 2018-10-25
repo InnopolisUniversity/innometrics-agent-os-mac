@@ -11,7 +11,7 @@ import Cocoa
 class AuthorizationController: NSViewController {
 
     @IBOutlet weak var loginBtn: NSButton!
-    @IBOutlet weak var loginTextField: NSTextField!
+    @IBOutlet weak var emailTextField: NSTextField!
     @IBOutlet weak var passwordTextField: NSSecureTextField!
     
     @IBOutlet weak var loaderIndicator: NSProgressIndicator!
@@ -35,12 +35,12 @@ class AuthorizationController: NSViewController {
     }
     
     @IBAction func loginBtn_Clicked(_ sender: AnyObject) {
-        let login = loginTextField.stringValue
+        let email = emailTextField.stringValue
         let password = passwordTextField.stringValue
-        if (((login.range(of: "\\s+", options: .regularExpression) != nil) || login.characters.count == 0) && ((password.range(of: "\\s+", options: .regularExpression) != nil) || password.characters.count == 0)) {
-            dialogOKCancel(question: "Warning", text: "Enter your login and password")
-        } else if (((login.range(of: "\\s+", options: .regularExpression) != nil) || login.characters.count == 0)) {
-            dialogOKCancel(question: "Warning", text: "Enter your login")
+        if (((email.range(of: "\\s+", options: .regularExpression) != nil) || email.characters.count == 0) && ((password.range(of: "\\s+", options: .regularExpression) != nil) || password.characters.count == 0)) {
+            dialogOKCancel(question: "Warning", text: "Enter your email and password")
+        } else if (((email.range(of: "\\s+", options: .regularExpression) != nil) || email.characters.count == 0)) {
+            dialogOKCancel(question: "Warning", text: "Enter your email")
         } else if (((password.range(of: "\\s+", options: .regularExpression) != nil) || password.characters.count == 0)) {
             dialogOKCancel(question: "Warning", text: "Enter your password")
         } else {
@@ -48,7 +48,7 @@ class AuthorizationController: NSViewController {
             loaderIndicator.startAnimation(self)
             disableInputElements()
             
-            AuthorizationUtils.authorization(username: login, password: password) { (token) in
+            AuthorizationUtils.authorization(username: email, password: password) { (token) in
                 DispatchQueue.main.async {
                     self.enableInputElements()
                     self.loaderIndicator.stopAnimation(self)
@@ -69,13 +69,13 @@ class AuthorizationController: NSViewController {
     
     func enableInputElements() {
         loginBtn.isEnabled = true
-        loginTextField.isEnabled = true
+        emailTextField.isEnabled = true
         passwordTextField.isEnabled = true
     }
     
     func disableInputElements() {
         loginBtn.isEnabled = false
-        loginTextField.isEnabled = false
+        emailTextField.isEnabled = false
         passwordTextField.isEnabled = false
     }
     

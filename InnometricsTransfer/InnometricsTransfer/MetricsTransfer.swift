@@ -18,6 +18,16 @@ public class MetricsTransfer {
         for metric in metrics {
             
             var measurementsArrayJson: [[String: Any]] = []
+            let activity: [String: Any] = [
+                "start_time": dateFormatter.string(from: metric.timestampEnd as! Date),
+                "end_time": dateFormatter.string(from: metric.timestampStart as! Date),
+                "executable_name": metric.bundleURL ?? "",
+                "browser_url": metric.tabUrl ?? "",
+                "browser_title": metric.tabName ?? "",
+                "ip_address": metric.session!.ipAddress ?? "",
+                "mac_address": metric.session!.macAddress ?? ""
+            ]
+            
             let appBundleIdentifierJson: [String: String] = ["name": "bundle_identifier", "type": "string", "value": metric.bundleIdentifier ?? ""]
             let appBundleURLJson: [String: String] = ["name": "bundle_url", "type": "string", "value": metric.bundleURL ?? ""]
             let appDurationJson: [String: String] = ["name": "activity_duration", "type": "double", "value": String(format:"%f", metric.duration)]
@@ -54,17 +64,18 @@ public class MetricsTransfer {
                 measurementsArrayJson.append(userName)
             }
             
-            activitiesArrayJson.append(["name": metric.appName ?? "undefined" + " application use", "comments": "macOS Environment Collection", "measurements": measurementsArrayJson])
+            activitiesArrayJson.append(activity)
         }
         
-        let finalJson: [String: [Any]] = ["activities": activitiesArrayJson]
+        let activities: [String: [Any]] = ["activities": activitiesArrayJson]
+        let finalJson: [String: Any] = ["activity": activities]
         do {
             let jsonData = try! JSONSerialization.data(withJSONObject: finalJson, options: .prettyPrinted)
             
             //let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
             //print("jsonData: \(jsonString)")
             // create post request
-            var request = URLRequest(url: URL(string: "\(ServerPrefs.getServerUrl())/activities/")!)
+            var request = URLRequest(url: URL(string: "\(ServerPrefs.getServerUrl())/activity")!)
             request.httpMethod = "POST"
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
