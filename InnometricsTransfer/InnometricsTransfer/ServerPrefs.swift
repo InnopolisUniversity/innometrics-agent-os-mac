@@ -19,7 +19,7 @@ public class ServerPrefs {
     
     public static func getServerUrl() -> String {
         let defaults = UserDefaults.standard
-        return defaults.string(forKey: serverUrlAlias) ?? "http://188.130.155.81:8120"
+        return defaults.string(forKey: serverUrlAlias) ?? "https://innometric.guru:8120"
     }
     
 }
