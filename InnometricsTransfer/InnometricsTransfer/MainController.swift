@@ -221,6 +221,8 @@ class MainController: NSViewController {
                     if (response == 1) {
                         self.clearDatabase()
                         self.dialogOKCancel(question: "Success", text: "Data have been sent successfully.")
+                    } else if (response == 2) {
+                        self.dialogOKCancel(question: "Error", text: "You need to relogin to the system.")
                     } else {
                         self.dialogOKCancel(question: "Error", text: "Something went wrong during sending.")
                     }

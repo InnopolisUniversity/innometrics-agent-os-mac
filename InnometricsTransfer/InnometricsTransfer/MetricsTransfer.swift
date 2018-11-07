@@ -95,7 +95,11 @@ public class MetricsTransfer {
                 if (responseCode == 201) {
                     completion(1)
                     return
-                } else {
+                } else if (responseCode == 401) {
+                    completion(2)
+                    return
+                }
+                else {
                     completion(-1)
                     return
                 }
