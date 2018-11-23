@@ -13,12 +13,12 @@ public class AuthorizationUtils {
     private static var authorizationTokenAlias: String = "authorizationToken"
 
     public static func authorization(username: String, password: String, completion: @escaping (_ token: String?) -> Void) {
-        let authorizationJson: [String: String] = ["username": username, "password": password]
+        let authorizationJson: [String: String] = ["email": username, "password": password]
         do {
             let jsonData = try! JSONSerialization.data(withJSONObject: authorizationJson, options: .prettyPrinted)
-            
             // create post request
-            var request = URLRequest(url: URL(string: "\(ServerPrefs.getServerUrl())/api-token-auth/")!)
+
+            var request = URLRequest(url: URL(string: "\(ServerPrefs.getServerUrl())/login")!)
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpMethod = "POST"
             
