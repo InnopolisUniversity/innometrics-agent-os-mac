@@ -3,14 +3,16 @@
 //  InnometricsTransfer
 //
 //  Created by Denis Zaplatnikov on 05/02/2017.
-//  Copyright © 2017 Denis Zaplatnikov. All rights reserved.
+//  Copyright © 2018 Denis Zaplatnikov and Pavel Kotov. All rights reserved.
 //
 
 import Cocoa
 
 class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     
-    var metrics: [Metric] = []
+    var appFocusMetrics: [Metric] = []
+    var idleMetrics: [IdleMetric] = []
+    var mergedMetrics: [MergedMetric] = []
     @IBOutlet weak var newMetricsTableView: NSTableView!
     
     override func viewDidLoad() {
@@ -22,24 +24,30 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     }
     
     public func fetchNewMetricsAndRefreshTable() {
-        metrics = []
+        appFocusMetrics = []
+        idleMetrics = []
         
         do {
             let appDelegate = NSApplication.shared().delegate as! AppDelegate
             let context = appDelegate.managedObjectContext
             
-            var datePredicates: [NSPredicate] = []
+            // Create an appropriate request to data context using user's filters
+            var appFocusDataPredicates: [NSPredicate] = []
+            var idleDataPredicates: [NSPredicate] = []
 
             if (UserPrefs.isNeedFromDateFilter()) {
                 let fromDate = UserPrefs.getExludedFromDate()
-                datePredicates.append(NSPredicate(format: "timestampStart < %@", fromDate))
+                appFocusDataPredicates.append(NSPredicate(format: "timestampStart < %@", fromDate))
+                idleDataPredicates.append(NSPredicate(format: "timeStampStart < %@", fromDate))
             }
             
             if (UserPrefs.isNeedToDateFilter()) {
                 let toDate = UserPrefs.getExludedToDate()
-                datePredicates.append(NSPredicate(format: "timestampStart > %@", toDate))
+                appFocusDataPredicates.append(NSPredicate(format: "timestampStart > %@", toDate))
+                idleDataPredicates.append(NSPredicate(format: "timeStampStart > %@", toDate))
             }
-            let datePredicateCompound = NSCompoundPredicate.init(type: .or, subpredicates: datePredicates)
+            let focusAppDatePredicateCompound = NSCompoundPredicate.init(type: .or, subpredicates: appFocusDataPredicates)
+            let idleDatePredicateCompound = NSCompoundPredicate.init(type: .or, subpredicates: idleDataPredicates)
             
             let appNames = UserPrefs.getUserExludedApps()
             var appNamePredicates: [NSPredicate] = []
@@ -48,38 +56,99 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
                 appNamePredicates.append(NSPredicate(format: "NOT appName CONTAINS[c] %@", appName))
             }
             
-            let keywordsSearchableColumns: [String] = ["appName", "bundleIdentifier", "bundleURL", "tabName", "tabUrl"]
+            let focusAppKeywordsSearchableColumns: [String] = ["appName", "bundleIdentifier", "bundleURL", "tabName", "tabUrl"]
+            let idleKeywordsSearchableColumns: [String] = ["appName"]
+            
             let keywordsValues = UserPrefs.getUserExludedKeywords()
-            var keywordsPredicates: [NSPredicate] = []
+            var keywordsPredicatesFocusApp: [NSPredicate] = []
+            var keywordsPredicatesIdle: [NSPredicate] = []
+            
             for keyword in keywordsValues {
-                for column in keywordsSearchableColumns{
-                    keywordsPredicates.append(NSPredicate(format: "NOT %K CONTAINS[c] %@", column, keyword))
+                for column in focusAppKeywordsSearchableColumns{
+                    keywordsPredicatesFocusApp.append(NSPredicate(format: "NOT %K CONTAINS[c] %@", column, keyword))
+                }
+                for column in idleKeywordsSearchableColumns {
+                    keywordsPredicatesIdle.append(NSPredicate(format: "NOT %K CONTAINS[c] %@", column, keyword))
                 }
             }
             
+            // Fetch the metrics and filter them
             let metricsFetch: NSFetchRequest<Metric> = Metric.fetchRequest()
             metricsFetch.sortDescriptors = [NSSortDescriptor(key: "timestampStart", ascending: false)]
             
-            let isFinished = NSPredicate(format: "timestampEnd != nil")
-            var allFilters: [NSPredicate] = []
-            if (datePredicates.count > 0) {
-                allFilters = appNamePredicates + keywordsPredicates + [datePredicateCompound] + [isFinished]
-            } else {
-                allFilters = appNamePredicates + keywordsPredicates + [isFinished]
+            let idleMetricsFetch: NSFetchRequest<IdleMetric> = IdleMetric.fetchRequest()
+            idleMetricsFetch.sortDescriptors = [NSSortDescriptor(key: "timeStampStart", ascending: false)]
+            
+            let isFinishedFocusApp = NSPredicate(format: "timestampEnd != nil")
+            let isFinishedIdle = NSPredicate(format: "timeStampEnd != nil")
+            
+            var allFiltersFocusApp: [NSPredicate] = []
+            var allFiltersIdle: [NSPredicate] = []
+            
+            if (appFocusDataPredicates.count > 0) {
+                allFiltersFocusApp = appNamePredicates + keywordsPredicatesFocusApp + [focusAppDatePredicateCompound] + [isFinishedFocusApp]
+            }
+            else {
+                allFiltersFocusApp = appNamePredicates + keywordsPredicatesFocusApp + [isFinishedFocusApp]
+            }
+            if (idleDataPredicates.count > 0) {
+                allFiltersIdle = appNamePredicates + keywordsPredicatesIdle + [idleDatePredicateCompound] + [isFinishedIdle]
+            }
+            else {
+                allFiltersIdle = appNamePredicates + keywordsPredicatesIdle + [isFinishedIdle]
             }
             
-            let predicateCompound = NSCompoundPredicate.init(type: .and, subpredicates: allFilters)
-            metricsFetch.predicate = predicateCompound
+            let focusAppPredicateCompound = NSCompoundPredicate.init(type: .and, subpredicates: allFiltersFocusApp)
+            let idlePredicateCompound = NSCompoundPredicate.init(type: .and, subpredicates: allFiltersIdle)
             
-            metrics = try context.fetch(metricsFetch)
+            metricsFetch.predicate = focusAppPredicateCompound
+            idleMetricsFetch.predicate = idlePredicateCompound
+            
+            appFocusMetrics = try context.fetch(metricsFetch)
+            idleMetrics = try context.fetch(idleMetricsFetch)
         } catch {
             print(error)
         }
+        updateMergedMetrics()
         newMetricsTableView.reloadData()
     }
     
+    // Merge all the metrics into one array
+    private func updateMergedMetrics() {
+        func dateIsEarlier(first: NSDate, second: NSDate) -> Bool {
+            return first.compare(second as Date) == ComparisonResult.orderedDescending
+        }
+        
+        mergedMetrics = []
+        let totalCount = appFocusMetrics.count + idleMetrics.count - 2
+        var appFocusPos = 0, idlePos = 0
+        var appFocusIsFilled = appFocusMetrics.isEmpty, idleIsFilled = idleMetrics.isEmpty
+        while ((appFocusPos + idlePos) < totalCount) {
+            if((idleIsFilled) || (!appFocusIsFilled && dateIsEarlier(first: appFocusMetrics[appFocusPos].timestampStart!, second: idleMetrics[idlePos].timeStampStart!))) {
+                let metric = appFocusMetrics[appFocusPos]
+                mergedMetrics.append(MergedMetric(_type: MergedMetric.MetricType.appFocus, _appName: metric.appName!, _duration: metric.duration, _start: metric.timestampStart!, _end: metric.timestampEnd!, _bundleId: metric.bundleIdentifier, _bundleURL: metric.bundleURL, _tabName: metric.tabName, _tabURL: metric.tabUrl))
+                if (appFocusPos != appFocusMetrics.count - 1) {
+                    appFocusPos += 1
+                }
+                else {
+                    appFocusIsFilled = true
+                }
+            }
+            else {
+                let metric = idleMetrics[idlePos]
+                mergedMetrics.append(MergedMetric(_type: MergedMetric.MetricType.idle, _appName: metric.appName!, _duration: metric.duration, _start: metric.timeStampStart!, _end: metric.timeStampEnd!, _bundleId: nil, _bundleURL: nil, _tabName: nil, _tabURL: nil))
+                if (idlePos != idleMetrics.count - 1) {
+                    idlePos += 1
+                }
+                else {
+                    idleIsFilled = true
+                }
+            }
+        }
+    }
+    
     public func sendMetrics (completion: @escaping (_ response: Int) -> Void) {
-        MetricsTransfer.sendMetrics(token: AuthorizationUtils.getAuthorizationToken()!, metrics: metrics) { (response) in
+        MetricsTransfer.sendMetrics(token: AuthorizationUtils.getAuthorizationToken()!, focusAppMetrics: appFocusMetrics, idleMetrics: idleMetrics) { (response) in
             completion(response)
         }
     }
@@ -108,8 +177,17 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
                     let appDelegate = NSApplication.shared().delegate as! AppDelegate
                     let context = appDelegate.managedObjectContext
                     for i in indexes.reversed() {
-                        context.delete(metrics[i])
-                        metrics.remove(at: i)
+                        switch mergedMetrics[i].type {
+                        case .idle:
+                            let metric = self.idleMetrics.first(where: { $0.timeStampStart == self.mergedMetrics[i].timeStampStart })
+                            context.delete(metric!)
+                            self.idleMetrics.remove(at: self.idleMetrics.index(of: metric!)!)
+                        case .appFocus:
+                            let metric = self.appFocusMetrics.first(where: { $0.timestampStart == self.mergedMetrics[i].timeStampStart })
+                            context.delete(metric!)
+                            self.appFocusMetrics.remove(at: self.appFocusMetrics.index(of: metric!)!)
+                        }
+                        mergedMetrics.remove(at: i)
                     }
                 
                     do {
@@ -129,7 +207,7 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     
     // Table view utilities
     func numberOfRows(in tableView: NSTableView) -> Int {
-        return metrics.count
+        return mergedMetrics.count
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
@@ -138,26 +216,24 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
         
-        if (columnId == "timestampStart") {
-            return dateFormatter.string(from: metrics[row].timestampStart as! Date)
+        if (columnId == "metricType") {
+            return mergedMetrics[row].type.stringValue
+        } else if (columnId == "timestampStart") {
+            return dateFormatter.string(from: mergedMetrics[row].timeStampStart as Date)
         } else if (columnId == "timestampEnd") {
-            if (metrics[row].timestampEnd != nil) {
-                return dateFormatter.string(from: metrics[row].timestampEnd as! Date)
-            } else {
-                return ""
-            }
+            return dateFormatter.string(from: mergedMetrics[row].timeStampEnd as Date)
         } else if (columnId == "bundleIdentifier") {
-            return metrics[row].bundleIdentifier
+            return mergedMetrics[row].bundleIdentifier
         } else if (columnId == "name") {
-            return metrics[row].appName
+            return mergedMetrics[row].appName
         } else if (columnId == "bundleURL") {
-            return metrics[row].bundleURL
+            return mergedMetrics[row].bundleURL
         } else if (columnId == "tabUrl") {
-            return metrics[row].tabUrl
+            return mergedMetrics[row].tabURL
         } else if (columnId == "tabName") {
-            return metrics[row].tabName
+            return mergedMetrics[row].tabName
         } else if (columnId == "duration"){
-            return stringFromTimeInterval(interval: metrics[row].duration)
+            return stringFromTimeInterval(interval: mergedMetrics[row].duration)
         } else {
             return ""
         }

@@ -3,19 +3,19 @@
 //  InnometricsTransfer
 //
 //  Created by Denis Zaplatnikov on 25/02/2017.
-//  Copyright © 2017 Denis Zaplatnikov. All rights reserved.
+//  Copyright © 2018 Denis Zaplatnikov and Pavel Kotov. All rights reserved.
 //
 
 import Foundation
 
 public class MetricsTransfer {
 
-    public static func sendMetrics(token: String, metrics: [Metric], completion: @escaping (_ response: Int) -> Void) {
+    public static func sendMetrics(token: String, focusAppMetrics: [Metric], idleMetrics: [IdleMetric], completion: @escaping (_ response: Int) -> Void) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         
         var activitiesArrayJson: [[String: Any]] = []
-        for metric in metrics {
+        for metric in focusAppMetrics {
             
             var measurementsArrayJson: [[String: Any]] = []
             let activity: [String: Any] = [
@@ -29,19 +29,37 @@ public class MetricsTransfer {
             ]
             
             let appBundleIdentifierJson: [String: String] = ["name": "bundle_identifier", "type": "string", "value": metric.bundleIdentifier ?? ""]
-            let appBundleURLJson: [String: String] = ["name": "bundle_url", "type": "string", "value": metric.bundleURL ?? ""]
-            let appDurationJson: [String: String] = ["name": "activity_duration", "type": "double", "value": String(format:"%f", metric.duration)]
+            let appBundleURLJson: [String: String] = ["name": "path", "type": "string", "value": metric.bundleURL ?? ""]
+            let appDurationJson: [String: String] = ["name": "activity_duration", "type": "double", "value": String(format:"%.0f", metric.duration)]
             if metric.tabName != nil {
-                let appTabNameJson: [String: String] = ["name": "browser_tab_name", "type": "string", "value": metric.tabName ?? ""]
+                var tabName: String = ""
+                if (metric.tabName!.count < 200) {
+                    tabName = metric.tabName!
+                }
+                else {
+                    tabName = String(metric.tabName!.prefix(199))
+                }
+                let appTabNameJson: [String: String] = ["name": "window title", "type": "string", "value": tabName]
                 measurementsArrayJson.append(appTabNameJson)
             }
             if metric.tabUrl != nil {
-                let appTabUrlJson: [String: String] = ["name": "browser_tab_url", "type": "string", "value": metric.tabUrl ?? ""]
+                // Check, if tab's name is greater than 200 - number, which causes error on server. If it is, just
+                // cut it up to the second domain name
+                var tabUrl: String = ""
+                if (metric.tabUrl!.count < 200) {
+                    tabUrl = metric.tabUrl!
+                }
+                else {
+                    if let host = NSURL(string: metric.tabUrl!)?.host {
+                        tabUrl = host
+                    }
+                }
+                let appTabUrlJson: [String: String] = ["name": "url", "type": "string", "value": tabUrl]
                 measurementsArrayJson.append(appTabUrlJson)
             }
-            let appTimestampStartJson: [String: String] = ["name": "activity_end", "type": "string", "value": dateFormatter.string(from: metric.timestampStart as! Date)]
+            let appTimestampStartJson: [String: String] = ["name": "activity end", "type": "epoch_time", "value":  String(format: "%.0f", metric.timestampStart!.timeIntervalSince1970)]
             if metric.timestampEnd != nil {
-                let appTimestampEndJson: [String: String] = ["name": "activity_start", "type": "string", "value":  dateFormatter.string(from: metric.timestampEnd as! Date)]
+                let appTimestampEndJson: [String: String] = ["name": "activity start", "type": "epoch_time", "value":String(format: "%.0f", metric.timestampEnd!.timeIntervalSince1970)]
                 
                 measurementsArrayJson.append(appTimestampEndJson)
             }
@@ -51,17 +69,19 @@ public class MetricsTransfer {
             measurementsArrayJson.append(appTimestampStartJson)
             
             if (metric.session != nil) {
-                let appSessionIpAddress: [String: String] = ["name": "session_ip_address", "type": "string", "value": metric.session!.ipAddress ?? ""]
-                let appSessionMacAddress: [String: String] = ["name": "session_mac_address", "type": "string", "value": metric.session!.macAddress ?? ""]
-                let operatingSystem: [String: String] = ["name": "session_operating_system", "type": "string", "value": metric.session!.operatingSystem ?? ""]
+                let appSessionIpAddress: [String: String] = ["name": "ip address", "type": "string", "value": metric.session!.ipAddress ?? ""]
+                let appSessionMacAddress: [String: String] = ["name": "mac address", "type": "string", "value": metric.session!.macAddress ?? ""]
+                let operatingSystem: [String: String] = ["name": "os name", "type": "string", "value": metric.session!.operatingSystem ?? ""]
                 let userLogin: [String: String] = ["name": "session_user_login", "type": "string", "value": metric.session!.userLogin ?? ""]
-                let userName: [String: String] = ["name": "session_user_name", "type": "string", "value": metric.session!.userName ?? ""]
-            
+                let userName: [String: String] = ["name": "os username", "type": "string", "value": metric.session!.userName ?? ""]
+                let applicationName: [String: String] = ["name": "application name", "type": "string", "value": metric.appName ?? "undefined"]
+                
                 measurementsArrayJson.append(appSessionIpAddress)
                 measurementsArrayJson.append(appSessionMacAddress)
                 measurementsArrayJson.append(operatingSystem)
                 measurementsArrayJson.append(userLogin)
                 measurementsArrayJson.append(userName)
+                measurementsArrayJson.append(applicationName)
             }
             
             activitiesArrayJson.append(activity)
@@ -72,13 +92,16 @@ public class MetricsTransfer {
         do {
             let jsonData = try! JSONSerialization.data(withJSONObject: finalJson, options: .prettyPrinted)
             
-            //let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
-            //print("jsonData: \(jsonString)")
+//            let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
+//            print("jsonData: \(jsonString)")
             // create post request
             var request = URLRequest(url: URL(string: "\(ServerPrefs.getServerUrl())/activity")!)
             request.httpMethod = "POST"
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+            
+            // Day-long timeout... maybe server will process metrics faster, then this will be to removed
+            request.timeoutInterval = 86400
             
             // insert json data to the request
             request.httpBody = jsonData
