@@ -22,6 +22,8 @@ class BrowserInfoUtils {
             code =  "tell application \"Google Chrome\" to return URL of active tab of front window"
         case "com.apple.Safari":
             code = "tell application \"Safari\" to return URL of front document"
+        case "com.jetbrains.pycharm":
+            code = "tell application \"Pycharm\" to return window title"
         default:
             code = nil
         }
