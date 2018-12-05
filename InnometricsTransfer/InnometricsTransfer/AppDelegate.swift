@@ -13,6 +13,7 @@ import Sparkle
 class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var logOutMenuItem: NSMenuItem!
     @IBOutlet weak var updater: SUUpdater!
+    @IBOutlet weak var window: NSWindow!
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -85,7 +86,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     lazy var managedObjectModel: NSManagedObjectModel = {
         // The managed object model for the application. This property is not optional. It is a fatal error for the application not to be able to find and load its model.
-        let modelURL = Bundle.main.url(forResource: "InnoMetricsCollector", withExtension: "momd")!
+        let modelURL = Bundle.main.url(forResource: "InnoMetricsTransfer", withExtension: "momd")!
         return NSManagedObjectModel(contentsOf: modelURL)!
     }()
     
@@ -121,7 +122,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if failError == nil {
             coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
             let url = self.applicationDocumentsDirectory.appendingPathComponent("InnoMetricsCollector.storedata")
-            print (url)
+
             do {
                 try coordinator!.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)
             } catch {
@@ -221,5 +222,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return .terminateNow
     }
 
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if let window = sender.windows.first {
+            if (flag) {
+                window.orderFront(nil)
+            }
+            else {
+                window.makeKeyAndOrderFront(nil)
+            }
+        }
+        return true
+    }
 }
 

@@ -3,13 +3,14 @@
 //  InnometricsTransfer
 //
 //  Created by Denis Zaplatnikov on 25/02/2017.
-//  Copyright © 2017 Denis Zaplatnikov. All rights reserved.
+//  Copyright © 2018 Denis Zaplatnikov and Pavel Kotov. All rights reserved.
 //
 
 import Cocoa
 
 class AuthorizationController: NSViewController {
 
+    @IBOutlet weak var offlineModeBtn: NSButton!
     @IBOutlet weak var loginBtn: NSButton!
     @IBOutlet weak var emailTextField: NSTextField!
     @IBOutlet weak var passwordTextField: NSSecureTextField!
@@ -32,6 +33,15 @@ class AuthorizationController: NSViewController {
         let attributedString = NSMutableAttributedString(string: "")
         attributedString.append(buttonTitleStr)
         loginBtn.setValue(attributedString, forKey: "attributedTitle")
+    }
+    
+    @IBAction func offlineBtn_Clicked(_ sender: Any) {
+        DispatchQueue.main.async {
+            AuthorizationUtils.enableOfflineMode()
+            let storyboard = NSStoryboard(name: "Main", bundle: nil)
+            let mvc = storyboard.instantiateController(withIdentifier:"MainController") as! MainController
+            self.view.window?.contentViewController = mvc
+        }
     }
     
     @IBAction func loginBtn_Clicked(_ sender: AnyObject) {
@@ -61,6 +71,7 @@ class AuthorizationController: NSViewController {
                         let storyboard = NSStoryboard(name: "Main", bundle: nil)
                         let mvc = storyboard.instantiateController(withIdentifier:"MainController") as! MainController
                         self.view.window?.contentViewController = mvc
+                        AuthorizationUtils.disableOfflineMode()
                     }
                 }
             }

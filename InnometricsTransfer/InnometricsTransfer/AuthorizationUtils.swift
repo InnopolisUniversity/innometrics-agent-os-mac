@@ -3,7 +3,7 @@
 //  InnometricsTransfer
 //
 //  Created by Denis Zaplatnikov on 25/02/2017.
-//  Copyright © 2017 Denis Zaplatnikov. All rights reserved.
+//  Copyright © 2018 Denis Zaplatnikov and Pavel Kotov. All rights reserved.
 //
 
 import Foundation
@@ -11,6 +11,7 @@ import Foundation
 public class AuthorizationUtils {
     private static var isAuthorizedAlias: String = "isAuthorized"
     private static var authorizationTokenAlias: String = "authorizationToken"
+    private static var offlineModeIsEnabled: Bool = false
 
     public static func authorization(username: String, password: String, completion: @escaping (_ token: String?) -> Void) {
         let authorizationJson: [String: String] = ["email": username, "password": password]
@@ -72,5 +73,17 @@ public class AuthorizationUtils {
     public static func getAuthorizationToken() -> String? {
         let defaults = UserDefaults.standard
         return defaults.string(forKey: authorizationTokenAlias)
+    }
+    
+    public static func disableOfflineMode() {
+        offlineModeIsEnabled = false
+    }
+    
+    public static func enableOfflineMode() {
+        offlineModeIsEnabled = true
+    }
+    
+    public static func offlineModeEnabled() -> Bool {
+        return offlineModeIsEnabled
     }
 }

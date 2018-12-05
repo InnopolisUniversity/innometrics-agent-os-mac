@@ -3,7 +3,7 @@
 //  InnoMetricsCollector
 //
 //  Created by Denis Zaplatnikov on 11/01/2017.
-//  Copyright © 2017 Denis Zaplatnikov. All rights reserved.
+//  Copyright © 2018 Denis Zaplatnikov and Pavel Kotov. All rights reserved.
 //
 
 import Foundation
@@ -21,7 +21,7 @@ extension Session {
     @NSManaged public var userLogin: String?
     @NSManaged public var userName: String?
     @NSManaged public var metric: NSSet?
-
+    @NSManaged public var idleMetric: NSSet?
 }
 
 // MARK: Generated accessors for metric

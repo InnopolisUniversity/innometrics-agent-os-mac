@@ -18,7 +18,7 @@
 		2554328D1DCB9D2100735C27 /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2554328C1DCB9D2100735C27 /* MainController.swift */; };
 		2554328F1DCB9D2100735C27 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2554328E1DCB9D2100735C27 /* Assets.xcassets */; };
 		255432921DCB9D2100735C27 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 255432901DCB9D2100735C27 /* Main.storyboard */; };
-		2576479E1E603F73006C4FAA /* InnoMetricsCollector.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2576479C1E603F73006C4FAA /* InnoMetricsCollector.xcdatamodeld */; };
+		2576479E1E603F73006C4FAA /* InnoMetricsTransfer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2576479C1E603F73006C4FAA /* InnoMetricsTransfer.xcdatamodeld */; };
 		257647AA1E604022006C4FAA /* Metric+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257647A61E604022006C4FAA /* Metric+CoreDataClass.swift */; };
 		257647AB1E604022006C4FAA /* Metric+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257647A71E604022006C4FAA /* Metric+CoreDataProperties.swift */; };
 		257647AC1E604022006C4FAA /* Session+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257647A81E604022006C4FAA /* Session+CoreDataClass.swift */; };
@@ -27,6 +27,9 @@
 		25D73DF81E478D95006C7BB7 /* Keyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D73DF71E478D95006C7BB7 /* Keyword.swift */; };
 		25E0B4F11E61E0FC00765EA2 /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E0B4F01E61E0FC00765EA2 /* MainWindowController.swift */; };
 		25F160BE1E64C190001B0B7D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 25F160BD1E64C190001B0B7D /* GoogleService-Info.plist */; };
+		9F13A8F82063CDB20057F6F3 /* IdleMetric+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F13A8F72063CDB20057F6F3 /* IdleMetric+CoreDataProperties.swift */; };
+		9F13A8FA2063CDCD0057F6F3 /* IdleMetric+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F13A8F92063CDCD0057F6F3 /* IdleMetric+CoreDataClass.swift */; };
+		9F514D74206CDCA40081EBA5 /* MergedMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F514D73206CDCA40081EBA5 /* MergedMetrics.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,7 +46,7 @@
 		2554328E1DCB9D2100735C27 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		255432911DCB9D2100735C27 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		255432931DCB9D2100735C27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2576479D1E603F73006C4FAA /* InnoMetricsCollector.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = InnoMetricsCollector.xcdatamodel; sourceTree = "<group>"; };
+		2576479D1E603F73006C4FAA /*  */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodeld; name = ""; sourceTree = "<group>"; };
 		257647A61E604022006C4FAA /* Metric+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Metric+CoreDataClass.swift"; sourceTree = "<group>"; };
 		257647A71E604022006C4FAA /* Metric+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Metric+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		257647A81E604022006C4FAA /* Session+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Session+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -52,6 +55,9 @@
 		25D73DF71E478D95006C7BB7 /* Keyword.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keyword.swift; sourceTree = "<group>"; };
 		25E0B4F01E61E0FC00765EA2 /* MainWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		25F160BD1E64C190001B0B7D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		9F13A8F72063CDB20057F6F3 /* IdleMetric+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdleMetric+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		9F13A8F92063CDCD0057F6F3 /* IdleMetric+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdleMetric+CoreDataClass.swift"; sourceTree = "<group>"; };
+		9F514D73206CDCA40081EBA5 /* MergedMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergedMetrics.swift; sourceTree = "<group>"; };
 		BAC31C00E605E9A9C55DA596 /* Pods-InnometricsTransfer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InnometricsTransfer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-InnometricsTransfer/Pods-InnometricsTransfer.debug.xcconfig"; sourceTree = "<group>"; };
 		CEDC31B9C38EF9571C8AFA2B /* Pods-InnometricsTransfer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InnometricsTransfer.release.xcconfig"; path = "Pods/Target Support Files/Pods-InnometricsTransfer/Pods-InnometricsTransfer.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -119,7 +125,9 @@
 				257647A71E604022006C4FAA /* Metric+CoreDataProperties.swift */,
 				257647A81E604022006C4FAA /* Session+CoreDataClass.swift */,
 				257647A91E604022006C4FAA /* Session+CoreDataProperties.swift */,
-				2576479C1E603F73006C4FAA /* InnoMetricsCollector.xcdatamodeld */,
+				2576479C1E603F73006C4FAA /* InnoMetricsTransfer.xcdatamodeld */,
+				9F13A8F72063CDB20057F6F3 /* IdleMetric+CoreDataProperties.swift */,
+				9F13A8F92063CDCD0057F6F3 /* IdleMetric+CoreDataClass.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -136,6 +144,7 @@
 		25E0B4F31E61EAA700765EA2 /* Metrics */ = {
 			isa = PBXGroup;
 			children = (
+				9F514D73206CDCA40081EBA5 /* MergedMetrics.swift */,
 				2554328C1DCB9D2100735C27 /* MainController.swift */,
 				251FBE531E47BF4B0031DB6D /* MetricsController.swift */,
 				251FBE471E479F180031DB6D /* UserPrefs.swift */,
@@ -185,7 +194,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
 				LastUpgradeCheck = 0800;
-				ORGANIZATIONNAME = "Denis Zaplatnikov";
+				ORGANIZATIONNAME = Innometrics;
 				TargetAttributes = {
 					255432861DCB9D2100735C27 = {
 						CreatedOnToolsVersion = 8.0;
@@ -281,16 +290,19 @@
 				257647AC1E604022006C4FAA /* Session+CoreDataClass.swift in Sources */,
 				251FBE541E47BF4B0031DB6D /* MetricsController.swift in Sources */,
 				2591AAC81E631F630064E303 /* ServerPrefs.swift in Sources */,
+				9F514D74206CDCA40081EBA5 /* MergedMetrics.swift in Sources */,
 				251FBE481E479F180031DB6D /* UserPrefs.swift in Sources */,
 				25135BA71E6199B900D0723E /* AuthorizationUtils.swift in Sources */,
 				25135BA31E6196C900D0723E /* MetricsTransfer.swift in Sources */,
 				257647AD1E604022006C4FAA /* Session+CoreDataProperties.swift in Sources */,
 				25135BA91E61D2E900D0723E /* AuthorizationController.swift in Sources */,
-				2576479E1E603F73006C4FAA /* InnoMetricsCollector.xcdatamodeld in Sources */,
+				2576479E1E603F73006C4FAA /* InnoMetricsTransfer.xcdatamodeld in Sources */,
 				25D73DF81E478D95006C7BB7 /* Keyword.swift in Sources */,
 				2554328D1DCB9D2100735C27 /* MainController.swift in Sources */,
 				257647AB1E604022006C4FAA /* Metric+CoreDataProperties.swift in Sources */,
 				257647AA1E604022006C4FAA /* Metric+CoreDataClass.swift in Sources */,
+				9F13A8F82063CDB20057F6F3 /* IdleMetric+CoreDataProperties.swift in Sources */,
+				9F13A8FA2063CDCD0057F6F3 /* IdleMetric+CoreDataClass.swift in Sources */,
 				2554328B1DCB9D2100735C27 /* AppDelegate.swift in Sources */,
 				25E0B4F11E61E0FC00765EA2 /* MainWindowController.swift in Sources */,
 			);
@@ -454,13 +466,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		2576479C1E603F73006C4FAA /* InnoMetricsCollector.xcdatamodeld */ = {
+		2576479C1E603F73006C4FAA /* InnoMetricsTransfer.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				2576479D1E603F73006C4FAA /* InnoMetricsCollector.xcdatamodel */,
+				2576479D1E603F73006C4FAA /*  */,
 			);
-			currentVersion = 2576479D1E603F73006C4FAA /* InnoMetricsCollector.xcdatamodel */;
-			path = InnoMetricsCollector.xcdatamodeld;
+			currentVersion = 2576479D1E603F73006C4FAA /*  */;
+			path = InnoMetricsTransfer.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

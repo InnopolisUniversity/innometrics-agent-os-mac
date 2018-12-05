@@ -3,12 +3,12 @@
 //  InnoMetricsCollector
 //
 //  Created by Denis Zaplatnikov on 12/01/2017.
-//  Copyright © 2017 Denis Zaplatnikov. All rights reserved.
+//  Copyright © 2018 Denis Zaplatnikov and Pavel Kotov. All rights reserved.
 //
 
 import Cocoa
 
-class CurrentWorkingApplicationController: NSView {
+class ActiveApplicationController: NSView {
     
     @IBOutlet weak var appImage: NSImageView!
     @IBOutlet weak var appName: NSTextField!

@@ -3,7 +3,7 @@
 //  InnoMetricsCollector
 //
 //  Created by Denis Zaplatnikov on 11/01/2017.
-//  Copyright © 2018 Denis Zaplatnikov and Pavel Kotov. All rights reserved.
+//  Copyright © 2017 Denis Zaplatnikov. All rights reserved.
 //
 
 import Foundation
@@ -24,4 +24,5 @@ extension Metric {
     @NSManaged public var timestampEnd: NSDate?
     @NSManaged public var timestampStart: NSDate?
     @NSManaged public var session: Session?
+
 }

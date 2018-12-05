@@ -195,8 +195,13 @@ class MainController: NSViewController {
     }
     
     @IBAction func sendMetricsBtnClicked(_ sender: AnyObject) {
-        if metricsController.metrics.count == 0 {
+        if metricsController.appFocusMetrics.count == 0 {
             dialogOKCancel(question: "Warning", text: "There are no metrics data to send.")
+            return
+        }
+        
+        if AuthorizationUtils.offlineModeEnabled() {
+            dialogOKCancel(question: "Warning", text: "Offline mode enabled")
             return
         }
         
@@ -255,6 +260,14 @@ class MainController: NSViewController {
             
             for metric in metricsToDelete {
                 context.delete(metric)
+            }
+            
+            let idleMetricsFetch: NSFetchRequest<IdleMetric> = IdleMetric.fetchRequest()
+            idleMetricsFetch.includesPropertyValues = false
+            let idleMetricsToDelete = try context.fetch(idleMetricsFetch as! NSFetchRequest<NSFetchRequestResult>) as! [NSManagedObject]
+            
+            for idleMetric in idleMetricsToDelete {
+                context.delete(idleMetric)
             }
             
             let sessionsFetch: NSFetchRequest<Session> = Session.fetchRequest()

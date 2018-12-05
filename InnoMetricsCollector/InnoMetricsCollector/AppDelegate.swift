@@ -3,7 +3,7 @@
 //  InnoMetricsCollector
 //
 //  Created by Denis Zaplatnikov on 04/01/2017.
-//  Copyright © 2017 Denis Zaplatnikov. All rights reserved.
+//  Copyright © 2018 Denis Zaplatnikov and Pavel Kotov. All rights reserved.
 //
 
 import Cocoa
@@ -21,7 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }
-
+    
     // MARK: - Core Data stack
 
     lazy var applicationDocumentsDirectory: Foundation.URL = {
@@ -69,7 +69,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if failError == nil {
             coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
             let url = self.applicationDocumentsDirectory.appendingPathComponent("InnoMetricsCollector.storedata")
-            print (url)
+
             do {
                 try coordinator!.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)
             } catch {
