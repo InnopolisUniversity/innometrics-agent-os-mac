@@ -32,7 +32,8 @@ class CollectorController: NSObject {
     private var isCollectingBrowserInfo: Bool = false
     private var isCollecting: Bool = true
     
-    private let browsersId: [String] = ["org.chromium.Chromium", "com.google.Chrome.canary", "com.google.Chrome", "com.apple.Safari"]
+    private let browsersId: [String] = ["org.chromium.Chromium", "com.google.Chrome.canary", "com.google.Chrome", "com.apple.Safari",
+                                        "com.jetbrains.pycharm"]
     
     let statusItem = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
     
