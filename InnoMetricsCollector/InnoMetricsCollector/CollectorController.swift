@@ -113,7 +113,7 @@ class CollectorController: NSObject {
         
         createAndSaveMetric(frontmostApp: frontmostApp!)
         
-        if (browsersId.contains(foregroundWindowBundleId!)) {
+        if (foregroundWindowBundleId != nil && browsersId.contains(foregroundWindowBundleId!)) {
             
             // background func
             let backgroundQueue = DispatchQueue(label: "com.app.InnoMetricsCollector", qos: .background, target: nil)
@@ -199,7 +199,7 @@ class CollectorController: NSObject {
         createAndSaveCurrentSession()
         metric.session = self.currentSession
         
-        if (self.browsersId.contains(foregroundWindowBundleId!)) {
+        if (foregroundWindowBundleId != nil && self.browsersId.contains(foregroundWindowBundleId!)) {
             let foregroundWindowTabUrl = BrowserInfoUtils.activeTabURL(bundleIdentifier: foregroundWindowBundleId!)
             
             if (foregroundWindowTabUrl != nil) {

@@ -20,9 +20,12 @@ class ActiveApplicationController: NSView {
         // do UI updates on the main thread
         DispatchQueue.main.async {
             self.timer.invalidate()
-            self.counter = 0
+            self.counter = 0;
+            var path: String? = nil;
+            if (application.bundleIdentifier != nil) {
+                path = NSWorkspace.shared().absolutePathForApplication(withBundleIdentifier: application.bundleIdentifier!)
+            }
             
-            let path = NSWorkspace.shared().absolutePathForApplication(withBundleIdentifier: application.bundleIdentifier!)
             if (path != nil) {
                 self.appImage.image = NSWorkspace.shared().icon(forFile: path!)
             }
