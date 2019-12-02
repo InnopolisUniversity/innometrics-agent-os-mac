@@ -91,6 +91,7 @@
 					2588A2CC1E35FD4C00D4B30B = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = F4Y7CW6HNH;
+						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -249,7 +250,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.denzap.InnoMetricsCollectorHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -264,7 +266,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.denzap.InnoMetricsCollectorHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -287,6 +290,7 @@
 				2588A2DC1E35FD4C00D4B30B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

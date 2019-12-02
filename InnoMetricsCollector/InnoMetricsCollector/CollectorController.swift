@@ -32,14 +32,14 @@ class CollectorController: NSObject {
     private var isPaused: Bool = false
     
     private var currentIdleMetric: IdleMetric?
-    private let possibleUserMovements: NSEventMask = [.mouseMoved, .keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown]
+    private let possibleUserMovements: NSEvent.EventTypeMask = [.mouseMoved, .keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown]
     
     private var isCollectingBrowserInfo: Bool = false
     private var isCollecting: Bool = true
     
     private let browsersId: [String] = ["org.chromium.Chromium", "com.google.Chrome.canary", "com.google.Chrome", "com.apple.Safari"]
     
-    let statusItem = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
+    let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
     override func awakeFromNib() {
         setUpLaunchAtLogin()
@@ -57,7 +57,7 @@ class CollectorController: NSObject {
         currentWorkingSessionMenuItem.view = currentWorkingSessionView
         
         // set up the NSManagedObjectContext
-        let appDelegate = NSApplication.shared().delegate as! AppDelegate
+        let appDelegate = NSApplication.shared.delegate as! AppDelegate
         context = appDelegate.managedObjectContext
         
         let transferAppIdentifier = "com.denzap.InnometricsTransfer"
@@ -67,7 +67,7 @@ class CollectorController: NSObject {
         DistributedNotificationCenter.default().addObserver(self, selector: #selector(dbChangeBegin), name: startChangingDbNotificationName, object: transferAppIdentifier)
         DistributedNotificationCenter.default().addObserver(self, selector: #selector(dbChangeEnd), name: endChangingDbNotificationName, object: transferAppIdentifier)
         
-        NSWorkspace.shared().notificationCenter.addObserver(self, selector: #selector(applicationSwitchTriggered), name: NSNotification.Name.NSWorkspaceDidActivateApplication, object: nil)
+        NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(applicationSwitchTriggered), name: NSWorkspace.didActivateApplicationNotification, object: nil)
         
         // Monitor for all possible user's movements (actions)
         NSEvent.addGlobalMonitorForEvents (
@@ -89,7 +89,7 @@ class CollectorController: NSObject {
         setEndTimeOfPrevMetric()
     }
     
-    func applicationSwitchTriggered(notification: NSNotification) {
+    @objc func applicationSwitchTriggered(notification: NSNotification) {
         handleApplicationSwitch()
     }
     
@@ -98,7 +98,7 @@ class CollectorController: NSObject {
             return
         }
         
-        let frontmostApp = NSWorkspace.shared().frontmostApplication
+        let frontmostApp = NSWorkspace.shared.frontmostApplication
         if (frontmostApp == nil) {
             return
         }
@@ -122,7 +122,7 @@ class CollectorController: NSObject {
                 self.isCollectingBrowserInfo = true
                 while (self.isCollectingBrowserInfo) {
                     sleep(5)
-                    let fronmostApp = NSWorkspace.shared().frontmostApplication
+                    let fronmostApp = NSWorkspace.shared.frontmostApplication
                     if (fronmostApp == nil) {
                         self.isCollectingBrowserInfo = false
                         break
@@ -290,7 +290,7 @@ class CollectorController: NSObject {
     
     @IBAction func quitCliked(_ sender: AnyObject) {
         setEndTimeOfPrevMetric()
-        NSApplication.shared().terminate(self)
+        NSApplication.shared.terminate(self)
     }
     
     @IBAction func pausePlayClicked(_ sender: AnyObject) {
@@ -308,7 +308,7 @@ class CollectorController: NSObject {
         }
     }
     
-    func dbChangeBegin() {
+    @objc func dbChangeBegin() {
         pausePlayBtn.isEnabled = false
         
         isCollecting = false
@@ -319,7 +319,7 @@ class CollectorController: NSObject {
         }
     }
     
-    func dbChangeEnd() {
+    @objc func dbChangeEnd() {
         context.reset()
         currentSession = nil
         currentMetric = nil

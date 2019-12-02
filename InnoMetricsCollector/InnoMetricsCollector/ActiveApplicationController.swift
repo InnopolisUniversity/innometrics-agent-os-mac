@@ -23,11 +23,11 @@ class ActiveApplicationController: NSView {
             self.counter = 0;
             var path: String? = nil;
             if (application.bundleIdentifier != nil) {
-                path = NSWorkspace.shared().absolutePathForApplication(withBundleIdentifier: application.bundleIdentifier!)
+                path = NSWorkspace.shared.absolutePathForApplication(withBundleIdentifier: application.bundleIdentifier!)
             }
             
             if (path != nil) {
-                self.appImage.image = NSWorkspace.shared().icon(forFile: path!)
+                self.appImage.image = NSWorkspace.shared.icon(forFile: path!)
             }
             
             if (application.localizedName != nil) {
@@ -37,11 +37,11 @@ class ActiveApplicationController: NSView {
             
             self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.updateTime), userInfo: nil, repeats: true)
             
-            RunLoop.main.add(self.timer, forMode: .commonModes)
+            RunLoop.main.add(self.timer, forMode: RunLoop.Mode.common)
         }
     }
     
-    func updateTime() {
+    @objc func updateTime() {
         DispatchQueue.main.async {
             self.counter += 1
             self.appTimeUsage.stringValue = self.stringFromTimeInterval(interval: self.counter)

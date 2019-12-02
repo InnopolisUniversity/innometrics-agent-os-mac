@@ -15,14 +15,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to initialize your application
         let path = NSString(string: (NSString(string: (NSString(string: (NSString(string: Bundle.main.bundlePath).deletingLastPathComponent)).deletingLastPathComponent)).deletingLastPathComponent)).deletingLastPathComponent
         
-        NSWorkspace.shared().launchApplication(path)
-        NSApplication.shared().terminate(self)
+        NSWorkspace.shared.launchApplication(path)
+        NSApplication.shared.terminate(self)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }
-
-
 }
 

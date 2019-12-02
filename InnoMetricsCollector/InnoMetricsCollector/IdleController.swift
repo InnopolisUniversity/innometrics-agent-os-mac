@@ -36,7 +36,7 @@ class IdleController: NSView {
     
     func updateIdleView(newIdleTime: Int) -> String {
         var currentAppName = ""
-        let currentApp = NSWorkspace.shared().frontmostApplication
+        let currentApp = NSWorkspace.shared.frontmostApplication
         if (currentApp != nil && currentApp?.localizedName != nil) {
             currentAppName = (currentApp?.localizedName!)!
         }
