@@ -3,11 +3,12 @@
 //  InnoMetricsCollector
 //
 //  Created by Denis Zaplatnikov on 11/01/2017.
-//  Copyright © 2018 Denis Zaplatnikov and Pavel Kotov. All rights reserved.
+//  Copyright © 2018 Denis Zaplatnikov, Pavel Kotov & Dragos Strugar. All rights reserved.
 //
 
 import Cocoa
 import ServiceManagement
+import Sparkle
 
 class CollectorController: NSObject {
     
@@ -24,6 +25,8 @@ class CollectorController: NSObject {
 
     @IBOutlet weak var pausePlayBtn: NSButton!
     @IBOutlet weak var pausePlayLabel: NSTextField!
+    
+    @IBOutlet weak var updateBtn: NSButtonCell!
     
     private var currentSession: Session!
     private var currentMetric: Metric?
@@ -286,6 +289,13 @@ class CollectorController: NSObject {
 //                print("An error occured")
 //            }
 //        }
+    }
+    
+    
+    @IBAction func updateClicked(_ sender: Any) {
+        let updater = SUUpdater.shared()
+        updater?.feedURL = URL(string: "some mystery location")
+        updater?.checkForUpdates(self)
     }
     
     @IBAction func quitCliked(_ sender: AnyObject) {

@@ -3,7 +3,7 @@
 //  InnoMetricsCollector
 //
 //  Created by Denis Zaplatnikov on 12/01/2017.
-//  Copyright © 2018 Denis Zaplatnikov and Pavel Kotov. All rights reserved.
+//  Copyright © 2018 Denis Zaplatnikov, Pavel Kotov & Dragos Strugar. All rights reserved.
 //
 
 import Cocoa

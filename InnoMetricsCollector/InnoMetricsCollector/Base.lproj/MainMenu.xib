@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,7 +18,11 @@
                 <outlet property="updater" destination="opZ-q5-Rga" id="eac-1P-ifC"/>
             </connections>
         </customObject>
-        <customObject id="opZ-q5-Rga" customClass="SUUpdater"/>
+        <customObject id="opZ-q5-Rga" customClass="SUUpdater">
+            <connections>
+                <outlet property="delegate" destination="nAU-ny-g4H" id="HZJ-s0-tqX"/>
+            </connections>
+        </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
         <customObject id="B27-Wf-KEC" userLabel="CollectorController" customClass="CollectorController" customModule="InnoMetricsCollector" customModuleProvider="target">
             <connections>
@@ -29,6 +33,7 @@
                 <outlet property="pausePlayBtn" destination="MLS-W4-KBg" id="t6q-EY-smp"/>
                 <outlet property="pausePlayLabel" destination="yMp-Ev-SGw" id="Jqr-Pf-uxi"/>
                 <outlet property="statusMenu" destination="8zz-s0-ezL" id="fHq-JZ-YNn"/>
+                <outlet property="updateBtn" destination="1ag-XZ-Fbl" id="j9e-RL-QKP"/>
             </connections>
         </customObject>
         <menu id="8zz-s0-ezL">
@@ -44,37 +49,29 @@
             <point key="canvasLocation" x="-195" y="-476"/>
         </menu>
         <customView id="2D5-vd-rFz" userLabel="CollectorView">
-            <rect key="frame" x="0.0" y="0.0" width="376" height="295"/>
+            <rect key="frame" x="0.0" y="0.0" width="376" height="339"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <tabView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mGm-OG-OoU" userLabel="TabView">
-                    <rect key="frame" x="-7" y="94" width="381" height="207"/>
+                    <rect key="frame" x="-7" y="138" width="381" height="207"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <font key="font" metaFont="system"/>
                     <tabViewItems>
                         <tabViewItem label="Focus Application Metric" identifier="" id="fw2-gK-aTP" userLabel="Active Application Metric">
-                            <view key="view" id="KLV-Ou-b9z" customClass="ActiveApplicationController" customModule="InnoMetricsCollector" customModuleProvider="target">
-                                <rect key="frame" x="10" y="33" width="220" height="0.0"/>
+                            <view key="view" ambiguous="YES" id="KLV-Ou-b9z" customClass="ActiveApplicationController" customModule="InnoMetricsCollector" customModuleProvider="target">
+                                <rect key="frame" x="10" y="33" width="361" height="161"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EgM-CV-eKa">
-                                        <rect key="frame" x="121" y="-75" width="228" height="17"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EgM-CV-eKa">
+                                        <rect key="frame" x="121" y="86" width="228" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Application" id="cJr-ll-XNF">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HPT-gi-lBI">
-                                        <rect key="frame" x="121" y="-108" width="228" height="17"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="00:00:00" id="gji-sg-Kqq">
-                                            <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                        </textFieldCell>
-                                    </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yEj-tb-mBO">
-                                        <rect key="frame" x="27" y="-34" width="328" height="17"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yEj-tb-mBO">
+                                        <rect key="frame" x="27" y="127" width="328" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Current process" id="rky-h9-T6g">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -82,13 +79,21 @@
                                         </textFieldCell>
                                     </textField>
                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u3K-b9-S6v">
-                                        <rect key="frame" x="29" y="-108" width="50" height="50"/>
+                                        <rect key="frame" x="29" y="53" width="50" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="2Z8-r7-vAe"/>
                                             <constraint firstAttribute="width" constant="50" id="R4x-Kr-rs9"/>
                                         </constraints>
                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="xHU-LL-UaL"/>
                                     </imageView>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HPT-gi-lBI">
+                                        <rect key="frame" x="121" y="53" width="228" height="17"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="00:00:00" id="gji-sg-Kqq">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="HPT-gi-lBI" firstAttribute="leading" secondItem="u3K-b9-S6v" secondAttribute="trailing" constant="50" id="1wl-b6-Pch"/>
@@ -110,7 +115,7 @@
                             </view>
                         </tabViewItem>
                         <tabViewItem label="Idle Time Metric" identifier="" id="uTu-KD-xVe">
-                            <view key="view" ambiguous="YES" id="HJW-qC-uW9" customClass="IdleController" customModule="InnoMetricsCollector" customModuleProvider="target">
+                            <view key="view" id="HJW-qC-uW9" customClass="IdleController" customModule="InnoMetricsCollector" customModuleProvider="target">
                                 <rect key="frame" x="10" y="33" width="361" height="161"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -187,7 +192,7 @@
                     </tabViewItems>
                 </tabView>
                 <customView ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TRK-q1-9NM">
-                    <rect key="frame" x="108" y="10" width="151" height="76"/>
+                    <rect key="frame" x="108" y="54" width="151" height="76"/>
                     <subviews>
                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="foH-Dy-9Dh">
                             <rect key="frame" x="0.0" y="0.0" width="77" height="76"/>
@@ -271,8 +276,23 @@
                         <constraint firstItem="foH-Dy-9Dh" firstAttribute="leading" secondItem="TRK-q1-9NM" secondAttribute="leading" id="xAo-ef-gWk"/>
                     </constraints>
                 </customView>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nAU-ny-g4H">
+                    <rect key="frame" x="109" y="6" width="159" height="32"/>
+                    <buttonCell key="cell" type="push" title="Check for updates.." bezelStyle="rounded" alignment="center" borderStyle="border" identifier="updater" imageScaling="proportionallyDown" inset="2" id="1ag-XZ-Fbl">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <connections>
+                            <action selector="updateClicked:" target="B27-Wf-KEC" id="Zf6-g2-6rv"/>
+                        </connections>
+                    </buttonCell>
+                    <color key="contentTintColor" name="systemIndigoColor" catalog="System" colorSpace="catalog"/>
+                </button>
             </subviews>
-            <point key="canvasLocation" x="-205" y="-206.5"/>
+            <constraints>
+                <constraint firstItem="nAU-ny-g4H" firstAttribute="centerX" secondItem="2D5-vd-rFz" secondAttribute="centerX" id="SPU-5m-z76"/>
+                <constraint firstAttribute="bottom" secondItem="nAU-ny-g4H" secondAttribute="bottom" constant="13" id="du5-Kn-VJm"/>
+            </constraints>
+            <point key="canvasLocation" x="-205" y="-184.5"/>
         </customView>
         <customView id="ozt-Se-289" customClass="CurrentWorkingSessionController" customModule="InnoMetricsCollector" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="380" height="167"/>
@@ -429,7 +449,7 @@
         </customView>
     </objects>
     <resources>
-        <image name="pauseIcon" width="24" height="24"/>
-        <image name="stopIcon" width="24" height="24"/>
+        <image name="pauseIcon" width="48" height="48"/>
+        <image name="stopIcon" width="48" height="48"/>
     </resources>
 </document>

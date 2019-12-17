@@ -3,7 +3,8 @@
 //  InnoMetricsCollector
 //
 //  Created by Pavel Kotov on 09/03/2018.
-//  Copyright © 2018 Pavel Kotov. All rights reserved.
+//  Merged to Swift 4 by Dragos Strugar on 02/12/2019
+//  Copyright © 2019 Pavel Kotov & Dragos Strugar. All rights reserved.
 //
 
 import Cocoa
