@@ -63,11 +63,11 @@
 		25C5B4F11E2684DF007FF799 /* Metric+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Metric+CoreDataProperties.swift"; path = "../Metric+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		25C5B4F81E26A593007FF799 /* InnoMetricsCollector_Bridging_Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InnoMetricsCollector_Bridging_Header.h; sourceTree = SOURCE_ROOT; };
 		25C5B4F91E26A9AC007FF799 /* SessionInfoUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionInfoUtils.swift; sourceTree = "<group>"; };
-		25D57A881E1D6F7600B2265D /* InnoMetricsCollector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = InnoMetricsCollector.app; path = "/Users/strudra/Documents/-INNOPOLIS/innopolis/rsf_innometrics/innometrics-agent-os-mac/InnoMetricsCollector/build/Debug/InnoMetricsCollector.app"; sourceTree = "<absolute>"; };
 		25D57A8B1E1D6F7700B2265D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		25D57A901E1D6F7700B2265D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		25D57A931E1D6F7700B2265D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		25D57A951E1D6F7700B2265D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2CCEBC2123B4E360007A5903 /* InnoMetricsCollector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InnoMetricsCollector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		77C440B57B5DFA283CB21009 /* Pods-InnoMetricsCollector.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InnoMetricsCollector.release.xcconfig"; path = "Pods/Target Support Files/Pods-InnoMetricsCollector/Pods-InnoMetricsCollector.release.xcconfig"; sourceTree = "<group>"; };
 		9F590DC22052A44C009AC489 /* IdleController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleController.swift; sourceTree = "<group>"; };
 		9F8C169E204D53830068CB58 /* IdleMetric+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IdleMetric+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -126,6 +126,7 @@
 				2588A2DD1E35FD4C00D4B30B /* InnoMetricsCollectorHelper.xcodeproj */,
 				AE4E2BA26056022E22B9792A /* Pods */,
 				5BD7A248E30A6B5F9B4CD41E /* Frameworks */,
+				2CCEBC2123B4E360007A5903 /* InnoMetricsCollector.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -185,7 +186,7 @@
 			);
 			name = InnoMetricsCollector;
 			productName = InnoMetricsCollector;
-			productReference = 25D57A881E1D6F7600B2265D /* InnoMetricsCollector.app */;
+			productReference = 2CCEBC2123B4E360007A5903 /* InnoMetricsCollector.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
