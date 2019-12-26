@@ -347,12 +347,7 @@ class CollectorController: NSObject {
     private func setUpLaunchAtLogin() {
         let appBundleIdentifier = "ru.innometrics.InnoMetricsCollectorHelper"
         if SMLoginItemSetEnabled(appBundleIdentifier as CFString, true) {
-            //if autoLaunch {
-                NSLog("Successfully add login item.")
-            //} else {
-                //NSLog("Successfully remove login item.")
-            //}
-            
+            NSLog("Successfully add login item.")
         } else {
             NSLog("Failed to add login item.")
         }
