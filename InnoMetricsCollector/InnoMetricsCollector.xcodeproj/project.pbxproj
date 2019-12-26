@@ -63,7 +63,7 @@
 		25C5B4F11E2684DF007FF799 /* Metric+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Metric+CoreDataProperties.swift"; path = "../Metric+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		25C5B4F81E26A593007FF799 /* InnoMetricsCollector_Bridging_Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InnoMetricsCollector_Bridging_Header.h; sourceTree = SOURCE_ROOT; };
 		25C5B4F91E26A9AC007FF799 /* SessionInfoUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionInfoUtils.swift; sourceTree = "<group>"; };
-		25D57A881E1D6F7600B2265D /* InnoMetricsCollector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InnoMetricsCollector.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		25D57A881E1D6F7600B2265D /* InnoMetricsCollector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = InnoMetricsCollector.app; path = "/Users/strudra/Documents/-INNOPOLIS/innopolis/rsf_innometrics/innometrics-agent-os-mac/InnoMetricsCollector/build/Debug/InnoMetricsCollector.app"; sourceTree = "<absolute>"; };
 		25D57A8B1E1D6F7700B2265D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		25D57A901E1D6F7700B2265D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		25D57A931E1D6F7700B2265D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -123,19 +123,10 @@
 			isa = PBXGroup;
 			children = (
 				25D57A8A1E1D6F7600B2265D /* InnoMetricsCollector */,
-				25D57A891E1D6F7600B2265D /* Products */,
 				2588A2DD1E35FD4C00D4B30B /* InnoMetricsCollectorHelper.xcodeproj */,
 				AE4E2BA26056022E22B9792A /* Pods */,
 				5BD7A248E30A6B5F9B4CD41E /* Frameworks */,
 			);
-			sourceTree = "<group>";
-		};
-		25D57A891E1D6F7600B2265D /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				25D57A881E1D6F7600B2265D /* InnoMetricsCollector.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		25D57A8A1E1D6F7600B2265D /* InnoMetricsCollector */ = {
@@ -209,6 +200,7 @@
 				TargetAttributes = {
 					25D57A871E1D6F7600B2265D = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = AR494XTABA;
 						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 					};
@@ -224,7 +216,7 @@
 				Base,
 			);
 			mainGroup = 25D57A7F1E1D6F7600B2265D;
-			productRefGroup = 25D57A891E1D6F7600B2265D /* Products */;
+			productRefGroup = 25D57A7F1E1D6F7600B2265D;
 			projectDirPath = "";
 			projectReferences = (
 				{
@@ -460,13 +452,17 @@
 			baseConfigurationReference = 1300D2E379B5219677E48D60 /* Pods-InnoMetricsCollector.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = AR494XTABA;
 				INFOPLIST_FILE = InnoMetricsCollector/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = com.denzap.InnoMetricsCollector;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.innometrics.InnoMetricsCollector;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = InnoMetricsCollector_Bridging_Header.h;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.2;
@@ -478,13 +474,17 @@
 			baseConfigurationReference = 77C440B57B5DFA283CB21009 /* Pods-InnoMetricsCollector.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = AR494XTABA;
 				INFOPLIST_FILE = InnoMetricsCollector/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = com.denzap.InnoMetricsCollector;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.innometrics.InnoMetricsCollector;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = InnoMetricsCollector_Bridging_Header.h;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.2;

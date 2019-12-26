@@ -20,10 +20,14 @@
 	<string>2.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.business</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>LSUIElement</key>
 	<true/>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>This script needs to control other applications to run.</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2019 Innometrics. All rights reserved.</string>
 	<key>NSMainNibFile</key>
@@ -34,11 +38,9 @@
 	<true/>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
+	<key>SUFeedURL</key>
+	<string>https://github.com/InnopolisUniversity/innometrics-agent-os-mac/releases/download/v2.0/appcast.xml</string>
 	<key>SUScheduledCheckInterval</key>
 	<integer>3600</integer>
-	<key>NSAppleEventsUsageDescription</key>
-	<string>This script needs to control other applications to run.</string>
-	<key>SUFeedURL</key>
-	<string>https://s3.amazonaws.com/com.sparklesetupguide.tutorial/sparkletestcast.xml</string>
 </dict>
 </plist>

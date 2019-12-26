@@ -63,7 +63,7 @@ class CollectorController: NSObject {
         let appDelegate = NSApplication.shared.delegate as! AppDelegate
         context = appDelegate.managedObjectContext
         
-        let transferAppIdentifier = "com.denzap.InnometricsTransfer"
+        let transferAppIdentifier = "ru.innometrics.InnometricsTransfer"
         let startChangingDbNotificationName = Notification.Name("db_start_changing")
         let endChangingDbNotificationName = Notification.Name("db_end_changing")
         
@@ -107,7 +107,7 @@ class CollectorController: NSObject {
         }
         
         let foregroundWindowBundleId = frontmostApp?.bundleIdentifier
-        if (foregroundWindowBundleId == "com.denzap.InnoMetricsCollector") {
+        if (foregroundWindowBundleId == "ru.innometrics.InnoMetricsCollector") {
             return
         }
         
@@ -345,7 +345,7 @@ class CollectorController: NSObject {
     }
     
     private func setUpLaunchAtLogin() {
-        let appBundleIdentifier = "com.denzap.InnoMetricsCollectorHelper"
+        let appBundleIdentifier = "ru.innometrics.InnoMetricsCollectorHelper"
         if SMLoginItemSetEnabled(appBundleIdentifier as CFString, true) {
             //if autoLaunch {
                 NSLog("Successfully add login item.")
