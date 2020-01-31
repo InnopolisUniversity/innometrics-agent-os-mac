@@ -18,7 +18,7 @@ class IdleController: NSView {
     private var totalIdleTimeValue: Int = 0
     private var topApps = [(String, Int)]()
     
-    private var usersLastActionTime: Date = NSDate() as Date!
+    private var usersLastActionTime: Date = (NSDate() as Date?)!
     private let idleTimeout: Int = 5
     
     // Return, if user exceeded idle timeout and for how long and in which app
@@ -26,7 +26,7 @@ class IdleController: NSView {
         let currentTime = NSDate()
         let timeSinceLastAction = (Int) (currentTime.timeIntervalSinceReferenceDate - usersLastActionTime.timeIntervalSinceReferenceDate)
         let timeoutExceeded = timeSinceLastAction > idleTimeout
-        usersLastActionTime = currentTime as Date!
+        usersLastActionTime = (currentTime as Date?)!
         
         var currentAppName: String? = nil
         if (timeoutExceeded) {
