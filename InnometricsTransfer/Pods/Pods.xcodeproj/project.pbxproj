@@ -14,17 +14,17 @@
 
 /* Begin PBXFileReference section */
 		06DC921FF51314B14E517DF1D00112DC /* Pods-InnometricsTransfer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-InnometricsTransfer.release.xcconfig"; sourceTree = "<group>"; };
-		0938785ED87AED8C5EDE23707347E0EA /* Pods-InnometricsTransfer.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-InnometricsTransfer.modulemap"; sourceTree = "<group>"; };
+		0938785ED87AED8C5EDE23707347E0EA /* Pods-InnometricsTransfer.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-InnometricsTransfer.modulemap"; sourceTree = "<group>"; };
 		270DD1219F1E6CF00379D39F252D87C6 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		4127449787DD970C5E549C2F2CDE1F35 /* Pods-InnometricsTransfer-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-InnometricsTransfer-umbrella.h"; sourceTree = "<group>"; };
 		4C6BDB0A6BC770627F24A449EAF167C9 /* Pods-InnometricsTransfer-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-InnometricsTransfer-frameworks.sh"; sourceTree = "<group>"; };
 		4DED442C123108A148B5BD21084A53C4 /* Pods-InnometricsTransfer-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-InnometricsTransfer-acknowledgements.plist"; sourceTree = "<group>"; };
 		56ED657837E09024D8CEB74EE243839B /* Pods-InnometricsTransfer-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-InnometricsTransfer-resources.sh"; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9F9C0AD9475F515869BD0F9154042CF7 /* Pods-InnometricsTransfer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-InnometricsTransfer.debug.xcconfig"; sourceTree = "<group>"; };
 		A97153A1DF7AD5E12ACA21591B0B9FE5 /* Pods-InnometricsTransfer-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-InnometricsTransfer-dummy.m"; sourceTree = "<group>"; };
 		B6C6AAD7808C9C8401FFF8B027544267 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DA5A36EBF83BA22EEA895C31EF1532F1 /* Pods_InnometricsTransfer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_InnometricsTransfer.framework; path = "Pods-InnometricsTransfer.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA5A36EBF83BA22EEA895C31EF1532F1 /* Pods_InnometricsTransfer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InnometricsTransfer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE5F42884879E629654DEB9B55320026 /* Pods-InnometricsTransfer-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-InnometricsTransfer-acknowledgements.markdown"; sourceTree = "<group>"; };
 		FCCD3866C838F21B08E660964D16649C /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -62,7 +62,6 @@
 			children = (
 				634590055027CF510BE8FF8332E15655 /* Frameworks */,
 			);
-			name = Sparkle;
 			path = Sparkle;
 			sourceTree = "<group>";
 		};
@@ -172,7 +171,9 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
+				Base,
 			);
 			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
 			productRefGroup = 74CF399AEDC8268B1410F22A448DFFA7 /* Products */;

@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import Sparkle
 
 class MainController: NSViewController {
     @IBOutlet weak var spinnerView: NSProgressIndicator!
@@ -33,6 +34,12 @@ class MainController: NSViewController {
     @IBOutlet weak var sendMetricsBtn: NSButton!
     @IBOutlet weak var refreshTableBtn: NSButton!
     @IBOutlet weak var clearDBBtn: NSButton!
+    
+    @IBAction func checkForUpdates(_ sender: AnyObject) {
+        let updater = SUUpdater.shared()
+        updater?.feedURL = URL(string: "some location")
+        updater?.checkForUpdates(self)
+    }
     
     @IBOutlet weak var lastTableRefreshTextField: NSTextField!
     private var metricsController: MetricsController!
