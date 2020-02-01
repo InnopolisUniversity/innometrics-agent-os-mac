@@ -27,6 +27,8 @@
 		25D73DF81E478D95006C7BB7 /* Keyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D73DF71E478D95006C7BB7 /* Keyword.swift */; };
 		25E0B4F11E61E0FC00765EA2 /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E0B4F01E61E0FC00765EA2 /* MainWindowController.swift */; };
 		25F160BE1E64C190001B0B7D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 25F160BD1E64C190001B0B7D /* GoogleService-Info.plist */; };
+		2C676D2523E58AA50056112F /* release.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2C676D2423E58AA50056112F /* release.sh */; };
+		2C676D2723E58AC30056112F /* bump_build.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2C676D2623E58AC30056112F /* bump_build.sh */; };
 		9F13A8F82063CDB20057F6F3 /* IdleMetric+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F13A8F72063CDB20057F6F3 /* IdleMetric+CoreDataProperties.swift */; };
 		9F13A8FA2063CDCD0057F6F3 /* IdleMetric+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F13A8F92063CDCD0057F6F3 /* IdleMetric+CoreDataClass.swift */; };
 		9F514D74206CDCA40081EBA5 /* MergedMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F514D73206CDCA40081EBA5 /* MergedMetrics.swift */; };
@@ -55,6 +57,8 @@
 		25D73DF71E478D95006C7BB7 /* Keyword.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keyword.swift; sourceTree = "<group>"; };
 		25E0B4F01E61E0FC00765EA2 /* MainWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		25F160BD1E64C190001B0B7D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2C676D2423E58AA50056112F /* release.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = release.sh; sourceTree = "<group>"; };
+		2C676D2623E58AC30056112F /* bump_build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = bump_build.sh; sourceTree = "<group>"; };
 		9F13A8F72063CDB20057F6F3 /* IdleMetric+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdleMetric+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		9F13A8F92063CDCD0057F6F3 /* IdleMetric+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IdleMetric+CoreDataClass.swift"; sourceTree = "<group>"; };
 		9F514D73206CDCA40081EBA5 /* MergedMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergedMetrics.swift; sourceTree = "<group>"; };
@@ -77,6 +81,8 @@
 		2554327E1DCB9D2100735C27 = {
 			isa = PBXGroup;
 			children = (
+				2C676D2423E58AA50056112F /* release.sh */,
+				2C676D2623E58AC30056112F /* bump_build.sh */,
 				255432891DCB9D2100735C27 /* InnometricsTransfer */,
 				255432881DCB9D2100735C27 /* Products */,
 				256649AB1E3608570090B5D0 /* Frameworks */,
@@ -226,6 +232,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C676D2523E58AA50056112F /* release.sh in Resources */,
+				2C676D2723E58AC30056112F /* bump_build.sh in Resources */,
 				2554328F1DCB9D2100735C27 /* Assets.xcassets in Resources */,
 				255432921DCB9D2100735C27 /* Main.storyboard in Resources */,
 				25F160BE1E64C190001B0B7D /* GoogleService-Info.plist in Resources */,
@@ -434,6 +442,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2.0;
 				DEVELOPMENT_TEAM = AR494XTABA;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = InnometricsTransfer/Info.plist;
@@ -442,7 +451,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = ru.innometrics.InnoMetricsCollector;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.innometrics.InnoMetrics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
@@ -458,6 +468,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2.0;
 				DEVELOPMENT_TEAM = AR494XTABA;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = InnometricsTransfer/Info.plist;
@@ -466,7 +477,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = ru.innometrics.InnoMetricsCollector;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.innometrics.InnoMetrics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
