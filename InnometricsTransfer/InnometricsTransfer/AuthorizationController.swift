@@ -22,14 +22,14 @@ class AuthorizationController: NSViewController {
         self.view.window?.titlebarAppearsTransparent = true
         self.view.window?.isMovableByWindowBackground = true
         self.view.window?.backgroundColor = NSColor.gray
-        self.view.window?.styleMask = [(self.view.window?.styleMask)!, NSFullSizeContentViewWindowMask]
+        self.view.window?.styleMask = [(self.view.window?.styleMask)!]
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let attrs = [NSForegroundColorAttributeName : NSColor.white, NSFontAttributeName : NSFont.systemFont(ofSize: 17.0)] as [String : Any]
-        let buttonTitleStr = NSMutableAttributedString(string:"Login", attributes:attrs)
+        let attrs = [convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor) : NSColor.white, convertFromNSAttributedStringKey(NSAttributedString.Key.font) : NSFont.systemFont(ofSize: 17.0)] as [String : Any]
+        let buttonTitleStr = NSMutableAttributedString(string:"Login", attributes:convertToOptionalNSAttributedStringKeyDictionary(attrs))
         let attributedString = NSMutableAttributedString(string: "")
         attributedString.append(buttonTitleStr)
         loginBtn.setValue(attributedString, forKey: "attributedTitle")
@@ -47,11 +47,11 @@ class AuthorizationController: NSViewController {
     @IBAction func loginBtn_Clicked(_ sender: AnyObject) {
         let email = emailTextField.stringValue
         let password = passwordTextField.stringValue
-        if (((email.range(of: "\\s+", options: .regularExpression) != nil) || email.characters.count == 0) && ((password.range(of: "\\s+", options: .regularExpression) != nil) || password.characters.count == 0)) {
+        if (((email.range(of: "\\s+", options: .regularExpression) != nil) || email.count == 0) && ((password.range(of: "\\s+", options: .regularExpression) != nil) || password.count == 0)) {
             dialogOKCancel(question: "Warning", text: "Enter your email and password")
-        } else if (((email.range(of: "\\s+", options: .regularExpression) != nil) || email.characters.count == 0)) {
+        } else if (((email.range(of: "\\s+", options: .regularExpression) != nil) || email.count == 0)) {
             dialogOKCancel(question: "Warning", text: "Enter your email")
-        } else if (((password.range(of: "\\s+", options: .regularExpression) != nil) || password.characters.count == 0)) {
+        } else if (((password.range(of: "\\s+", options: .regularExpression) != nil) || password.count == 0)) {
             dialogOKCancel(question: "Warning", text: "Enter your password")
         } else {
             loaderIndicator.isHidden = false
@@ -94,7 +94,7 @@ class AuthorizationController: NSViewController {
         let myPopup: NSAlert = NSAlert()
         myPopup.messageText = question
         myPopup.informativeText = text
-        myPopup.alertStyle = NSAlertStyle.informational
+        myPopup.alertStyle = NSAlert.Style.informational
         myPopup.addButton(withTitle: "OK")
         myPopup.runModal()
     }
@@ -104,4 +104,15 @@ class AuthorizationController: NSViewController {
             // Update the view, if already loaded.
         }
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
 }

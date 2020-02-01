@@ -17,7 +17,7 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let appDelegate = NSApplication.shared().delegate as! AppDelegate
+        let appDelegate = NSApplication.shared.delegate as! AppDelegate
         appDelegate.logOutMenuItem.isEnabled = true
         
         fetchNewMetricsAndRefreshTable()
@@ -28,7 +28,7 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
         idleMetrics = []
         
         do {
-            let appDelegate = NSApplication.shared().delegate as! AppDelegate
+            let appDelegate = NSApplication.shared.delegate as! AppDelegate
             let context = appDelegate.managedObjectContext
             
             // Create an appropriate request to data context using user's filters
@@ -162,12 +162,12 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
                 let alert: NSAlert = NSAlert()
                 alert.messageText = "Would you like to delete selected metrics?"
                 alert.informativeText = "This action cannot be undone."
-                alert.alertStyle = NSAlertStyle.critical
+                alert.alertStyle = NSAlert.Style.critical
                 alert.addButton(withTitle: "Delete")
                 alert.addButton(withTitle: "Cancel")
                 
                 let answer = alert.runModal()
-                if answer == NSAlertFirstButtonReturn {
+                if answer == NSApplication.ModalResponse.alertFirstButtonReturn {
                     
                     let startChangingDbNotificationName = Notification.Name("db_start_changing")
                     let endChangingDbNotificationName = Notification.Name("db_end_changing")
@@ -175,18 +175,18 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
                 
                     newMetricsTableView.beginUpdates()
                     let indexPaths = newMetricsTableView.selectedRowIndexes
-                    let appDelegate = NSApplication.shared().delegate as! AppDelegate
+                    let appDelegate = NSApplication.shared.delegate as! AppDelegate
                     let context = appDelegate.managedObjectContext
                     for i in indexes.reversed() {
                         switch mergedMetrics[i].type {
                         case .idle:
                             let metric = self.idleMetrics.first(where: { $0.timestampStart == self.mergedMetrics[i].timestampStart })
                             context.delete(metric!)
-                            self.idleMetrics.remove(at: self.idleMetrics.index(of: metric!)!)
+                            self.idleMetrics.remove(at: self.idleMetrics.firstIndex(of: metric!)!)
                         case .appFocus:
                             let metric = self.appFocusMetrics.first(where: { $0.timestampStart == self.mergedMetrics[i].timestampStart })
                             context.delete(metric!)
-                            self.appFocusMetrics.remove(at: self.appFocusMetrics.index(of: metric!)!)
+                            self.appFocusMetrics.remove(at: self.appFocusMetrics.firstIndex(of: metric!)!)
                         }
                         mergedMetrics.remove(at: i)
                     }
@@ -212,7 +212,7 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-        let columnId = tableColumn?.identifier
+        let columnId = convertFromNSUserInterfaceItemIdentifier((tableColumn?.identifier)!)
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
@@ -251,4 +251,9 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
         return NSString(format: "%0.2d:%0.2d:%0.2d",hours,minutes,seconds)
     }
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSUserInterfaceItemIdentifier(_ input: NSUserInterfaceItemIdentifier) -> String {
+	return input.rawValue
 }

@@ -32,13 +32,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var notCorrectOrCancelled = false
         while (!notCorrectOrCancelled) {
             let answer = serverSettingsPopup.runModal()
-            if answer == NSAlertFirstButtonReturn {
+            if answer == NSApplication.ModalResponse.alertFirstButtonReturn {
                 let enteredString = inputTextField.stringValue
-                if ((enteredString.range(of: "\\s+", options: .regularExpression) != nil) || enteredString.characters.count == 0) {
+                if ((enteredString.range(of: "\\s+", options: .regularExpression) != nil) || enteredString.count == 0) {
                     let myPopup: NSAlert = NSAlert()
                     myPopup.messageText = "Warning"
                     myPopup.informativeText = "Server URL cannot be empty."
-                    myPopup.alertStyle = NSAlertStyle.informational
+                    myPopup.alertStyle = NSAlert.Style.informational
                     myPopup.addButton(withTitle: "OK")
                     myPopup.runModal()
                 } else {
@@ -55,18 +55,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let alert: NSAlert = NSAlert()
         alert.messageText = "InnometricsTransfer"
         alert.informativeText = "You are sure you want to log out?"
-        alert.alertStyle = NSAlertStyle.informational
+        alert.alertStyle = NSAlert.Style.informational
         alert.addButton(withTitle: "Log Out")
         alert.addButton(withTitle: "Cancel")
         
         let answer = alert.runModal()
-        if answer == NSAlertFirstButtonReturn {
+        if answer == NSApplication.ModalResponse.alertFirstButtonReturn {
             logOutMenuItem.isEnabled = false
             AuthorizationUtils.saveIsAuthorized(isAuthorized: false)
             AuthorizationUtils.saveAuthorizationToken(token: nil)
             let storyboard = NSStoryboard(name: "Main", bundle: nil)
             let avc = storyboard.instantiateController(withIdentifier:"AuthorizationController") as! AuthorizationController
-            NSApplication.shared().mainWindow?.contentViewController = avc
+            NSApplication.shared.mainWindow?.contentViewController = avc
         }
     }
     
@@ -136,7 +136,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if shouldFail || (failError != nil) {
             // Report any error we got.
             if let error = failError {
-                NSApplication.shared().presentError(error)
+                NSApplication.shared.presentError(error)
                 fatalError("Unresolved error: \(error), \(error.userInfo)")
             }
             fatalError("Unsresolved error: \(failureReason)")
@@ -165,7 +165,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 try managedObjectContext.save()
             } catch {
                 let nserror = error as NSError
-                NSApplication.shared().presentError(nserror)
+                NSApplication.shared.presentError(nserror)
             }
         }
     }
@@ -175,7 +175,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return managedObjectContext.undoManager
     }
     
-    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplicationTerminateReply {
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         // Save changes in the application's managed object context before the application terminates.
         
         if !managedObjectContext.commitEditing() {
@@ -208,7 +208,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             alert.addButton(withTitle: cancelButton)
             
             let answer = alert.runModal()
-            if answer == NSAlertSecondButtonReturn {
+            if answer == NSApplication.ModalResponse.alertSecondButtonReturn {
                 return .terminateCancel
             }
         }

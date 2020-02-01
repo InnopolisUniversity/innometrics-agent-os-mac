@@ -7,8 +7,14 @@
 //
 
 import Cocoa
+import Sparkle
 
 class MainWindowController: NSWindowController {
+    @IBAction func checkForUpdates(_ sender: AnyObject) {
+        let updater = SUUpdater.shared()
+        updater?.feedURL = URL(string: "some location")
+        updater?.checkForUpdates(self)
+    }
 
     override func windowDidLoad() {
         super.windowDidLoad()
@@ -21,7 +27,7 @@ class MainWindowController: NSWindowController {
         if AuthorizationUtils.isAuthorized() {
             self.contentViewController = mvc
         } else {
-            let appDelegate = NSApplication.shared().delegate as! AppDelegate
+            let appDelegate = NSApplication.shared.delegate as! AppDelegate
             appDelegate.logOutMenuItem.isEnabled = false
             self.contentViewController = avc
         }

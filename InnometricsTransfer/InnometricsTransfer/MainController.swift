@@ -19,14 +19,14 @@ class MainController: NSViewController {
     
     @IBOutlet weak var keywordsTableView: NSTableView!
     @IBOutlet var keywordsArrayController: NSArrayController!
-    dynamic var keywordsArray: Array<Keyword> = []
+    @objc dynamic var keywordsArray: Array<Keyword> = []
     private var prefsKeywordsArray: [String] = []
     @IBOutlet weak var removeKeywordBtn: NSButton!
     @IBOutlet weak var addKeywordBtn: NSButton!
     
     @IBOutlet weak var appsTableView: NSTableView!
     @IBOutlet var appsArrayController: NSArrayController!
-    dynamic var appsArray: Array<Application> = []
+    @objc dynamic var appsArray: Array<Application> = []
     private var prefsAppsArray: [String] = []
     @IBOutlet weak var addAppBtn: NSButton!
     @IBOutlet weak var removeAppBtn: NSButton!
@@ -49,10 +49,10 @@ class MainController: NSViewController {
         self.view.window?.titlebarAppearsTransparent = true
         self.view.window?.isMovableByWindowBackground = true
         self.view.window?.backgroundColor = NSColor.gray
-        self.view.window?.styleMask = [(self.view.window?.styleMask)!, NSFullSizeContentViewWindowMask]
+        self.view.window?.styleMask = [(self.view.window?.styleMask)!]
         
-        let window = NSApplication.shared().windows[0]
-        if let screen = NSScreen.main() {
+        let window = NSApplication.shared.windows[0]
+        if let screen = NSScreen.main {
             window.setFrame(screen.visibleFrame, display: true, animate: true)
         }
     }
@@ -73,10 +73,10 @@ class MainController: NSViewController {
         }
         
         if (UserPrefs.isNeedFromDateFilter()) {
-            fromDateCheckBox.state = NSOnState
+            fromDateCheckBox.state = NSControl.StateValue.on
         }
         if (UserPrefs.isNeedToDateFilter()) {
-            toDateCheckBox.state = NSOnState
+            toDateCheckBox.state = NSControl.StateValue.on
         }
         
         fromDate.dateValue = UserPrefs.getExludedFromDate() as Date
@@ -108,12 +108,12 @@ class MainController: NSViewController {
         let alert: NSAlert = NSAlert()
         alert.messageText = "Would you like to delete metrics data and clear the local database?"
         alert.informativeText = "This action cannot be undone."
-        alert.alertStyle = NSAlertStyle.critical
+        alert.alertStyle = NSAlert.Style.critical
         alert.addButton(withTitle: "Delete")
         alert.addButton(withTitle: "Cancel")
         
         let answer = alert.runModal()
-        if answer == NSAlertFirstButtonReturn {
+        if answer == NSApplication.ModalResponse.alertFirstButtonReturn {
             clearDatabase()
         }
     }
@@ -161,8 +161,8 @@ class MainController: NSViewController {
     }
     
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
-        if segue.identifier == "MetricsController" {
-            metricsController = segue.destinationController as! MetricsController
+        if segue.identifier! == "MetricsController" {
+            metricsController = segue.destinationController as? MetricsController
         }
     }
     
@@ -189,14 +189,14 @@ class MainController: NSViewController {
     
     @IBAction func fromDateFilterChanged(_ sender: AnyObject) {
         UserPrefs.saveExludedFromDate(date: fromDate.dateValue as NSDate)
-        if (fromDateCheckBox.state == NSOnState) {
+        if (fromDateCheckBox.state ==  NSControl.StateValue.on) {
             refreshMetricsTables(self)
         }
     }
     
     @IBAction func toDateFilterChanged(_ sender: AnyObject) {
         UserPrefs.saveExludedToDate(date: toDate.dateValue as NSDate)
-        if (toDateCheckBox.state == NSOnState) {
+        if (toDateCheckBox.state ==  NSControl.StateValue.on) {
             refreshMetricsTables(self)
         }
     }
@@ -215,12 +215,12 @@ class MainController: NSViewController {
         let alert: NSAlert = NSAlert()
         alert.messageText = "Would you like to send metrics to the remote server?"
         alert.informativeText = "All metrics that you see on the screen would be send to the remote server."
-        alert.alertStyle = NSAlertStyle.warning
+        alert.alertStyle = NSAlert.Style.warning
         alert.addButton(withTitle: "Send")
         alert.addButton(withTitle: "Cancel")
         
         let answer = alert.runModal()
-        if answer == NSAlertFirstButtonReturn {
+        if answer == NSApplication.ModalResponse.alertFirstButtonReturn {
             disableAllElements()
             spinnerView.isHidden = false
             spinnerView.startAnimation(self)
@@ -244,12 +244,12 @@ class MainController: NSViewController {
     }
     
     @IBAction func fromDateFilterChecked(_ sender: AnyObject) {
-        UserPrefs.saveNeedFromDateFilter(isNeeded: fromDateCheckBox.state == NSOnState)
+        UserPrefs.saveNeedFromDateFilter(isNeeded: fromDateCheckBox.state ==  NSControl.StateValue.on)
         refreshMetricsTables(self)
     }
     
     @IBAction func toDateFilterChecked(_ sender: AnyObject) {
-        UserPrefs.saveNeedToDateFilter(isNeeded: toDateCheckBox.state == NSOnState)
+        UserPrefs.saveNeedToDateFilter(isNeeded: toDateCheckBox.state ==  NSControl.StateValue.on)
         refreshMetricsTables(self)
     }
     
@@ -258,7 +258,7 @@ class MainController: NSViewController {
         let endChangingDbNotificationName = Notification.Name("db_end_changing")
         DistributedNotificationCenter.default().postNotificationName(startChangingDbNotificationName, object: Bundle.main.bundleIdentifier, deliverImmediately: true)
         do {
-            let appDelegate = NSApplication.shared().delegate as! AppDelegate
+            let appDelegate = NSApplication.shared.delegate as! AppDelegate
             let context = appDelegate.managedObjectContext
             
             let metricsFetch: NSFetchRequest<Metric> = Metric.fetchRequest()
@@ -333,7 +333,7 @@ class MainController: NSViewController {
         let myPopup: NSAlert = NSAlert()
         myPopup.messageText = question
         myPopup.informativeText = text
-        myPopup.alertStyle = NSAlertStyle.informational
+        myPopup.alertStyle = NSAlert.Style.informational
         myPopup.addButton(withTitle: "OK")
         myPopup.runModal()
     }

@@ -47,6 +47,12 @@
                                                 <action selector="unhideAllApplications:" target="Ady-hI-5gd" id="Dhg-Le-xox"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="9Ly-e6-2FR"/>
+                                        <menuItem title="Check for updates" keyEquivalent="u" id="Bjq-kx-KVU">
+                                            <connections>
+                                                <action selector="checkForUpdates:" target="kox-pB-A0M" id="g4U-36-SWK"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
                                         <menuItem title="Quit InnometricsTransfer" keyEquivalent="q" id="4sb-4s-VLi">
                                             <connections>
