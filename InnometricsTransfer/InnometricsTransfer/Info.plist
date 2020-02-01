@@ -35,7 +35,7 @@
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>https://innopolisuniversity.github.io/innometrics-agent-os-mac/appcast.xml</string>
+	<string>https://innometric.guru/files/collectors-files/mac_collector/appcast_transfer.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>17lMLup/Bpk7e57Jq7VV6YS0BRviX8xsM0JhIv4t/3A=</string>
 	<key>SUScheduledCheckInterval</key>
