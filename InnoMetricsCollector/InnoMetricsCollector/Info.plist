@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>2.0</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.business</string>
 	<key>LSMinimumSystemVersion</key>
@@ -40,6 +40,8 @@
 	<true/>
 	<key>SUFeedURL</key>
 	<string>https://innometric.guru/files/collectors-files/mac_collector/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>17lMLup/Bpk7e57Jq7VV6YS0BRviX8xsM0JhIv4t/3A=</string>
 	<key>SUScheduledCheckInterval</key>
 	<integer>3600</integer>
 </dict>
