@@ -67,6 +67,7 @@ class AuthorizationController: NSViewController {
                         self.dialogOKCancel(question: "Error", text: "Wrong input authorization data")
                     } else {
                         AuthorizationUtils.saveAuthorizationToken(token: token!)
+                        AuthorizationUtils.saveUsername(username: email)
                         AuthorizationUtils.saveIsAuthorized(isAuthorized: true)
                         let storyboard = NSStoryboard(name: "Main", bundle: nil)
                         let mvc = storyboard.instantiateController(withIdentifier:"MainController") as! MainController

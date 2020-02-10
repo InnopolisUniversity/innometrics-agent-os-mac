@@ -3,7 +3,7 @@
 //  InnometricsTransfer
 //
 //  Created by Denis Zaplatnikov on 03.11.16.
-//  Copyright © 2016 Denis Zaplatnikov. All rights reserved.
+//  Copyright © 2020 Denis Zaplatnikov, Dragos Strugar. All rights reserved.
 //
 
 import Cocoa
@@ -34,12 +34,6 @@ class MainController: NSViewController {
     @IBOutlet weak var sendMetricsBtn: NSButton!
     @IBOutlet weak var refreshTableBtn: NSButton!
     @IBOutlet weak var clearDBBtn: NSButton!
-    
-    @IBAction func checkForUpdates(_ sender: AnyObject) {
-        let updater = SUUpdater.shared()
-        updater?.feedURL = URL(string: "some location")
-        updater?.checkForUpdates(self)
-    }
     
     @IBOutlet weak var lastTableRefreshTextField: NSTextField!
     private var metricsController: MetricsController!
@@ -75,6 +69,7 @@ class MainController: NSViewController {
         if (UserPrefs.isNeedFromDateFilter()) {
             fromDateCheckBox.state = NSControl.StateValue.on
         }
+        
         if (UserPrefs.isNeedToDateFilter()) {
             toDateCheckBox.state = NSControl.StateValue.on
         }
@@ -92,7 +87,7 @@ class MainController: NSViewController {
 
     override var representedObject: Any? {
         didSet {
-        // Update the view, if already loaded.
+            // Update the view, if already loaded.
         }
     }
     

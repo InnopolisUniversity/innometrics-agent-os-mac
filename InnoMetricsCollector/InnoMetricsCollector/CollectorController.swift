@@ -119,7 +119,7 @@ class CollectorController: NSObject {
         if (foregroundWindowBundleId != nil && browsersId.contains(foregroundWindowBundleId!)) {
             
             // background func
-            let backgroundQueue = DispatchQueue(label: "com.app.InnoMetricsCollector", qos: .background, target: nil)
+            let backgroundQueue = DispatchQueue(label: "ru.innometrics.InnoMetricsCollector", qos: .background, target: nil)
             
             backgroundQueue.async {
                 self.isCollectingBrowserInfo = true

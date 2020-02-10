@@ -1094,30 +1094,17 @@ CA
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4he-ze-b1Y">
-                                                        <rect key="frame" x="115" y="6" width="115" height="17"/>
-                                                        <buttonCell key="cell" type="inline" title="Check for updates" bezelStyle="inline" alignment="center" borderStyle="border" inset="2" id="ujh-Ws-pI9">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="smallSystemBold"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="checkForUpdates:" target="XfG-lQ-9wD" id="TuL-cs-6B8"/>
-                                                        </connections>
-                                                    </button>
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="k1g-Ut-xR1" firstAttribute="centerY" secondItem="G3e-1Z-JOT" secondAttribute="centerY" id="1cu-ER-8bB"/>
                                                     <constraint firstItem="iZL-NR-mRA" firstAttribute="leading" secondItem="G3e-1Z-JOT" secondAttribute="leading" constant="20" symbolic="YES" id="46V-Xr-SWd"/>
-                                                    <constraint firstItem="4he-ze-b1Y" firstAttribute="leading" secondItem="iZL-NR-mRA" secondAttribute="trailing" constant="8" id="4ww-33-gpf"/>
                                                     <constraint firstAttribute="trailing" secondItem="aOp-PP-eWf" secondAttribute="trailing" constant="20" symbolic="YES" id="71i-gU-5dj"/>
                                                     <constraint firstItem="KiA-7J-gD9" firstAttribute="centerY" secondItem="G3e-1Z-JOT" secondAttribute="centerY" id="B0x-vF-KW5"/>
                                                     <constraint firstItem="aOp-PP-eWf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="KiA-7J-gD9" secondAttribute="trailing" constant="8" id="CfJ-aH-8OP"/>
                                                     <constraint firstItem="iZL-NR-mRA" firstAttribute="centerY" secondItem="G3e-1Z-JOT" secondAttribute="centerY" id="Vpx-n1-pwe"/>
-                                                    <constraint firstItem="k1g-Ut-xR1" firstAttribute="leading" secondItem="4he-ze-b1Y" secondAttribute="trailing" constant="80" id="azm-dU-cCD"/>
                                                     <constraint firstItem="k1g-Ut-xR1" firstAttribute="centerX" secondItem="G3e-1Z-JOT" secondAttribute="centerX" id="bEh-A5-bVw"/>
                                                     <constraint firstItem="KiA-7J-gD9" firstAttribute="leading" secondItem="k1g-Ut-xR1" secondAttribute="trailing" constant="8" id="jL9-zf-T3D"/>
                                                     <constraint firstItem="k1g-Ut-xR1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iZL-NR-mRA" secondAttribute="trailing" constant="8" id="qQL-Xa-gYr"/>
-                                                    <constraint firstItem="4he-ze-b1Y" firstAttribute="centerY" secondItem="G3e-1Z-JOT" secondAttribute="centerY" id="uAP-26-Axg"/>
                                                     <constraint firstItem="aOp-PP-eWf" firstAttribute="centerY" secondItem="G3e-1Z-JOT" secondAttribute="centerY" id="wky-h1-n84"/>
                                                 </constraints>
                                             </view>
