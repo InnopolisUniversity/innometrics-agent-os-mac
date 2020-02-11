@@ -15,6 +15,7 @@
         <attribute name="alternativeLabel" optional="YES" attributeType="String"/>
         <attribute name="measurementTypeId" optional="YES" attributeType="String"/>
         <attribute name="value" optional="YES" attributeType="String"/>
+        <relationship name="metric" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Metric" inverseName="measurements" inverseEntity="Metric"/>
     </entity>
     <entity name="Metric" representedClassName=".Metric" syncable="YES">
         <attribute name="appName" optional="YES" attributeType="String"/>
@@ -25,6 +26,7 @@
         <attribute name="tabUrl" optional="YES" attributeType="String"/>
         <attribute name="timestampEnd" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="timestampStart" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="measurements" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Measurement" inverseName="metric" inverseEntity="Measurement"/>
         <relationship name="session" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="Session" inverseName="metric" inverseEntity="Session"/>
     </entity>
     <entity name="Session" representedClassName=".Session" syncable="YES">
@@ -38,8 +40,8 @@
     </entity>
     <elements>
         <element name="IdleMetric" positionX="-63" positionY="-18" width="128" height="180"/>
-        <element name="Metric" positionX="-36" positionY="9" width="128" height="178"/>
+        <element name="Measurement" positionX="-45" positionY="72" width="128" height="103"/>
+        <element name="Metric" positionX="-36" positionY="9" width="128" height="193"/>
         <element name="Session" positionX="-54" positionY="-9" width="128" height="150"/>
-        <element name="Measurement" positionX="-45" positionY="72" width="128" height="88"/>
     </elements>
 </model>

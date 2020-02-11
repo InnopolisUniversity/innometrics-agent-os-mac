@@ -70,7 +70,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let url = self.applicationDocumentsDirectory.appendingPathComponent("InnoMetricsCollector.storedata")
 
             do {
-                try coordinator!.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)
+                try coordinator!.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true])
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
                  
