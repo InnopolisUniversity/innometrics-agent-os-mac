@@ -3,12 +3,28 @@
 //  InnoMetricsCollector
 //
 //  Created by Denis Zaplatnikov on 11/01/2017.
-//  Copyright © 2018 Denis Zaplatnikov, Pavel Kotov & Dragos Strugar. All rights reserved.
+//  Modified by Dragos Strugar on 11/02/2020.
+//  Copyright © 2020 Innopolis University. All rights reserved.
 //
 
 import Cocoa
 import ServiceManagement
 import Sparkle
+
+func shell(_ command: String) -> String {
+    let task = Process()
+    task.launchPath = "/bin/bash"
+    task.arguments = ["-c", command]
+
+    let pipe = Pipe()
+    task.standardOutput = pipe
+    task.launch()
+
+    let data = pipe.fileHandleForReading.readDataToEndOfFile()
+    let output: String = NSString(data: data, encoding: String.Encoding.utf8.rawValue)! as String
+
+    return output
+}
 
 class CollectorController: NSObject {
     
@@ -33,6 +49,8 @@ class CollectorController: NSObject {
     private var prevMetric: Metric?
     private var context: NSManagedObjectContext!
     private var isPaused: Bool = false
+    private var timer : Timer? = Timer()
+    private var measurements = Set<Measurement>()
     
     private var currentIdleMetric: IdleMetric?
     private let possibleUserMovements: NSEvent.EventTypeMask = [.mouseMoved, .keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown]
@@ -44,6 +62,19 @@ class CollectorController: NSObject {
     
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
+    func startTimer(processID: Int32, metric: Metric) {
+      if timer == nil {
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.measureEnergyMetrics(sender:)), userInfo: ["processID": processID, "metric": metric], repeats: true)
+      }
+    }
+
+    func stopTimer() {
+      if timer != nil {
+        timer!.invalidate()
+        timer = nil
+      }
+    }
+    
     override func awakeFromNib() {
         setUpLaunchAtLogin()
         
@@ -52,7 +83,6 @@ class CollectorController: NSObject {
         statusItem.image = icon
         statusItem.menu = statusMenu
 
-        
         metricsCollectorMenuItem = statusMenu.item(withTitle: "Collector")
         metricsCollectorMenuItem.view = collectorView
         
@@ -106,6 +136,7 @@ class CollectorController: NSObject {
             return
         }
         
+        let foregroundPID = frontmostApp?.processIdentifier
         let foregroundWindowBundleId = frontmostApp?.bundleIdentifier
         if (foregroundWindowBundleId == "ru.innometrics.InnoMetricsCollector") {
             return
@@ -114,10 +145,10 @@ class CollectorController: NSObject {
         setEndTimeOfPrevMetric()
         activeApplicationView.update(application: frontmostApp!)
         
-        createAndSaveMetric(frontmostApp: frontmostApp!)
+        createAndSaveMetric(frontmostApp: frontmostApp!, processID: foregroundPID!)
         
+        // browsers
         if (foregroundWindowBundleId != nil && browsersId.contains(foregroundWindowBundleId!)) {
-            
             // background func
             let backgroundQueue = DispatchQueue(label: "ru.innometrics.InnoMetricsCollector", qos: .background, target: nil)
             
@@ -146,15 +177,13 @@ class CollectorController: NSObject {
                     }
                     
                     self.setEndTimeOfPrevMetric()
-                    self.createAndSaveMetric(frontmostApp: fronmostApp!)
+                    self.createAndSaveMetric(frontmostApp: fronmostApp!, processID: foregroundPID!)
                 }
             }
         } else {
             self.isCollectingBrowserInfo = false
         }
-
     }
-    
     
     func handleUserMovement() {
         if (!isCollecting) {
@@ -187,8 +216,69 @@ class CollectorController: NSObject {
         }
     }
     
+    @objc func measureEnergyMetrics(sender: Timer) {
+        let userInfo = sender.userInfo as? NSDictionary
+        let processID = userInfo!["processID"] as? Int32
+        let metric = userInfo!["metric"] as? Metric
+        let usesAcPower = shell("pmset -g ps").contains("AC Power") ? true : false
+        
+        // create metric model
+        let batteryPercentageMeasurement = NSEntityDescription.insertNewObject(forEntityName: "Measurement", into: context) as! Measurement
+        let batteryStatusMeasurement = NSEntityDescription.insertNewObject(forEntityName: "Measurement", into: context) as! Measurement
+        let ramMeasurement = NSEntityDescription.insertNewObject(forEntityName: "Measurement", into: context) as! Measurement
+        let vRamMeasurement = NSEntityDescription.insertNewObject(forEntityName: "Measurement", into: context) as! Measurement
+        let cpuMeasurement = NSEntityDescription.insertNewObject(forEntityName: "Measurement", into: context) as! Measurement
+        
+        
+        // 1. battery percentage
+        let estimatedChargeRemaining = usesAcPower ? "-1" : shell("pmset -g batt | grep -Eo \"\\d+%\" | cut -d% -f1")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        batteryPercentageMeasurement.alternativeLabel = "EstimatedChargeRemaining"
+        batteryPercentageMeasurement.measurementTypeId = "1"
+        batteryPercentageMeasurement.value = estimatedChargeRemaining
+        batteryPercentageMeasurement.metric = metric
+        
+        // 2. battery status (charging or not)
+        batteryStatusMeasurement.alternativeLabel = "BatteryStatus"
+        batteryStatusMeasurement.measurementTypeId = "2"
+        batteryStatusMeasurement.value = usesAcPower ? "2" : "1"
+        batteryStatusMeasurement.metric = metric
+        
+        // 3. ram usage
+        let ramUsage = shell("ps -axm -o rss,pid | grep \(processID!)")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .split(separator: " ")
+        ramMeasurement.alternativeLabel = "RAM"
+        ramMeasurement.measurementTypeId = "3"
+        ramMeasurement.value = String(ramUsage.first ?? "0")
+        ramMeasurement.metric = metric
+        
+        // 4. vRAM usage
+        let vRamUsage = shell("ps -axm -o vsz,pid | grep \(processID!)")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .split(separator: " ")
+        vRamMeasurement.alternativeLabel = "vRAM"
+        vRamMeasurement.measurementTypeId = "4"
+        vRamMeasurement.value = String(vRamUsage.first ?? "0")
+        vRamMeasurement.metric = metric
+        
+        // 5. CPU usage
+        let cpuUsage = shell("ps -axm -o %cpu,pid | grep \(processID!)")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .split(separator: " ")
+        cpuMeasurement.alternativeLabel = "CPU"
+        cpuMeasurement.measurementTypeId = "5"
+        cpuMeasurement.value = String(cpuUsage.first ?? "0.0")
+        cpuMeasurement.metric = metric
+        
+        measurements.insert(batteryPercentageMeasurement)
+        measurements.insert(batteryStatusMeasurement)
+        measurements.insert(ramMeasurement)
+        measurements.insert(vRamMeasurement)
+        measurements.insert(cpuMeasurement)
+    }
     
-    func createAndSaveMetric(frontmostApp: NSRunningApplication) {
+    func createAndSaveMetric(frontmostApp: NSRunningApplication, processID: Int32) {
         let foregroundWindowBundleId = frontmostApp.bundleIdentifier
         
         let metric = NSEntityDescription.insertNewObject(forEntityName: "Metric", into: context) as! Metric
@@ -215,14 +305,14 @@ class CollectorController: NSObject {
                 metric.tabName = foregroundWindowTabTitle!
             }
             prevMetric = currentMetric
-            currentMetric = metric//self.metrics.insert(metric, at: 0)
+            currentMetric = metric
         }
         
         do {
             try self.context.save()
             prevMetric = currentMetric
             currentMetric = metric
-            //self.metrics.insert(metric, at: 0)
+            startTimer(processID: processID, metric: metric) // execute every 1sec, get energy info
         } catch {
             print("An error occurred")
         }
@@ -236,6 +326,9 @@ class CollectorController: NSObject {
                 metric.timestampEnd = endTime
                 
                 metric.duration = (metric.timestampEnd?.timeIntervalSinceReferenceDate)! - (metric.timestampStart?.timeIntervalSinceReferenceDate)!
+                metric.measurements = measurements
+                measurements.removeAll()
+                
                 do {
                     try context.save()
                 } catch {
