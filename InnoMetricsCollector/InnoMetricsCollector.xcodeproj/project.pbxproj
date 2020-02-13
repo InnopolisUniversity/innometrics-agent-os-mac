@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -67,6 +67,7 @@
 		25D57A901E1D6F7700B2265D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		25D57A931E1D6F7700B2265D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		25D57A951E1D6F7700B2265D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C29E7D523F56E2F003D3612 /* InnoMetricsCollector.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InnoMetricsCollector.entitlements; sourceTree = "<group>"; };
 		2CCEBC2123B4E360007A5903 /* InnoMetricsCollector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InnoMetricsCollector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CE6883823F2EA6500DD9946 /* InnoMetricsCollector 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "InnoMetricsCollector 2.xcdatamodel"; sourceTree = "<group>"; };
 		2CE6883923F2EA9600DD9946 /* InnoMetricsCollector 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "InnoMetricsCollector 3.xcdatamodel"; sourceTree = "<group>"; };
@@ -135,6 +136,7 @@
 		25D57A8A1E1D6F7600B2265D /* InnoMetricsCollector */ = {
 			isa = PBXGroup;
 			children = (
+				2C29E7D523F56E2F003D3612 /* InnoMetricsCollector.entitlements */,
 				9F590DC22052A44C009AC489 /* IdleController.swift */,
 				25AB378E1E2FAF2600174767 /* Utils */,
 				25C5B4F61E2684EF007FF799 /* Model */,
@@ -210,7 +212,7 @@
 				};
 			};
 			buildConfigurationList = 25D57A831E1D6F7600B2265D /* Build configuration list for PBXProject "InnoMetricsCollector" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -445,7 +447,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;
 		};
@@ -454,6 +457,7 @@
 			baseConfigurationReference = 1300D2E379B5219677E48D60 /* Pods-InnoMetricsCollector.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = InnoMetricsCollector/InnoMetricsCollector.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -462,7 +466,10 @@
 				DEVELOPMENT_TEAM = AR494XTABA;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = InnoMetricsCollector/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.innometrics.InnoMetricsCollector;
@@ -479,6 +486,7 @@
 			baseConfigurationReference = 77C440B57B5DFA283CB21009 /* Pods-InnoMetricsCollector.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = InnoMetricsCollector/InnoMetricsCollector.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -487,7 +495,10 @@
 				DEVELOPMENT_TEAM = AR494XTABA;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = InnoMetricsCollector/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.innometrics.InnoMetricsCollector;
