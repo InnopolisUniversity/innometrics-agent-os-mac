@@ -9,26 +9,12 @@
 import Cocoa
 import Foundation
 
-func shell(_ command: String) -> String {
-    let task = Process()
-    task.launchPath = "/bin/bash"
-    task.arguments = ["-c", command]
-
-    let pipe = Pipe()
-    task.standardOutput = pipe
-    task.launch()
-
-    let data = pipe.fileHandleForReading.readDataToEndOfFile()
-    let output: String = NSString(data: data, encoding: String.Encoding.utf8.rawValue)! as String
-
-    return output
-}
-
 class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     
     var appFocusMetrics: [Metric] = []
     var idleMetrics: [IdleMetric] = []
     var mergedMetrics: [MergedMetric] = []
+    var appFocusMeasurements: [Measurement] = []
     
     @IBOutlet weak var newMetricsTableView: NSTableView!
     
@@ -43,29 +29,11 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     public func fetchNewMetricsAndRefreshTable() {
         appFocusMetrics = []
         idleMetrics = []
+        appFocusMeasurements = []
         
         do {
             let appDelegate = NSApplication.shared.delegate as! AppDelegate
             let context = appDelegate.managedObjectContext
-            /* energy metrics
-            let currentPid = shell("ps -ax | grep InnometricsTransfer").split(separator: " ")[0];
-            /* here are the titles of the elements of energyQuery (see below)
-               PID,COMMAND,%CPU TIME,#TH,#WQ,#PORTS,MEM,PURG,CMPRS,PGRP,PPID,STATE,BOOSTS,%CPU_ME,%CPU_OTHERS,UID,FAULTS,COW,MSGSENT
-               MSGRECV,SYSBSD,SYSMACH,CSW,PAGEINS,IDELW,POWER,INSTRS,CYCLES,USER,#MREGS,RPRVT,VPRVT,VSIZE,KPRVT,KSHRD */
-            let metrics = "PID,COMMAND,%CPU TIME,#TH,#WQ,#PORTS,MEM,PURG,CMPRS,PGRP,PPID,STATE,BOOSTS,%CPU_ME,%CPU_OTHERS,UID,FAULTS,COW,MSGSENT,MSGRECV,SYSBSD,SYSMACH,CSW,PAGEINS,IDELW,POWER,INSTRS,CYCLES,USER,#MREGS,RPRVT,VPRVT,VSIZE,KPRVT,KSHRD".split(separator: ",")
-            let energyQuery = shell("top -pid " + currentPid + " -l3 -n30 | grep " + currentPid + " > test ; tail -n42 ./test > ./test2 ; cat ./test2").split(separator: " ").map{$0.trimmingCharacters(in: .whitespaces)}
-            
-            var metricToResult: [String: [String]] = [:]
-            
-            for (n, metric) in metrics.enumerated() {
-                metricToResult[String(metric), default: []] += [String(energyQuery[n])]
-                metricToResult[String(metric), default: []] += [String(energyQuery[n + 36])]
-                metricToResult[String(metric), default: []] += [String(energyQuery[n + 72])]
-            }
-            
-            print(metricToResult)
-            */
-            
             
             // Create an appropriate request to data context using user's filters
             var appFocusDataPredicates: [NSPredicate] = []
@@ -117,6 +85,8 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
             let idleMetricsFetch: NSFetchRequest<IdleMetric> = IdleMetric.fetchRequest()
             idleMetricsFetch.sortDescriptors = [NSSortDescriptor(key: "timestampStart", ascending: false)]
             
+            let measurementsFetch: NSFetchRequest<Measurement> = Measurement.fetchRequest()
+            
             let isFinishedFocusApp = NSPredicate(format: "timestampEnd != nil")
             let isFinishedIdle = NSPredicate(format: "timestampEnd != nil")
             
@@ -125,17 +95,13 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
             
             if (appFocusDataPredicates.count > 0) {
                 allFiltersFocusApp = appNamePredicates + keywordsPredicatesFocusApp + [focusAppDatePredicateCompound] + [isFinishedFocusApp]
-            }
-                
-            else {
+            } else {
                 allFiltersFocusApp = appNamePredicates + keywordsPredicatesFocusApp + [isFinishedFocusApp]
             }
             
             if (idleDataPredicates.count > 0) {
                 allFiltersIdle = appNamePredicates + keywordsPredicatesIdle + [idleDatePredicateCompound] + [isFinishedIdle]
-            }
-                
-            else {
+            } else {
                 allFiltersIdle = appNamePredicates + keywordsPredicatesIdle + [isFinishedIdle]
             }
             
@@ -147,6 +113,7 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
             
             appFocusMetrics = try context.fetch(metricsFetch)
             idleMetrics = try context.fetch(idleMetricsFetch)
+            appFocusMeasurements = try context.fetch(measurementsFetch)
         } catch {
             print(error)
         }
@@ -189,7 +156,7 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     }
     
     public func sendMetrics (completion: @escaping (_ response: Int) -> Void) {
-        MetricsTransfer.sendMetrics(token: AuthorizationUtils.getAuthorizationToken()!, username: AuthorizationUtils.getUsername()!, focusAppMetrics: appFocusMetrics, idleMetrics: idleMetrics) { (response) in
+        MetricsTransfer.sendMetrics(token: AuthorizationUtils.getAuthorizationToken()!, username: AuthorizationUtils.getUsername()!, focusAppMetrics: appFocusMetrics, idleMetrics: idleMetrics, measurements: appFocusMeasurements) { (response) in
             completion(response)
         }
     }
