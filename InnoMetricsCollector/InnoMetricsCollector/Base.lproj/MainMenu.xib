@@ -458,20 +458,88 @@
             <point key="canvasLocation" x="-587" y="-461"/>
         </menu>
         <customView id="E4X-gO-rya" customClass="LoginViewController" customModule="InnoMetricsCollector" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="163" height="96"/>
+            <rect key="frame" x="0.0" y="0.0" width="340" height="222"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eT4-Pk-4eL">
-                    <rect key="frame" x="47" y="40" width="68" height="16"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="login page" id="2y8-hm-9s0">
-                        <font key="font" usesAppearanceFont="YES"/>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fGL-k5-XfY">
+                    <rect key="frame" x="84" y="182" width="172" height="20"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Log In to Innometrics" id="BHS-O3-LiN">
+                        <font key="font" metaFont="systemSemibold" size="17"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="osI-Cc-1rb">
+                    <rect key="frame" x="20" y="125" width="292" height="21"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="example@innopolis.ru" drawsBackground="YES" id="6Fx-0n-RVp">
+                        <font key="font" metaFont="label" size="13"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <secureTextField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9SC-QT-nq2">
+                    <rect key="frame" x="20" y="68" width="290" height="21"/>
+                    <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Your password" drawsBackground="YES" usesSingleLineMode="YES" id="FtE-4U-lRO">
+                        <font key="font" metaFont="label" size="13"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        <allowedInputSourceLocales>
+                            <string>NSAllRomanInputSourcesLocaleIdentifier</string>
+                        </allowedInputSourceLocales>
+                    </secureTextFieldCell>
+                </secureTextField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ly1-RF-gEX">
+                    <rect key="frame" x="18" y="151" width="37" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="email" id="GWU-ym-ecI">
+                        <font key="font" metaFont="label" size="13"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="X1p-IQ-q8R">
+                    <rect key="frame" x="18" y="94" width="63" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="password" id="hoD-zg-ULu">
+                        <font key="font" metaFont="label" size="13"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UAI-sI-Tle">
+                    <rect key="frame" x="125" y="13" width="90" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="78" id="02A-n5-hwN"/>
+                    </constraints>
+                    <buttonCell key="cell" type="push" title="Log In" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="q2L-AY-hQm">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" size="13" name="HelveticaNeue"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="onLogIn:" target="E4X-gO-rya" id="Ws8-XN-zKL"/>
+                    </connections>
+                </button>
             </subviews>
-            <point key="canvasLocation" x="-2333" y="-175"/>
+            <constraints>
+                <constraint firstItem="fGL-k5-XfY" firstAttribute="centerX" secondItem="E4X-gO-rya" secondAttribute="centerX" id="3s4-wH-Bcn"/>
+                <constraint firstAttribute="trailing" secondItem="osI-Cc-1rb" secondAttribute="trailing" constant="28" id="AS5-Id-d96"/>
+                <constraint firstItem="ly1-RF-gEX" firstAttribute="top" secondItem="fGL-k5-XfY" secondAttribute="bottom" constant="15" id="EnG-1L-VhG"/>
+                <constraint firstItem="X1p-IQ-q8R" firstAttribute="leading" secondItem="E4X-gO-rya" secondAttribute="leading" constant="20" id="MIy-tg-T13"/>
+                <constraint firstItem="X1p-IQ-q8R" firstAttribute="top" secondItem="osI-Cc-1rb" secondAttribute="bottom" constant="15" id="UIe-Wo-Anx"/>
+                <constraint firstItem="9SC-QT-nq2" firstAttribute="top" secondItem="X1p-IQ-q8R" secondAttribute="bottom" constant="5" id="VhO-6J-9wu"/>
+                <constraint firstItem="fGL-k5-XfY" firstAttribute="top" secondItem="E4X-gO-rya" secondAttribute="top" constant="20" id="ZiB-In-cva"/>
+                <constraint firstItem="UAI-sI-Tle" firstAttribute="centerX" secondItem="fGL-k5-XfY" secondAttribute="centerX" id="d2j-kc-8Ud"/>
+                <constraint firstItem="osI-Cc-1rb" firstAttribute="leading" secondItem="E4X-gO-rya" secondAttribute="leading" constant="20" id="eWV-kQ-JVN"/>
+                <constraint firstItem="9SC-QT-nq2" firstAttribute="leading" secondItem="E4X-gO-rya" secondAttribute="leading" constant="20" id="fhZ-Lp-Y5A"/>
+                <constraint firstAttribute="trailing" secondItem="9SC-QT-nq2" secondAttribute="trailing" constant="30" id="s8N-r5-h8r"/>
+                <constraint firstItem="ly1-RF-gEX" firstAttribute="leading" secondItem="E4X-gO-rya" secondAttribute="leading" constant="20" id="tLb-mN-oBz"/>
+                <constraint firstItem="osI-Cc-1rb" firstAttribute="top" secondItem="ly1-RF-gEX" secondAttribute="bottom" constant="5" id="vAR-3X-9hj"/>
+                <constraint firstAttribute="bottom" secondItem="UAI-sI-Tle" secondAttribute="bottom" constant="20" symbolic="YES" id="zrt-IT-z40"/>
+            </constraints>
+            <connections>
+                <outlet property="emailField" destination="osI-Cc-1rb" id="o7L-fr-KbR"/>
+                <outlet property="onLogIn" destination="UAI-sI-Tle" id="6Ih-GJ-QkR"/>
+                <outlet property="passwordField" destination="9SC-QT-nq2" id="QWb-11-JGf"/>
+            </connections>
+            <point key="canvasLocation" x="-2245" y="-112"/>
         </customView>
     </objects>
     <resources>

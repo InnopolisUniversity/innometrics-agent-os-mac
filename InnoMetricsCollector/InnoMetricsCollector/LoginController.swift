@@ -9,5 +9,14 @@
 import Cocoa
 
 class LoginViewController: NSView {
+    @IBOutlet weak var emailField: NSTextField!
+    @IBOutlet weak var passwordField: NSSecureTextField!
+
     
+    @IBAction func onLogIn(_ sender: Any) {
+        // TODO: send API request
+        
+        // If successful, save token + display menu
+        // If unsuccessful, display warning
+    }
 }

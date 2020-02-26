@@ -3,7 +3,8 @@
 //  InnometricsTransfer
 //
 //  Created by Pavel Kotov on 29/03/2018.
-//  Copyright © 2018 Pavel Kotov. All rights reserved.
+//  Modified by Dragos Strugar in 2020
+//  Copyright © 2020 Innopolis University.
 //
 
 /*

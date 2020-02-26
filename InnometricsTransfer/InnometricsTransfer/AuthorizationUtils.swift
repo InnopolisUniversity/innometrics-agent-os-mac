@@ -1,8 +1,9 @@
 //
 //  AuthorizationUtils.swift
-//  InnometricsTransfer
+//  InnometricsCollector
 //
 //  Created by Denis Zaplatnikov on 25/02/2017.
+//  Modified by Dragos Strugar in 2020
 //  Copyright © 2018 Denis Zaplatnikov and Pavel Kotov. All rights reserved.
 //
 

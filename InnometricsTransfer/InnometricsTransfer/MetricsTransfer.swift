@@ -3,7 +3,8 @@
 //  InnometricsTransfer
 //
 //  Created by Denis Zaplatnikov on 25/02/2017.
-//  Copyright © 2018 Denis Zaplatnikov and Pavel Kotov. All rights reserved.
+//  Modified by Dragos Strugar in 2020
+//  Copyright © 2020 Innopolis University.
 //
 
 import Foundation
@@ -26,7 +27,6 @@ public class MetricsTransfer {
                 measurementsArrayJson.append(mJson)
             }
         }
-        
         
         let activity: [String: Any] = [
             "idle_activity": idle,

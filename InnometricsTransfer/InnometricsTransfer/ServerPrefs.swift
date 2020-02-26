@@ -3,7 +3,8 @@
 //  InnometricsTransfer
 //
 //  Created by Denis Zaplatnikov on 26/02/2017.
-//  Copyright © 2020 Denis Zaplatnikov, Pavel Kotov & Dragos Strugar.
+//  Modified by Dragos Strugar in 2020
+//  Copyright © 2020 Innopolis University.
 //  Innopolis University, All rights reserved.
 //
 

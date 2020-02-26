@@ -23,4 +23,15 @@ class Helpers {
 
         return output
     }
+    
+    public static func isLoggedIn() -> Bool {
+        // TODO: check if token expired
+        let defaults = UserDefaults.standard
+        let token = defaults.string(forKey: "token")
+        if token == nil {
+            return false
+        }
+        
+        return true
+    }
 }

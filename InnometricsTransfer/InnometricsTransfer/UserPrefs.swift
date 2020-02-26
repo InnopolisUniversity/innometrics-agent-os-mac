@@ -3,7 +3,8 @@
 //  InnometricsTransfer
 //
 //  Created by Denis Zaplatnikov on 05/02/2017.
-//  Copyright © 2018 Denis Zaplatnikov and Pavel Kotov. All rights reserved.
+//  Modified by Dragos Strugar in 2020
+//  Copyright © 2020 Innopolis University.
 //
 
 import Cocoa

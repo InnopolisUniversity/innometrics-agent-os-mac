@@ -33,7 +33,6 @@ class CollectorController: NSObject {
     
     @IBOutlet weak var updateBtn: NSButtonCell!
     
-    private var isLoggedIn: Bool = false
     private var currentSession: Session!
     private var currentMetric: Metric?
     private var prevMetric: Metric?
@@ -72,7 +71,7 @@ class CollectorController: NSObject {
         icon?.isTemplate = true // best for dark mode
         statusItem.image = icon
         
-        if (isLoggedIn) {
+        if (Helpers.isLoggedIn()) {
             statusItem.menu = statusMenu
 
             metricsCollectorMenuItem = statusMenu.item(withTitle: "Collector")
