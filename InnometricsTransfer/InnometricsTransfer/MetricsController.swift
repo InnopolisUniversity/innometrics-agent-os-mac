@@ -21,7 +21,8 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         let appDelegate = NSApplication.shared.delegate as! AppDelegate
-        appDelegate.logOutMenuItem.isEnabled = true
+        // TODO: update later
+        // appDelegate.logOutMenuItem.isEnabled = true
         
         fetchNewMetricsAndRefreshTable()
     }

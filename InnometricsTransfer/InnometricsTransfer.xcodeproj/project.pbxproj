@@ -435,7 +435,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2.1.1;
+				CURRENT_PROJECT_VERSION = 2.2;
 				DEVELOPMENT_TEAM = AR494XTABA;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = InnometricsTransfer/Info.plist;
@@ -444,7 +444,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.innometrics.InnoMetrics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -461,7 +461,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2.1.1;
+				CURRENT_PROJECT_VERSION = 2.2;
 				DEVELOPMENT_TEAM = AR494XTABA;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = InnometricsTransfer/Info.plist;
@@ -470,7 +470,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 2.1.1;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.innometrics.InnoMetrics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

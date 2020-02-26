@@ -46,7 +46,7 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="-195.5" y="-476"/>
+            <point key="canvasLocation" x="-195" y="-531"/>
         </menu>
         <customView id="2D5-vd-rFz" userLabel="CollectorView">
             <rect key="frame" x="0.0" y="0.0" width="376" height="339"/>
@@ -58,11 +58,11 @@
                     <font key="font" metaFont="system"/>
                     <tabViewItems>
                         <tabViewItem label="Focus Application Metric" identifier="" id="fw2-gK-aTP" userLabel="Active Application Metric">
-                            <view key="view" ambiguous="YES" id="KLV-Ou-b9z" customClass="ActiveApplicationController" customModule="InnoMetricsCollector" customModuleProvider="target">
+                            <view key="view" id="KLV-Ou-b9z" customClass="ActiveApplicationController" customModule="InnoMetricsCollector" customModuleProvider="target">
                                 <rect key="frame" x="10" y="33" width="361" height="161"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EgM-CV-eKa">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EgM-CV-eKa">
                                         <rect key="frame" x="121" y="86" width="228" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Application" id="cJr-ll-XNF">
                                             <font key="font" metaFont="system"/>
@@ -70,7 +70,7 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yEj-tb-mBO">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yEj-tb-mBO">
                                         <rect key="frame" x="27" y="127" width="328" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Currently active process" id="rky-h9-T6g">
                                             <font key="font" metaFont="system"/>
@@ -86,7 +86,7 @@
                                         </constraints>
                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="xHU-LL-UaL"/>
                                     </imageView>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HPT-gi-lBI">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HPT-gi-lBI">
                                         <rect key="frame" x="121" y="53" width="228" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="00:00:00" id="gji-sg-Kqq">
                                             <font key="font" metaFont="system"/>
@@ -115,7 +115,7 @@
                             </view>
                         </tabViewItem>
                         <tabViewItem label="Idle Time Metric" identifier="" id="uTu-KD-xVe">
-                            <view key="view" id="HJW-qC-uW9" customClass="IdleController" customModule="InnoMetricsCollector" customModuleProvider="target">
+                            <view key="view" ambiguous="YES" id="HJW-qC-uW9" customClass="IdleController" customModule="InnoMetricsCollector" customModuleProvider="target">
                                 <rect key="frame" x="10" y="33" width="361" height="161"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -292,7 +292,7 @@
                 <constraint firstItem="nAU-ny-g4H" firstAttribute="centerX" secondItem="2D5-vd-rFz" secondAttribute="centerX" id="SPU-5m-z76"/>
                 <constraint firstAttribute="bottom" secondItem="nAU-ny-g4H" secondAttribute="bottom" constant="13" id="du5-Kn-VJm"/>
             </constraints>
-            <point key="canvasLocation" x="-205" y="-184.5"/>
+            <point key="canvasLocation" x="-185" y="88"/>
         </customView>
         <customView id="ozt-Se-289" customClass="CurrentWorkingSessionController" customModule="InnoMetricsCollector" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="380" height="161"/>
@@ -444,7 +444,7 @@
                 <outlet property="userLogin" destination="OfH-O2-ZmD" id="fus-hG-x8B"/>
                 <outlet property="userName" destination="V9r-lx-lDt" id="a0D-ly-MYu"/>
             </connections>
-            <point key="canvasLocation" x="-193" y="155.5"/>
+            <point key="canvasLocation" x="-185" y="-208"/>
         </customView>
     </objects>
     <resources>

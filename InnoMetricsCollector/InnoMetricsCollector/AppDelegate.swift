@@ -3,7 +3,8 @@
 //  InnoMetricsCollector
 //
 //  Created by Denis Zaplatnikov on 04/01/2017.
-//  Copyright © 2018 Denis Zaplatnikov, Pavel Kotov Dragos Strugar. All rights reserved.
+//  Modified by Dragos Strugar on 26/02/2020.
+//  Copyright © 2020 Innopolis University. All rights reserved.
 //
 
 import Cocoa
@@ -167,6 +168,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // If we got here, it is time to quit.
         return .terminateNow
     }
-
 }
 

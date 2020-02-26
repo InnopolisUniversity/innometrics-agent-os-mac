@@ -11,21 +11,6 @@ import Cocoa
 import ServiceManagement
 import Sparkle
 
-func shell(_ command: String) -> String {
-    let task = Process()
-    task.launchPath = "/bin/bash"
-    task.arguments = ["-c", command]
-
-    let pipe = Pipe()
-    task.standardOutput = pipe
-    task.launch()
-
-    let data = pipe.fileHandleForReading.readDataToEndOfFile()
-    let output: String = NSString(data: data, encoding: String.Encoding.utf8.rawValue)! as String
-
-    return output
-}
-
 class CollectorController: NSObject {
     
     @IBOutlet weak var statusMenu: NSMenu!
@@ -220,7 +205,7 @@ class CollectorController: NSObject {
         let userInfo = sender.userInfo as? NSDictionary
         let processID = userInfo!["processID"] as? Int32
         let metric = userInfo!["metric"] as? Metric
-        let usesAcPower = shell("pmset -g ps").contains("AC Power") ? true : false
+        let usesAcPower = Helpers.shell("pmset -g ps").contains("AC Power") ? true : false
         
         // create metric model
         let batteryPercentageMeasurement = NSEntityDescription.insertNewObject(forEntityName: "Measurement", into: context) as! Measurement
@@ -231,7 +216,7 @@ class CollectorController: NSObject {
         
         
         // 1. battery percentage
-        let estimatedChargeRemaining = usesAcPower ? "-1" : shell("pmset -g batt | grep -Eo \"\\d+%\" | cut -d% -f1")
+        let estimatedChargeRemaining = usesAcPower ? "-1" : Helpers.shell("pmset -g batt | grep -Eo \"\\d+%\" | cut -d% -f1")
             .trimmingCharacters(in: .whitespacesAndNewlines)
         batteryPercentageMeasurement.alternativeLabel = "EstimatedChargeRemaining"
         batteryPercentageMeasurement.measurementTypeId = "1"
@@ -245,7 +230,7 @@ class CollectorController: NSObject {
         batteryStatusMeasurement.metric = metric
         
         // 3. ram usage
-        let ramUsage = shell("ps -axm -o rss,pid | grep \(processID!)")
+        let ramUsage = Helpers.shell("ps -axm -o rss,pid | grep \(processID!)")
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .split(separator: " ")
         ramMeasurement.alternativeLabel = "RAM"
@@ -254,7 +239,7 @@ class CollectorController: NSObject {
         ramMeasurement.metric = metric
         
         // 4. vRAM usage
-        let vRamUsage = shell("ps -axm -o vsz,pid | grep \(processID!)")
+        let vRamUsage = Helpers.shell("ps -axm -o vsz,pid | grep \(processID!)")
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .split(separator: " ")
         vRamMeasurement.alternativeLabel = "vRAM"
@@ -263,7 +248,7 @@ class CollectorController: NSObject {
         vRamMeasurement.metric = metric
         
         // 5. CPU usage
-        let cpuUsage = shell("ps -axm -o %cpu,pid | grep \(processID!)")
+        let cpuUsage = Helpers.shell("ps -axm -o %cpu,pid | grep \(processID!)")
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .split(separator: " ")
         cpuMeasurement.alternativeLabel = "CPU"

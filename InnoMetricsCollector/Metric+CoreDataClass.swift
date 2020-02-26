@@ -10,5 +10,5 @@ import Foundation
 import CoreData
 
 public class Metric: NSManagedObject {
-
+    public var isHidden: Bool = true
 }
