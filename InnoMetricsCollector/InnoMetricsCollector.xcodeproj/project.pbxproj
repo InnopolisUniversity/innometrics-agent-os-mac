@@ -27,6 +27,7 @@
 		2C1EAF292406AF4500A34585 /* AuthorizationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1EAF282406AF4500A34585 /* AuthorizationUtils.swift */; };
 		2C1EAF2B2406B08C00A34585 /* ServerPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1EAF2A2406B08C00A34585 /* ServerPrefs.swift */; };
 		2C1EAF2F2406B20300A34585 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1EAF2E2406B20300A34585 /* Helpers.swift */; };
+		2C1EAF312406B41C00A34585 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1EAF302406B41C00A34585 /* LoginController.swift */; };
 		3630E8EBEB2F835EF98392C1 /* Pods_InnoMetricsCollector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA14428BFD802AB8F60FE76A /* Pods_InnoMetricsCollector.framework */; };
 		9F590DC32052A44C009AC489 /* IdleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F590DC22052A44C009AC489 /* IdleController.swift */; };
 		9F8C169F204D53830068CB58 /* IdleMetric+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8C169E204D53830068CB58 /* IdleMetric+CoreDataClass.swift */; };
@@ -81,6 +82,7 @@
 		2C1EAF282406AF4500A34585 /* AuthorizationUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthorizationUtils.swift; path = ../../InnometricsTransfer/InnometricsTransfer/AuthorizationUtils.swift; sourceTree = "<group>"; };
 		2C1EAF2A2406B08C00A34585 /* ServerPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServerPrefs.swift; path = ../../InnometricsTransfer/InnometricsTransfer/ServerPrefs.swift; sourceTree = "<group>"; };
 		2C1EAF2E2406B20300A34585 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		2C1EAF302406B41C00A34585 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		2C29E7D523F56E2F003D3612 /* InnoMetricsCollector.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InnoMetricsCollector.entitlements; sourceTree = "<group>"; };
 		2CCEBC2123B4E360007A5903 /* InnoMetricsCollector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InnoMetricsCollector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CE6883823F2EA6500DD9946 /* InnoMetricsCollector 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "InnoMetricsCollector 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 				9F590DC22052A44C009AC489 /* IdleController.swift */,
 				25C5B4EA1E267053007FF799 /* CollectorController.swift */,
 				255312D81E27C13100674DF3 /* CurrentWorkingSessionController.swift */,
+				2C1EAF302406B41C00A34585 /* LoginController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -374,6 +377,7 @@
 				25C5B4F41E2684DF007FF799 /* Metric+CoreDataClass.swift in Sources */,
 				9FDEF757204DB8380012711F /* IdleMetric+CoreDataProperties.swift in Sources */,
 				250D88F31E27A5F2009E5F32 /* ActiveApplicationController.swift in Sources */,
+				2C1EAF312406B41C00A34585 /* LoginController.swift in Sources */,
 				25AB378D1E2FAF1400174767 /* BrowserInfoUtils.swift in Sources */,
 				25D57A8C1E1D6F7700B2265D /* AppDelegate.swift in Sources */,
 				25C5B4EB1E267053007FF799 /* CollectorController.swift in Sources */,

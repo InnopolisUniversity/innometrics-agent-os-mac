@@ -14,12 +14,16 @@ import Sparkle
 class CollectorController: NSObject {
     
     @IBOutlet weak var statusMenu: NSMenu!
+    @IBOutlet weak var loginMenu: NSMenu!
     
     @IBOutlet weak var collectorView: NSView!
     var metricsCollectorMenuItem: NSMenuItem!
     
     @IBOutlet weak var currentWorkingSessionView: CurrentWorkingSessionController!
     var currentWorkingSessionMenuItem: NSMenuItem!
+    
+    @IBOutlet weak var loginView: LoginViewController!
+    @IBOutlet weak var loginMenuItem: NSMenuItem!
     
     @IBOutlet weak var activeApplicationView: ActiveApplicationController!
     @IBOutlet weak var idleView: IdleController!
@@ -29,6 +33,7 @@ class CollectorController: NSObject {
     
     @IBOutlet weak var updateBtn: NSButtonCell!
     
+    private var isLoggedIn: Bool = false
     private var currentSession: Session!
     private var currentMetric: Metric?
     private var prevMetric: Metric?
@@ -66,34 +71,36 @@ class CollectorController: NSObject {
         let icon = NSImage(named: "statusIcon")
         icon?.isTemplate = true // best for dark mode
         statusItem.image = icon
-        statusItem.menu = statusMenu
+        
+        if (isLoggedIn) {
+            statusItem.menu = statusMenu
 
-        metricsCollectorMenuItem = statusMenu.item(withTitle: "Collector")
-        metricsCollectorMenuItem.view = collectorView
-        
-        currentWorkingSessionMenuItem = statusMenu.item(withTitle: "CurrentWorkingSession")
-        currentWorkingSessionMenuItem.view = currentWorkingSessionView
-        
-        // set up the NSManagedObjectContext
-        let appDelegate = NSApplication.shared.delegate as! AppDelegate
-        context = appDelegate.managedObjectContext
-        
-        let transferAppIdentifier = "ru.innometrics.InnometricsTransfer"
-        let startChangingDbNotificationName = Notification.Name("db_start_changing")
-        let endChangingDbNotificationName = Notification.Name("db_end_changing")
-        
-        DistributedNotificationCenter.default().addObserver(self, selector: #selector(dbChangeBegin), name: startChangingDbNotificationName, object: transferAppIdentifier)
-        DistributedNotificationCenter.default().addObserver(self, selector: #selector(dbChangeEnd), name: endChangingDbNotificationName, object: transferAppIdentifier)
-        
-        NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(applicationSwitchTriggered), name: NSWorkspace.didActivateApplicationNotification, object: nil)
-        
-        // Monitor for all possible user's movements (actions)
-        NSEvent.addGlobalMonitorForEvents (
-            matching: self.possibleUserMovements,
-            handler: { (event: NSEvent) in self.handleUserMovement()}
-        )
-        
-        startMetricCollection()
+            metricsCollectorMenuItem = statusMenu.item(withTitle: "Collector")
+            metricsCollectorMenuItem.view = collectorView
+            
+            currentWorkingSessionMenuItem = statusMenu.item(withTitle: "CurrentWorkingSession")
+            currentWorkingSessionMenuItem.view = currentWorkingSessionView
+            
+            // set up the NSManagedObjectContext
+            let appDelegate = NSApplication.shared.delegate as! AppDelegate
+            context = appDelegate.managedObjectContext
+            
+            NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(applicationSwitchTriggered), name: NSWorkspace.didActivateApplicationNotification, object: nil)
+            
+            // Monitor for all possible user's movements (actions)
+            NSEvent.addGlobalMonitorForEvents (
+                matching: self.possibleUserMovements,
+                handler: { (event: NSEvent) in self.handleUserMovement()}
+            )
+            
+            startMetricCollection()
+        } else {
+            // Present Log In Screen
+            statusItem.menu = loginMenu
+            
+            loginMenuItem = loginMenu.item(withTitle: "LoginPage")
+            loginMenuItem.view = loginView
+        }
     }
     
     func startMetricCollection() {
