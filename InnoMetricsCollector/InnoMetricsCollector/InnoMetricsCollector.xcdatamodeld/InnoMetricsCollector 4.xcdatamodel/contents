@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="EnergyMeasurement" representedClassName=".EnergyMeasurement" syncable="YES">
+        <attribute name="alternativeLabel" optional="YES" attributeType="String"/>
+        <attribute name="measurementTypeId" optional="YES" attributeType="String"/>
+        <attribute name="value" optional="YES" attributeType="String"/>
+        <relationship name="metric" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Metric" inverseName="measurements" inverseEntity="Metric"/>
+    </entity>
+    <entity name="IdleMetric" representedClassName=".IdleMetric" syncable="YES">
+        <attribute name="appName" optional="YES" attributeType="String"/>
+        <attribute name="bundleIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="bundleURL" optional="YES" attributeType="String"/>
+        <attribute name="duration" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="tabName" optional="YES" attributeType="String"/>
+        <attribute name="tabUrl" optional="YES" attributeType="String"/>
+        <attribute name="timestampEnd" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timestampStart" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="session" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="Session" inverseName="idleMetric" inverseEntity="Session"/>
+    </entity>
+    <entity name="Metric" representedClassName=".Metric" syncable="YES">
+        <attribute name="appName" optional="YES" attributeType="String"/>
+        <attribute name="bundleIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="bundleURL" optional="YES" attributeType="String"/>
+        <attribute name="duration" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="tabName" optional="YES" attributeType="String"/>
+        <attribute name="tabUrl" optional="YES" attributeType="String"/>
+        <attribute name="timestampEnd" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timestampStart" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="measurements" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EnergyMeasurement" inverseName="metric" inverseEntity="EnergyMeasurement"/>
+        <relationship name="session" optional="YES" maxCount="1" deletionRule="No Action" destinationEntity="Session" inverseName="metric" inverseEntity="Session"/>
+    </entity>
+    <entity name="Session" representedClassName=".Session" syncable="YES">
+        <attribute name="ipAddress" optional="YES" attributeType="String"/>
+        <attribute name="macAddress" optional="YES" attributeType="String"/>
+        <attribute name="operatingSystem" optional="YES" attributeType="String"/>
+        <attribute name="userLogin" optional="YES" attributeType="String"/>
+        <attribute name="userName" optional="YES" attributeType="String"/>
+        <relationship name="idleMetric" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="IdleMetric" inverseName="session" inverseEntity="IdleMetric"/>
+        <relationship name="metric" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="Metric" inverseName="session" inverseEntity="Metric"/>
+    </entity>
+    <elements>
+        <element name="EnergyMeasurement" positionX="-45" positionY="72" width="128" height="103"/>
+        <element name="IdleMetric" positionX="-63" positionY="-18" width="128" height="180"/>
+        <element name="Metric" positionX="-36" positionY="9" width="128" height="193"/>
+        <element name="Session" positionX="-54" positionY="-9" width="128" height="150"/>
+    </elements>
+</model>

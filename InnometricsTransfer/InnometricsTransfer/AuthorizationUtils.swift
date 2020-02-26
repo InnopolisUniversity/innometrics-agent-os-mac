@@ -86,16 +86,4 @@ public class AuthorizationUtils {
         let defaults = UserDefaults.standard
         return defaults.string(forKey: userIdAlias)
     }
-    
-    public static func disableOfflineMode() {
-        offlineModeIsEnabled = false
-    }
-    
-    public static func enableOfflineMode() {
-        offlineModeIsEnabled = true
-    }
-    
-    public static func offlineModeEnabled() -> Bool {
-        return offlineModeIsEnabled
-    }
 }

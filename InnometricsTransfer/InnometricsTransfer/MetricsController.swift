@@ -15,7 +15,7 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     var appFocusMetrics: [Metric] = []
     var idleMetrics: [IdleMetric] = []
     var mergedMetrics: [MergedMetric] = []
-    var appFocusMeasurements: [Measurement] = []
+    var appFocusMeasurements: [EnergyMeasurement] = []
     
     @IBOutlet weak var newMetricsTableView: NSTableView!
     
@@ -87,7 +87,7 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
             let idleMetricsFetch: NSFetchRequest<IdleMetric> = IdleMetric.fetchRequest()
             idleMetricsFetch.sortDescriptors = [NSSortDescriptor(key: "timestampStart", ascending: false)]
             
-            let measurementsFetch: NSFetchRequest<Measurement> = Measurement.fetchRequest()
+            let measurementsFetch: NSFetchRequest<EnergyMeasurement> = EnergyMeasurement.fetchRequest()
             
             let isFinishedFocusApp = NSPredicate(format: "timestampEnd != nil")
             let isFinishedIdle = NSPredicate(format: "timestampEnd != nil")

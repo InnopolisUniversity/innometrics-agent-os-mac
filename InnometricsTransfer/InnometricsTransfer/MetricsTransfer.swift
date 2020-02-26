@@ -17,7 +17,7 @@ public class MetricsTransfer {
         
         var measurementsArrayJson: [[String: String]] = []
         if (!idle && metric.measurements != nil) {
-            for m in metric.measurements ?? Set<Measurement>() {
+            for m in metric.measurements ?? Set<EnergyMeasurement>() {
                 let mJson: [String: String] = [
                     "alternativeLabel": m.alternativeLabel ?? "CPU",
                     "measurementTypeId": m.measurementTypeId ?? "0",
@@ -46,7 +46,7 @@ public class MetricsTransfer {
         return activity
     }
     
-    public static func sendMetrics(token: String, username: String, focusAppMetrics: [Metric], idleMetrics: [IdleMetric], measurements: [Measurement], completion: @escaping (_ response: Int) -> Void) {
+    public static func sendMetrics(token: String, username: String, focusAppMetrics: [Metric], idleMetrics: [IdleMetric], measurements: [EnergyMeasurement], completion: @escaping (_ response: Int) -> Void) {
         
         var activitiesArrayJson: [[String: Any]] = []
         

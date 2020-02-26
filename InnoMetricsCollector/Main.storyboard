@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="MRc-qd-iXW">
+            <objects>
+                <windowController storyboardIdentifier="LoginViewController" id="gwu-41-uM1" sceneMemberID="viewController">
+                    <window key="window" title="Log In to Innometrics" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="1tB-Qx-ZIh">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="294" y="313" width="339" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+                        <connections>
+                            <outlet property="delegate" destination="gwu-41-uM1" id="gUG-HW-FG3"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="AMh-0L-i19" kind="relationship" relationship="window.shadowedContentViewController" id="daF-rB-0S1"/>
+                    </connections>
+                </windowController>
+                <customObject id="XVf-ws-EUQ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-149.5" y="193"/>
+        </scene>
+        <!--Login View Controller-->
+        <scene sceneID="hU6-63-L4m">
+            <objects>
+                <viewController id="AMh-0L-i19" customClass="LoginViewController" customModule="InnoMetricsCollector" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="sIL-Sv-sTx">
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="270"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="q61-pr-b59">
+                                <rect key="frame" x="129" y="230" width="172" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Log In to Innometrics" id="vyt-nO-fAc">
+                                    <font key="font" metaFont="systemSemibold" size="17"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <outlet property="delegate" destination="sIL-Sv-sTx" id="6Lh-EO-ANd"/>
+                                </connections>
+                            </textField>
+                            <secureTextField verticalHuggingPriority="750" id="7ny-U0-lMu">
+                                <rect key="frame" x="36" y="98" width="363" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Your password" drawsBackground="YES" usesSingleLineMode="YES" id="qan-6I-1sU">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <allowedInputSourceLocales>
+                                        <string>NSAllRomanInputSourcesLocaleIdentifier</string>
+                                    </allowedInputSourceLocales>
+                                </secureTextFieldCell>
+                            </secureTextField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="AYT-Xi-TEi">
+                                <rect key="frame" x="34" y="196" width="37" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="email" id="nFD-45-diz">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" id="76L-6r-L0a">
+                                <rect key="frame" x="36" y="167" width="363" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="example@innopolis.ru" drawsBackground="YES" id="hpf-3C-f6o">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="MIw-H4-ogL">
+                                <rect key="frame" x="34" y="127" width="63" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="password" id="Awl-ws-s7N">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xl2-Sp-zOl">
+                                <rect key="frame" x="170" y="13" width="90" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="78" id="NKn-Eq-0ff"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Log In" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Rzz-fo-Kus">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" size="13" name="HelveticaNeue"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLogIn:" target="AMh-0L-i19" id="mq3-Af-neZ"/>
+                                </connections>
+                            </button>
+                            <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="MZz-P3-tJy">
+                                <rect key="frame" x="207" y="61" width="16" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="xl2-Sp-zOl" firstAttribute="centerX" secondItem="q61-pr-b59" secondAttribute="centerX" id="LTR-va-CBZ"/>
+                            <constraint firstAttribute="bottom" secondItem="xl2-Sp-zOl" secondAttribute="bottom" constant="20" symbolic="YES" id="xFd-al-YEZ"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="emailField" destination="76L-6r-L0a" id="yca-rN-C5a"/>
+                        <outlet property="loaderIndicator" destination="MZz-P3-tJy" id="30K-B3-NGP"/>
+                        <outlet property="passwordField" destination="7ny-U0-lMu" id="bdt-YH-Lvr"/>
+                    </connections>
+                </viewController>
+                <customObject id="H1L-cI-p6y" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="337" y="193"/>
+        </scene>
+    </scenes>
+</document>

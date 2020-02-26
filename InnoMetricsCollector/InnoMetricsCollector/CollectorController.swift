@@ -17,13 +17,12 @@ class CollectorController: NSObject {
     @IBOutlet weak var loginMenu: NSMenu!
     
     @IBOutlet weak var collectorView: NSView!
-    var metricsCollectorMenuItem: NSMenuItem!
+    @IBOutlet weak var metricsCollectorMenuItem: NSMenuItem!
     
     @IBOutlet weak var currentWorkingSessionView: CurrentWorkingSessionController!
-    var currentWorkingSessionMenuItem: NSMenuItem!
+    @IBOutlet weak var currentWorkingSessionMenuItem: NSMenuItem!
     
-    @IBOutlet weak var loginView: LoginViewController!
-    @IBOutlet weak var loginMenuItem: NSMenuItem!
+    @IBOutlet weak var logInMenuItem: NSMenuItem!
     
     @IBOutlet weak var activeApplicationView: ActiveApplicationController!
     @IBOutlet weak var idleView: IdleController!
@@ -39,7 +38,7 @@ class CollectorController: NSObject {
     private var context: NSManagedObjectContext!
     private var isPaused: Bool = false
     private var timer : Timer? = Timer()
-    private var measurements = Set<Measurement>()
+    private var measurements = Set<EnergyMeasurement>()
     
     private var currentIdleMetric: IdleMetric?
     private let possibleUserMovements: NSEvent.EventTypeMask = [.mouseMoved, .keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown]
@@ -50,6 +49,14 @@ class CollectorController: NSObject {
     private let browsersId: [String] = ["org.chromium.Chromium", "com.google.Chrome.canary", "com.google.Chrome", "com.apple.Safari"]
     
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    
+    @IBAction func onClickToLogIn(_ sender: Any) {
+        let mainStoryboard = NSStoryboard.init(name: NSStoryboard.Name("Main"), bundle: nil)
+        let logInController = mainStoryboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier("LoginViewController")) as? NSWindowController
+        
+        logInController!.showWindow(self)
+        NSApp.activate(ignoringOtherApps: true)
+    }
     
     func startTimer(processID: Int32, metric: Metric) {
       if timer == nil {
@@ -64,21 +71,20 @@ class CollectorController: NSObject {
       }
     }
     
-    override func awakeFromNib() {
-        setUpLaunchAtLogin()
-        
-        let icon = NSImage(named: "statusIcon")
-        icon?.isTemplate = true // best for dark mode
-        statusItem.image = icon
-        
-        if (Helpers.isLoggedIn()) {
-            statusItem.menu = statusMenu
-
-            metricsCollectorMenuItem = statusMenu.item(withTitle: "Collector")
-            metricsCollectorMenuItem.view = collectorView
+    func renderMenuItems() {
+        statusItem.menu = loginMenu
+        if (AuthorizationUtils.isAuthorized()) {
+            logInMenuItem.isHidden = true
+            logInMenuItem.isEnabled = false
             
-            currentWorkingSessionMenuItem = statusMenu.item(withTitle: "CurrentWorkingSession")
+            currentWorkingSessionMenuItem.isHidden = false
+            currentWorkingSessionMenuItem.isEnabled = true
+            
+            metricsCollectorMenuItem.isHidden = false
+            metricsCollectorMenuItem.isEnabled = true
+            
             currentWorkingSessionMenuItem.view = currentWorkingSessionView
+            metricsCollectorMenuItem.view = collectorView
             
             // set up the NSManagedObjectContext
             let appDelegate = NSApplication.shared.delegate as! AppDelegate
@@ -89,17 +95,36 @@ class CollectorController: NSObject {
             // Monitor for all possible user's movements (actions)
             NSEvent.addGlobalMonitorForEvents (
                 matching: self.possibleUserMovements,
-                handler: { (event: NSEvent) in self.handleUserMovement()}
+                handler: { (event: NSEvent) in self.handleUserMovement() }
             )
             
             startMetricCollection()
         } else {
-            // Present Log In Screen
-            statusItem.menu = loginMenu
+            logInMenuItem.isHidden = false
+            logInMenuItem.isEnabled = true
             
-            loginMenuItem = loginMenu.item(withTitle: "LoginPage")
-            loginMenuItem.view = loginView
+            currentWorkingSessionMenuItem.isHidden = true
+            currentWorkingSessionMenuItem.isEnabled = false
+            
+            metricsCollectorMenuItem.isHidden = true
+            metricsCollectorMenuItem.isEnabled = false
         }
+    }
+    
+    @objc func defaultsChanged() {
+        renderMenuItems()
+        startMetricCollection()
+    }
+    
+    override func awakeFromNib() {
+        NotificationCenter.default.addObserver(self, selector: #selector(defaultsChanged), name: UserDefaults.didChangeNotification, object: nil)
+        setUpLaunchAtLogin()
+        
+        let icon = NSImage(named: "statusIcon")
+        icon?.isTemplate = true // best for dark mode
+        statusItem.image = icon
+        
+        renderMenuItems()
     }
     
     func startMetricCollection() {
@@ -214,11 +239,11 @@ class CollectorController: NSObject {
         let usesAcPower = Helpers.shell("pmset -g ps").contains("AC Power") ? true : false
         
         // create metric model
-        let batteryPercentageMeasurement = NSEntityDescription.insertNewObject(forEntityName: "Measurement", into: context) as! Measurement
-        let batteryStatusMeasurement = NSEntityDescription.insertNewObject(forEntityName: "Measurement", into: context) as! Measurement
-        let ramMeasurement = NSEntityDescription.insertNewObject(forEntityName: "Measurement", into: context) as! Measurement
-        let vRamMeasurement = NSEntityDescription.insertNewObject(forEntityName: "Measurement", into: context) as! Measurement
-        let cpuMeasurement = NSEntityDescription.insertNewObject(forEntityName: "Measurement", into: context) as! Measurement
+        let batteryPercentageMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
+        let batteryStatusMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
+        let ramMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
+        let vRamMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
+        let cpuMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
         
         
         // 1. battery percentage
