@@ -13,25 +13,21 @@ import Sparkle
 
 class CollectorController: NSObject {
     
+    // Status Menu Entities
     @IBOutlet weak var statusMenu: NSMenu!
     @IBOutlet weak var loginMenu: NSMenu!
-    
     @IBOutlet weak var collectorView: NSView!
     @IBOutlet weak var metricsCollectorMenuItem: NSMenuItem!
-    
     @IBOutlet weak var currentWorkingSessionView: CurrentWorkingSessionController!
     @IBOutlet weak var currentWorkingSessionMenuItem: NSMenuItem!
-    
     @IBOutlet weak var logInMenuItem: NSMenuItem!
     
+    // Collector Entities
     @IBOutlet weak var activeApplicationView: ActiveApplicationController!
     @IBOutlet weak var idleView: IdleController!
-
     @IBOutlet weak var pausePlayBtn: NSButton!
     @IBOutlet weak var pausePlayLabel: NSTextField!
-    
     @IBOutlet weak var updateBtn: NSButtonCell!
-    
     private var currentSession: Session!
     private var currentMetric: Metric?
     private var prevMetric: Metric?
@@ -39,17 +35,16 @@ class CollectorController: NSObject {
     private var isPaused: Bool = false
     private var timer : Timer? = Timer()
     private var measurements = Set<EnergyMeasurement>()
-    
     private var currentIdleMetric: IdleMetric?
-    private let possibleUserMovements: NSEvent.EventTypeMask = [.mouseMoved, .keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown]
     
+    // User Movements Entities
+    private let possibleUserMovements: NSEvent.EventTypeMask = [.mouseMoved, .keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown]
     private var isCollectingBrowserInfo: Bool = false
     private var isCollecting: Bool = true
-    
     private let browsersId: [String] = ["org.chromium.Chromium", "com.google.Chrome.canary", "com.google.Chrome", "com.apple.Safari"]
-    
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
+    // Handles when user is not authenticated
     @IBAction func onClickToLogIn(_ sender: Any) {
         let mainStoryboard = NSStoryboard.init(name: NSStoryboard.Name("Main"), bundle: nil)
         let logInController = mainStoryboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier("LoginViewController")) as? NSWindowController
@@ -58,9 +53,11 @@ class CollectorController: NSObject {
         NSApp.activate(ignoringOtherApps: true)
     }
     
+    // Measure metrics every second
+    // TODO: make this modifiable
     func startTimer(processID: Int32, metric: Metric) {
       if timer == nil {
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.measureEnergyMetrics(sender:)), userInfo: ["processID": processID, "metric": metric], repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.measureEnergyMetrics(sender:)), userInfo: ["processID": processID, "metric": metric], repeats: true)
       }
     }
 
@@ -71,6 +68,7 @@ class CollectorController: NSObject {
       }
     }
     
+    // Based on Auhenticated/Not Authenticated, display appropriate menu
     func renderMenuItems() {
         statusItem.menu = loginMenu
         if (AuthorizationUtils.isAuthorized()) {
@@ -390,14 +388,6 @@ class CollectorController: NSObject {
                 print("An error occurred")
             }
         }
-//        else {
-//            context.delete(session)
-//            do {
-//                try context.save()
-//            } catch {
-//                print("An error occured")
-//            }
-//        }
     }
     
     

@@ -34,10 +34,8 @@ class LoginViewController: NSViewController {
                 self.loaderIndicator.stopAnimation(self)
                 self.loaderIndicator.isHidden = true
                 if (token == nil) {
-                    print("no success")
                     Helpers.dialogOK(question: "Error", text: "Wrong input authorization data")
                 } else {
-                    print("success")
                     AuthorizationUtils.saveAuthorizationToken(token: token!)
                     AuthorizationUtils.saveUsername(username: email)
                     AuthorizationUtils.saveIsAuthorized(isAuthorized: true)
