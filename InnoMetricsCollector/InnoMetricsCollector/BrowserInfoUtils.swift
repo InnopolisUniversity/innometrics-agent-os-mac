@@ -84,7 +84,7 @@ class BrowserInfoUtils {
         let script = NSAppleScript(source: code)
         let scriptOutput = script?.executeAndReturnError(&errorInfo)
         if ((errorInfo) != nil) {
-            print(errorInfo)
+            print(errorInfo ?? "there has been an error using apple scripts")
             return nil;
         } else {
             return scriptOutput?.stringValue

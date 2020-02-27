@@ -14,7 +14,6 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     
     var appFocusMetrics: [Metric] = []
     var idleMetrics: [IdleMetric] = []
-    var mergedMetrics: [MergedMetric] = []
     var appFocusMeasurements: [EnergyMeasurement] = []
     
     override func viewDidLoad() {
@@ -23,10 +22,10 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
         // TODO: update later
         // appDelegate.logOutMenuItem.isEnabled = true
         
-        ferchNewMetrics()
+        fetchNewMetrics()
     }
     
-    public func ferchNewMetrics() {
+    public func fetchNewMetrics() {
         appFocusMetrics = []
         idleMetrics = []
         appFocusMeasurements = []
@@ -49,42 +48,6 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
             appFocusMeasurements = try context.fetch(measurementsFetch)
         } catch {
             print(error)
-        }
-        
-        updateMergedMetrics()
-    }
-    
-    // Merge all the metrics into one array
-    private func updateMergedMetrics() {
-        func dateIsEarlier(first: NSDate, second: NSDate) -> Bool {
-            return first.compare(second as Date) == ComparisonResult.orderedDescending
-        }
-        
-        mergedMetrics = []
-        let totalCount = appFocusMetrics.count + idleMetrics.count - 2
-        var appFocusPos = 0, idlePos = 0
-        var appFocusIsFilled = appFocusMetrics.isEmpty, idleIsFilled = idleMetrics.isEmpty
-        while ((appFocusPos + idlePos) < totalCount) {
-            if((idleIsFilled) || (!appFocusIsFilled && dateIsEarlier(first: appFocusMetrics[appFocusPos].timestampStart!, second: idleMetrics[idlePos].timestampStart!))) {
-                let metric = appFocusMetrics[appFocusPos]
-                mergedMetrics.append(MergedMetric(_type: MergedMetric.MetricType.appFocus, _appName: metric.appName!, _duration: metric.duration, _start: metric.timestampStart!, _end: metric.timestampEnd!, _bundleId: metric.bundleIdentifier, _bundleURL: metric.bundleURL, _tabName: metric.tabName, _tabURL: metric.tabUrl))
-                if (appFocusPos != appFocusMetrics.count - 1) {
-                    appFocusPos += 1
-                }
-                else {
-                    appFocusIsFilled = true
-                }
-            }
-            else {
-                let metric = idleMetrics[idlePos]
-                mergedMetrics.append(MergedMetric(_type: MergedMetric.MetricType.idle, _appName: metric.appName!, _duration: metric.duration, _start: metric.timestampStart!, _end: metric.timestampEnd!, _bundleId: metric.bundleIdentifier, _bundleURL: metric.bundleURL, _tabName: metric.tabName, _tabURL: metric.tabUrl))
-                if (idlePos != idleMetrics.count - 1) {
-                    idlePos += 1
-                }
-                else {
-                    idleIsFilled = true
-                }
-            }
         }
     }
     

@@ -30,9 +30,9 @@ public class MetricsTransfer {
         
         let activity: [String: Any] = [
             "idle_activity": idle,
-            "start_time": dateFormatter.string(from: metric.timestampEnd! as Date),
-            "end_time": dateFormatter.string(from: metric.timestampStart! as Date),
-            "executable_name": metric.bundleURL ?? "",
+            "start_time": dateFormatter.string(from: metric.timestampStart! as Date),
+            "end_time": (metric.timestampEnd != nil) ? dateFormatter.string(from: metric.timestampEnd! as Date) : dateFormatter.string(from: Date()),
+            "executable_name": metric.bundleURL != nil ? metric.bundleURL!.split(separator: "/").last! : "",
             "browser_url": metric.tabUrl ?? "",
             "browser_title": metric.tabName ?? "",
             "ip_address": metric.session!.ipAddress ?? "",
@@ -62,25 +62,23 @@ public class MetricsTransfer {
         do {
             let jsonData = try! JSONSerialization.data(withJSONObject: activities, options: .prettyPrinted)
             
-            // let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
-            // print("jsonData: \(String(describing: jsonString))")
-            
+            /*
+             let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
+             print("jsonData: \(String(describing: jsonString))")
+            */
+ 
             // create post request
             var request = URLRequest(url: URL(string: "\(ServerPrefs.getServerUrl())/V1/activity")!)
             request.httpMethod = "POST"
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("\(token)", forHTTPHeaderField: "Token")
             
-            // Day-long timeout... maybe server will process metrics faster, then this will be to removed
-            request.timeoutInterval = 86400
-            
             // insert json data to the request
             request.httpBody = jsonData
             
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                if error != nil
-                {
-                    print("\(error)")
+                
+                if error != nil {
                     completion(-1)
                     return
                 }

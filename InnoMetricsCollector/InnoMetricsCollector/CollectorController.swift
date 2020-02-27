@@ -28,12 +28,14 @@ class CollectorController: NSObject {
     @IBOutlet weak var pausePlayBtn: NSButton!
     @IBOutlet weak var pausePlayLabel: NSTextField!
     @IBOutlet weak var updateBtn: NSButtonCell!
+    @IBOutlet weak var sendingIndicator: NSProgressIndicator!
     private var currentSession: Session!
     private var currentMetric: Metric?
     private var prevMetric: Metric?
     private var context: NSManagedObjectContext!
     private var isPaused: Bool = false
     private var timer : Timer? = Timer()
+    private var transferTimer : Timer? = Timer()
     private var measurements = Set<EnergyMeasurement>()
     private var currentIdleMetric: IdleMetric?
     
@@ -53,12 +55,26 @@ class CollectorController: NSObject {
         NSApp.activate(ignoringOtherApps: true)
     }
     
-    // Measure metrics every second
+    // Measure energy metrics every 15 seconds
     // TODO: make this modifiable
     func startTimer(processID: Int32, metric: Metric) {
       if timer == nil {
-        timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.measureEnergyMetrics(sender:)), userInfo: ["processID": processID, "metric": metric], repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(self.measureEnergyMetrics(sender:)), userInfo: ["processID": processID, "metric": metric], repeats: true)
       }
+    }
+    
+    // TODO: decide on how frequent this should be
+    func startTransferTimer() {
+      if transferTimer == nil {
+        transferTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(self.transferAll(sender:)), userInfo: nil, repeats: true)
+      }
+    }
+    
+    func stopTransferTimer() {
+        if transferTimer != nil {
+            transferTimer!.invalidate()
+            transferTimer = nil
+        }
     }
 
     func stopTimer() {
@@ -121,6 +137,7 @@ class CollectorController: NSObject {
         let icon = NSImage(named: "statusIcon")
         icon?.isTemplate = true // best for dark mode
         statusItem.image = icon
+        self.sendingIndicator.isHidden = true
         
         renderMenuItems()
     }
@@ -230,6 +247,94 @@ class CollectorController: NSObject {
         }
     }
     
+    @objc func transferAll(sender: Timer) {
+        if (!isCollecting) {
+            return
+        }
+        
+        stopMetricCollection()
+        stopTimer()
+        stopTransferTimer()
+        
+        sendingIndicator.isHidden = false
+        sendingIndicator.startAnimation(self)
+        
+        let metricsController: MetricsController = MetricsController()
+        metricsController.fetchNewMetrics()
+        
+        metricsController.sendMetrics() { (response) in
+            DispatchQueue.main.async {
+                self.sendingIndicator.stopAnimation(self)
+                self.sendingIndicator.isHidden = true
+                if (response == 1) {
+                    self.clearDatabase()
+                } else if (response == 2) {
+                    Helpers.dialogOK(question: "Error", text: "You need to relogin to the system.")
+                    AuthorizationUtils.saveIsAuthorized(isAuthorized: false)
+                } else {
+                    Helpers.dialogOK(question: "Error", text: "Something went wrong during sending the data.")
+                }
+                self.startMetricCollection()
+                self.currentMetric = nil
+                self.prevMetric = nil
+            }
+        }
+    }
+    
+    func clearDatabase() {
+        let startChangingDbNotificationName = Notification.Name("db_start_changing")
+        let endChangingDbNotificationName = Notification.Name("db_end_changing")
+        DistributedNotificationCenter.default().postNotificationName(startChangingDbNotificationName, object: Bundle.main.bundleIdentifier, deliverImmediately: true)
+        
+        do {
+            let appDelegate = NSApplication.shared.delegate as! AppDelegate
+            let context = appDelegate.managedObjectContext
+            
+            let metricsFetch: NSFetchRequest<Metric> = Metric.fetchRequest()
+            metricsFetch.includesPropertyValues = false
+            let metricsToDelete = try context.fetch(metricsFetch as! NSFetchRequest<NSFetchRequestResult>) as! [NSManagedObject]
+            
+            for metric in metricsToDelete {
+                context.delete(metric)
+            }
+            
+            let idleMetricsFetch: NSFetchRequest<IdleMetric> = IdleMetric.fetchRequest()
+            idleMetricsFetch.includesPropertyValues = false
+            let idleMetricsToDelete = try context.fetch(idleMetricsFetch as! NSFetchRequest<NSFetchRequestResult>) as! [NSManagedObject]
+            
+            for idleMetric in idleMetricsToDelete {
+                context.delete(idleMetric)
+            }
+            
+            let sessionsFetch: NSFetchRequest<Session> = Session.fetchRequest()
+            sessionsFetch.includesPropertyValues = false
+            let sessionsToDelete = try context.fetch(sessionsFetch as! NSFetchRequest<NSFetchRequestResult>) as! [NSManagedObject]
+            
+            for session in sessionsToDelete {
+                context.delete(session)
+            }
+            
+            let measurementsFetch: NSFetchRequest<EnergyMeasurement> = EnergyMeasurement.fetchRequest()
+            measurementsFetch.includesPropertyValues = false
+            let measurementsToDelete = try context.fetch(measurementsFetch as! NSFetchRequest<NSFetchRequestResult>) as! [NSManagedObject]
+            
+            for energyMeasurement in measurementsToDelete {
+                context.delete(energyMeasurement)
+            }
+            
+            // Save Changes
+            try context.save()
+            
+            currentMetric = nil
+            prevMetric = nil
+            currentSession = nil
+        } catch {
+            print (error)
+            Helpers.dialogOK(question: "Error!", text: "There has been an error whilst trying to save the data to a local database. If the issue persists, please contact the responsible persons.")
+        }
+        DistributedNotificationCenter.default().postNotificationName(endChangingDbNotificationName, object: Bundle.main.bundleIdentifier, deliverImmediately: true)
+    }
+    
     @objc func measureEnergyMetrics(sender: Timer) {
         let userInfo = sender.userInfo as? NSDictionary
         let processID = userInfo!["processID"] as? Int32
@@ -326,7 +431,8 @@ class CollectorController: NSObject {
             try self.context.save()
             prevMetric = currentMetric
             currentMetric = metric
-            startTimer(processID: processID, metric: metric) // execute every 1sec, get energy info
+            startTimer(processID: processID, metric: metric)
+            startTransferTimer()
         } catch {
             print("An error occurred")
         }

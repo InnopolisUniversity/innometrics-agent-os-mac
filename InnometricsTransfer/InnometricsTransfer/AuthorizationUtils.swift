@@ -31,7 +31,7 @@ public class AuthorizationUtils {
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 if error != nil
                 {
-                    print("\(error)")
+                    print("\(String(describing: error))")
                     completion(nil)
                     return
                 }
@@ -40,7 +40,7 @@ public class AuthorizationUtils {
                 
                 if (responseCode == 200) {
                     if data != nil {
-                        if let responseJson = try? JSONSerialization.jsonObject(with: data!) as! [String: Any] {
+                        if let responseJson = try? JSONSerialization.jsonObject(with: data!) as? [String: Any] {
                             if let token = responseJson["token"] as? String {
                                 completion(token)
                                 return
