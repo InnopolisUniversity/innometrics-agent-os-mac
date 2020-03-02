@@ -3,7 +3,8 @@
 //  InnoMetricsCollector
 //
 //  Created by Denis Zaplatnikov on 12/01/2017.
-//  Copyright © 2018 Denis Zaplatnikov, Pavel Kotov & Dragos Strugar. All rights reserved.
+//  Modified in 2020 by Dragos Strugar
+//  Copyright © 2020 Innopolis University. All rights reserved.
 //
 
 import Cocoa

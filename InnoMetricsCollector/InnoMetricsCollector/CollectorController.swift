@@ -29,6 +29,7 @@ class CollectorController: NSObject {
     @IBOutlet weak var pausePlayLabel: NSTextField!
     @IBOutlet weak var updateBtn: NSButtonCell!
     @IBOutlet weak var sendingIndicator: NSProgressIndicator!
+    
     private var currentSession: Session!
     private var currentMetric: Metric?
     private var prevMetric: Metric?
@@ -309,7 +310,7 @@ class CollectorController: NSObject {
             let sessionsFetch: NSFetchRequest<Session> = Session.fetchRequest()
             sessionsFetch.includesPropertyValues = false
             let sessionsToDelete = try context.fetch(sessionsFetch as! NSFetchRequest<NSFetchRequestResult>) as! [NSManagedObject]
-            
+
             for session in sessionsToDelete {
                 context.delete(session)
             }
@@ -327,7 +328,6 @@ class CollectorController: NSObject {
             
             currentMetric = nil
             prevMetric = nil
-            currentSession = nil
         } catch {
             print (error)
             Helpers.dialogOK(question: "Error!", text: "There has been an error whilst trying to save the data to a local database. If the issue persists, please contact the responsible persons.")
@@ -409,6 +409,7 @@ class CollectorController: NSObject {
         metric.timestampStart = foregroundWindowLaunchDate
         
         createAndSaveCurrentSession()
+        
         metric.session = self.currentSession
         
         if (foregroundWindowBundleId != nil && self.browsersId.contains(foregroundWindowBundleId!)) {
@@ -460,6 +461,7 @@ class CollectorController: NSObject {
     
     func createAndSaveCurrentSession() {
         // save current session
+        
         let session = NSEntityDescription.insertNewObject(forEntityName: "Session", into: context) as! Session
         
         session.operatingSystem = "macOS " + ProcessInfo().operatingSystemVersionString
@@ -491,7 +493,7 @@ class CollectorController: NSObject {
                 currentSession = session
                 self.currentWorkingSessionView.updateSession(session: currentSession)
             } catch {
-                print("An error occurred")
+                print("error has occured")
             }
         }
     }
@@ -536,7 +538,6 @@ class CollectorController: NSObject {
     
     @objc func dbChangeEnd() {
         context.reset()
-        currentSession = nil
         currentMetric = nil
         prevMetric = nil
         
