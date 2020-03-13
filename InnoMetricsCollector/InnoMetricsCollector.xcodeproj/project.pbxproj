@@ -24,6 +24,7 @@
 		2C1B0FD8241BA42A0092F0AD /* ActiveProcess+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1B0FD7241BA42A0092F0AD /* ActiveProcess+CoreDataProperties.swift */; };
 		2C1B0FDA241BAB360092F0AD /* ProcessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1B0FD9241BAB360092F0AD /* ProcessController.swift */; };
 		2C1B0FDC241BABFB0092F0AD /* ProcessesTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1B0FDB241BABFB0092F0AD /* ProcessesTransfer.swift */; };
+		2C1B0FDF241C1DBD0092F0AD /* CollectorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1B0FDE241C1DBD0092F0AD /* CollectorHelper.swift */; };
 		2C1EAF202406AEAC00A34585 /* MergedMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1EAF1F2406AEAC00A34585 /* MergedMetrics.swift */; };
 		2C1EAF222406AEB700A34585 /* MetricsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1EAF212406AEB700A34585 /* MetricsController.swift */; };
 		2C1EAF242406AEC000A34585 /* UserPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1EAF232406AEC000A34585 /* UserPrefs.swift */; };
@@ -87,6 +88,7 @@
 		2C1B0FD7241BA42A0092F0AD /* ActiveProcess+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ActiveProcess+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		2C1B0FD9241BAB360092F0AD /* ProcessController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessController.swift; sourceTree = "<group>"; };
 		2C1B0FDB241BABFB0092F0AD /* ProcessesTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessesTransfer.swift; sourceTree = "<group>"; };
+		2C1B0FDE241C1DBD0092F0AD /* CollectorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectorHelper.swift; sourceTree = "<group>"; };
 		2C1EAF1F2406AEAC00A34585 /* MergedMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MergedMetrics.swift; path = ../../InnometricsTransfer/InnometricsTransfer/MergedMetrics.swift; sourceTree = "<group>"; };
 		2C1EAF212406AEB700A34585 /* MetricsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MetricsController.swift; path = ../../InnometricsTransfer/InnometricsTransfer/MetricsController.swift; sourceTree = "<group>"; };
 		2C1EAF232406AEC000A34585 /* UserPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserPrefs.swift; path = ../../InnometricsTransfer/InnometricsTransfer/UserPrefs.swift; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 				250D88F21E27A5F2009E5F32 /* ActiveApplicationController.swift */,
 				9F590DC22052A44C009AC489 /* IdleController.swift */,
 				25C5B4EA1E267053007FF799 /* CollectorController.swift */,
+				2C1B0FDE241C1DBD0092F0AD /* CollectorHelper.swift */,
 				255312D81E27C13100674DF3 /* CurrentWorkingSessionController.swift */,
 				2C581C122406F4C5009997AF /* LoginViewController.swift */,
 			);
@@ -399,6 +402,7 @@
 				2C1EAF2B2406B08C00A34585 /* ServerPrefs.swift in Sources */,
 				255312D91E27C13100674DF3 /* CurrentWorkingSessionController.swift in Sources */,
 				2C1B0FD6241BA40D0092F0AD /* ActiveProcess+CoreDataClass.swift in Sources */,
+				2C1B0FDF241C1DBD0092F0AD /* CollectorHelper.swift in Sources */,
 				9F8C169F204D53830068CB58 /* IdleMetric+CoreDataClass.swift in Sources */,
 				2C1B0FD8241BA42A0092F0AD /* ActiveProcess+CoreDataProperties.swift in Sources */,
 				2C1EAF262406AEC800A34585 /* MetricsTransfer.swift in Sources */,

@@ -88,17 +88,10 @@ class CollectorController: NSObject {
     func renderMenuItems() {
         statusItem.menu = loginMenu
         if (AuthorizationUtils.isAuthorized()) {
-            logInMenuItem.isHidden = true
-            logInMenuItem.isEnabled = false
-            
-            currentWorkingSessionMenuItem.isHidden = false
-            currentWorkingSessionMenuItem.isEnabled = true
-            
-            metricsCollectorMenuItem.isHidden = false
-            metricsCollectorMenuItem.isEnabled = true
-            
-            currentWorkingSessionMenuItem.view = currentWorkingSessionView
-            metricsCollectorMenuItem.view = collectorView
+            CollectorHelper.updateUIAuthorized(
+                logInMenuItem: logInMenuItem, currentWorkingSessionMenuItem: currentWorkingSessionMenuItem, metricsCollectorMenuItem: metricsCollectorMenuItem,
+                currentWorkingSessionView: currentWorkingSessionView, collectorView: collectorView
+            )
             
             // set up the NSManagedObjectContext
             let appDelegate = NSApplication.shared.delegate as! AppDelegate
@@ -115,14 +108,10 @@ class CollectorController: NSObject {
             startMetricCollection()
             startProcessTransferTimer()
         } else {
-            logInMenuItem.isHidden = false
-            logInMenuItem.isEnabled = true
-            
-            currentWorkingSessionMenuItem.isHidden = true
-            currentWorkingSessionMenuItem.isEnabled = false
-            
-            metricsCollectorMenuItem.isHidden = true
-            metricsCollectorMenuItem.isEnabled = false
+            CollectorHelper.updateUIUnuthorized(
+                logInMenuItem: logInMenuItem, currentWorkingSessionMenuItem: currentWorkingSessionMenuItem, metricsCollectorMenuItem: metricsCollectorMenuItem,
+                currentWorkingSessionView: currentWorkingSessionView, collectorView: collectorView
+            )
         }
     }
     
