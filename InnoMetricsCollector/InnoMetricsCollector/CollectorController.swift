@@ -107,6 +107,9 @@ class CollectorController: NSObject {
             
             metricsCollectorMenuItem.isHidden = true
             metricsCollectorMenuItem.isEnabled = false
+            
+            currentWorkingSessionMenuItem.view = nil
+            metricsCollectorMenuItem.view = nil
         }
     }
     
