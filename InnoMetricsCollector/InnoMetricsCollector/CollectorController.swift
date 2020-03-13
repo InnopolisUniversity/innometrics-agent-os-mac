@@ -36,8 +36,10 @@ class CollectorController: NSObject {
     private var context: NSManagedObjectContext!
     private var isPaused: Bool = false
     private var transferTimer : Timer? = Timer()
+    private var processTransferTimer : Timer? = Timer()
     private var measurements = Set<EnergyMeasurement>()
     private var currentIdleMetric: IdleMetric?
+    private var dbProcesses: [ActiveProcess]?
     
     // User Movements Entities
     private let possibleUserMovements: NSEvent.EventTypeMask = [.mouseMoved, .keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown, .scrollWheel, .smartMagnify, .swipe]
@@ -53,6 +55,20 @@ class CollectorController: NSObject {
         
         logInController!.showWindow(self)
         NSApp.activate(ignoringOtherApps: true)
+    }
+    
+    func startProcessTransferTimer() {
+        if processTransferTimer == nil {
+            // TODO: change frequency
+            processTransferTimer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.transferProcesses(sender:)), userInfo: nil, repeats: true)
+        }
+    }
+    
+    func stopProcessTimer() {
+        if processTransferTimer != nil {
+            processTransferTimer!.invalidate()
+            processTransferTimer = nil
+        }
     }
     
     // TODO: decide on how frequent this should be
@@ -98,6 +114,7 @@ class CollectorController: NSObject {
             )
             
             startMetricCollection()
+            startProcessTransferTimer()
         } else {
             logInMenuItem.isHidden = false
             logInMenuItem.isEnabled = true
@@ -107,9 +124,6 @@ class CollectorController: NSObject {
             
             metricsCollectorMenuItem.isHidden = true
             metricsCollectorMenuItem.isEnabled = false
-            
-            currentWorkingSessionMenuItem.view = nil
-            metricsCollectorMenuItem.view = nil
         }
     }
     
@@ -131,6 +145,10 @@ class CollectorController: NSObject {
     }
     
     func startMetricCollection() {
+        if (!AuthorizationUtils.isAuthorized()) {
+            return
+        }
+        
         isCollecting = true
         handleApplicationSwitch()
     }
@@ -146,7 +164,7 @@ class CollectorController: NSObject {
     }
     
     func handleApplicationSwitch() {
-        if (!isCollecting) {
+        if (!isCollecting || !AuthorizationUtils.isAuthorized()) {
             return
         }
         
@@ -168,7 +186,6 @@ class CollectorController: NSObject {
         
         // browsers
         if (foregroundWindowBundleId != nil && browsersId.contains(foregroundWindowBundleId!)) {
-            // background func
             let backgroundQueue = DispatchQueue(label: "ru.innometrics.InnoMetricsCollector", qos: .background, target: nil)
             
             backgroundQueue.async {
@@ -235,6 +252,49 @@ class CollectorController: NSObject {
         }
     }
     
+    @objc func transferProcesses(sender: Timer) {
+        if (!isCollecting) {
+            return
+        }
+        
+        let startChangingDbNotificationName = Notification.Name("db_start_changing")
+        let endChangingDbNotificationName = Notification.Name("db_end_changing")
+        DistributedNotificationCenter.default().postNotificationName(startChangingDbNotificationName, object: Bundle.main.bundleIdentifier, deliverImmediately: true)
+        
+        print("in transfer processes")
+        
+        // 1. get all processes
+        let allProcesses = Helpers.shell("ps -axm -o pid,comm").components(separatedBy: "\n").dropFirst()
+        var allProcessesFiltered = allProcesses.map{ $0.trimmingCharacters(in: .whitespaces) }
+        allProcessesFiltered = allProcessesFiltered.filter{ $0 != "" }
+        
+        // 2. store all processes
+        for p in allProcessesFiltered {
+            let separated = p.split(separator: " ", maxSplits: 1)
+            let pid = String(separated[0])
+            let comm = String(separated[1].split(separator: "/").last ?? "")
+            
+            // 2.1: check if exists in db
+            let newProcess = NSEntityDescription.insertNewObject(forEntityName: "ActiveProcess", into: self.context) as! ActiveProcess
+        
+            newProcess.pid = pid
+            newProcess.process_name = comm
+            newProcess.session = self.currentSession
+            
+            // TODO: add this
+            // 3: get energy metrics per process
+             self.measureEnergyMetrics(process: newProcess, processID: newProcess.pid!)
+            
+            do {
+                try self.context.save()
+            } catch {
+                print("error with getting individual process")
+            }
+        }
+        
+        DistributedNotificationCenter.default().postNotificationName(endChangingDbNotificationName, object: Bundle.main.bundleIdentifier, deliverImmediately: true)
+    }
+    
     @objc func transferAll(sender: Timer) {
         if (!isCollecting) {
             return
@@ -255,6 +315,7 @@ class CollectorController: NSObject {
                 self.sendingIndicator.isHidden = true
                 if (response == 1) {
                     self.clearDatabase()
+                    self.startTransferTimer()
                 } else if (response == 2) {
                     Helpers.dialogOK(question: "Error", text: "You need to relogin to the system.")
                     AuthorizationUtils.saveIsAuthorized(isAuthorized: false)
@@ -273,9 +334,9 @@ class CollectorController: NSObject {
         let endChangingDbNotificationName = Notification.Name("db_end_changing")
         DistributedNotificationCenter.default().postNotificationName(startChangingDbNotificationName, object: Bundle.main.bundleIdentifier, deliverImmediately: true)
         
+        let appDelegate = NSApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.managedObjectContext
         do {
-            let appDelegate = NSApplication.shared.delegate as! AppDelegate
-            let context = appDelegate.managedObjectContext
             
             let metricsFetch: NSFetchRequest<Metric> = Metric.fetchRequest()
             metricsFetch.includesPropertyValues = false
@@ -304,8 +365,8 @@ class CollectorController: NSObject {
             // Save Changes
             try context.save()
             
-            currentMetric = nil
-            prevMetric = nil
+            self.currentMetric = nil
+            self.prevMetric = nil
         } catch {
             print (error)
             Helpers.dialogOK(question: "Error!", text: "There has been an error whilst trying to save the data to a local database. If the issue persists, please contact the responsible persons.")
@@ -313,61 +374,64 @@ class CollectorController: NSObject {
         DistributedNotificationCenter.default().postNotificationName(endChangingDbNotificationName, object: Bundle.main.bundleIdentifier, deliverImmediately: true)
     }
     
-    @objc func measureEnergyMetrics(sender: Timer) {
-        let userInfo = sender.userInfo as? NSDictionary
-        let processID = userInfo!["processID"] as? Int32
-        let metric = userInfo!["metric"] as? Metric
+    func measureEnergyMetrics(process: ActiveProcess, processID: String) {
         let usesAcPower = Helpers.shell("pmset -g ps").contains("AC Power") ? true : false
         
-        // create metric model
         let batteryPercentageMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
         let batteryStatusMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
         let ramMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
         let vRamMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
         let cpuMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
         
-        
+        let d = NSDate()
         // 1. battery percentage
         let estimatedChargeRemaining = usesAcPower ? "-1" : Helpers.shell("pmset -g batt | grep -Eo \"\\d+%\" | cut -d% -f1")
             .trimmingCharacters(in: .whitespacesAndNewlines)
         batteryPercentageMeasurement.alternativeLabel = "EstimatedChargeRemaining"
         batteryPercentageMeasurement.measurementTypeId = "1"
         batteryPercentageMeasurement.value = estimatedChargeRemaining
+        batteryPercentageMeasurement.process = process
+        batteryPercentageMeasurement.capturedDate = NSDate()
         
         // 2. battery status (charging or not)
         batteryStatusMeasurement.alternativeLabel = "BatteryStatus"
         batteryStatusMeasurement.measurementTypeId = "2"
         batteryStatusMeasurement.value = usesAcPower ? "2" : "1"
+        batteryStatusMeasurement.process = process
+        batteryStatusMeasurement.capturedDate = d
         
         // 3. ram usage
-        let ramUsage = Helpers.shell("ps -axm -o rss,pid | grep \(processID!)")
+        let ramUsage = Helpers.shell("ps -p \(processID) -xm -o rss")
             .trimmingCharacters(in: .whitespacesAndNewlines)
-            .split(separator: " ")
         ramMeasurement.alternativeLabel = "RAM"
         ramMeasurement.measurementTypeId = "3"
-        ramMeasurement.value = String(ramUsage.first ?? "0")
+        ramMeasurement.value = String(ramUsage)
+        ramMeasurement.process = process
+        ramMeasurement.capturedDate = d
         
         // 4. vRAM usage
-        let vRamUsage = Helpers.shell("ps -axm -o vsz,pid | grep \(processID!)")
+        let vRamUsage = Helpers.shell("ps -p \(processID) -xm -o vsz")
             .trimmingCharacters(in: .whitespacesAndNewlines)
-            .split(separator: " ")
         vRamMeasurement.alternativeLabel = "vRAM"
         vRamMeasurement.measurementTypeId = "4"
-        vRamMeasurement.value = String(vRamUsage.first ?? "0")
+        vRamMeasurement.value = String(vRamUsage)
+        vRamMeasurement.process = process
+        vRamMeasurement.capturedDate = d
         
         // 5. CPU usage
-        let cpuUsage = Helpers.shell("ps -axm -o %cpu,pid | grep \(processID!)")
+        let cpuUsage = Helpers.shell("ps -p \(processID) -xm -o %cpu")
             .trimmingCharacters(in: .whitespacesAndNewlines)
-            .split(separator: " ")
         cpuMeasurement.alternativeLabel = "CPU"
         cpuMeasurement.measurementTypeId = "5"
-        cpuMeasurement.value = String(cpuUsage.first ?? "0.0")
+        cpuMeasurement.value = String(cpuUsage)
+        cpuMeasurement.process = process
+        cpuMeasurement.capturedDate = d
         
-        measurements.insert(batteryPercentageMeasurement)
-        measurements.insert(batteryStatusMeasurement)
-        measurements.insert(ramMeasurement)
-        measurements.insert(vRamMeasurement)
-        measurements.insert(cpuMeasurement)
+        self.measurements.insert(batteryPercentageMeasurement)
+        self.measurements.insert(batteryStatusMeasurement)
+        self.measurements.insert(ramMeasurement)
+        self.measurements.insert(vRamMeasurement)
+        self.measurements.insert(cpuMeasurement)
     }
     
     func createAndSaveMetric(frontmostApp: NSRunningApplication, processID: Int32) {

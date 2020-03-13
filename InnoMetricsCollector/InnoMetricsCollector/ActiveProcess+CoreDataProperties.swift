@@ -17,4 +17,5 @@ extension ActiveProcess {
     @NSManaged public var process_name: String!
     @NSManaged public var measurementReportList: Set<EnergyMeasurement>?
     @NSManaged public var session: Session?
+    @NSManaged public var pid: String?
 }

@@ -14,7 +14,6 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     
     var appFocusMetrics: [Metric] = []
     var idleMetrics: [IdleMetric] = []
-    var appFocusMeasurements: [EnergyMeasurement] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +27,6 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     public func fetchNewMetrics() {
         appFocusMetrics = []
         idleMetrics = []
-        appFocusMeasurements = []
         
         do {
             let appDelegate = NSApplication.shared.delegate as! AppDelegate
@@ -41,11 +39,8 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
             let idleMetricsFetch: NSFetchRequest<IdleMetric> = IdleMetric.fetchRequest()
             idleMetricsFetch.sortDescriptors = [NSSortDescriptor(key: "timestampStart", ascending: false)]
             
-            let measurementsFetch: NSFetchRequest<EnergyMeasurement> = EnergyMeasurement.fetchRequest()
-            
             appFocusMetrics = try context.fetch(metricsFetch)
             idleMetrics = try context.fetch(idleMetricsFetch)
-            appFocusMeasurements = try context.fetch(measurementsFetch)
         } catch {
             print(error)
         }

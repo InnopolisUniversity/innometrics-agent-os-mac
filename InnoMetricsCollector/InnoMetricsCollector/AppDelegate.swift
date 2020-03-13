@@ -68,7 +68,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var coordinator: NSPersistentStoreCoordinator? = nil
         if failError == nil {
             coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-            let url = self.applicationDocumentsDirectory.appendingPathComponent("InnoMetricsCollectorV2.sqlite")
+            let url = self.applicationDocumentsDirectory.appendingPathComponent("InnoMetricsCollectorV3.sqlite")
 
             do {
                 try coordinator!.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true])
