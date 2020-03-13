@@ -15,19 +15,6 @@ public class MetricsTransfer {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         
-        var measurementsArrayJson: [[String: String]] = []
-        if (!idle && metric.measurements != nil) {
-            for m in metric.measurements ?? Set<EnergyMeasurement>() {
-                let mJson: [String: String] = [
-                    "alternativeLabel": m.alternativeLabel ?? "CPU",
-                    "measurementTypeId": m.measurementTypeId ?? "0",
-                    "value": m.value ?? "0"
-                ]
-                
-                measurementsArrayJson.append(mJson)
-            }
-        }
-        
         let activity: [String: Any] = [
             "idle_activity": idle,
             "start_time": dateFormatter.string(from: metric.timestampStart! as Date),
@@ -39,14 +26,13 @@ public class MetricsTransfer {
             "mac_address": (metric.session != nil) ? metric.session!.macAddress! : "",
             "activityType": "os",
             "activityID": 0,
-            "userID": username,
-            "measurements": measurementsArrayJson
+            "userID": username
         ]
         
         return activity
     }
     
-    public static func sendMetrics(token: String, username: String, focusAppMetrics: [Metric], idleMetrics: [IdleMetric], measurements: [EnergyMeasurement], completion: @escaping (_ response: Int) -> Void) {
+    public static func sendMetrics(token: String, username: String, focusAppMetrics: [Metric], idleMetrics: [IdleMetric], completion: @escaping (_ response: Int) -> Void) {
         
         var activitiesArrayJson: [[String: Any]] = []
         

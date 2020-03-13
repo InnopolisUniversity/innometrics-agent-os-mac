@@ -17,5 +17,4 @@ extension EnergyMeasurement {
     @NSManaged public var alternativeLabel: String!
     @NSManaged public var measurementTypeId: String!
     @NSManaged public var value: String!
-    @NSManaged public var metric: Metric!
 }

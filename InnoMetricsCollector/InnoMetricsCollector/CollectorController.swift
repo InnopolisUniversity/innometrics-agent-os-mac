@@ -35,13 +35,12 @@ class CollectorController: NSObject {
     private var prevMetric: Metric?
     private var context: NSManagedObjectContext!
     private var isPaused: Bool = false
-    private var timer : Timer? = Timer()
     private var transferTimer : Timer? = Timer()
     private var measurements = Set<EnergyMeasurement>()
     private var currentIdleMetric: IdleMetric?
     
     // User Movements Entities
-    private let possibleUserMovements: NSEvent.EventTypeMask = [.mouseMoved, .keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown]
+    private let possibleUserMovements: NSEvent.EventTypeMask = [.mouseMoved, .keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown, .scrollWheel, .smartMagnify, .swipe]
     private var isCollectingBrowserInfo: Bool = false
     private var isCollecting: Bool = true
     private let browsersId: [String] = ["org.chromium.Chromium", "com.google.Chrome.canary", "com.google.Chrome", "com.apple.Safari"]
@@ -56,14 +55,6 @@ class CollectorController: NSObject {
         NSApp.activate(ignoringOtherApps: true)
     }
     
-    // Measure energy metrics every 15 seconds
-    // TODO: make this modifiable
-    func startTimer(processID: Int32, metric: Metric) {
-      if timer == nil {
-        timer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(self.measureEnergyMetrics(sender:)), userInfo: ["processID": processID, "metric": metric], repeats: true)
-      }
-    }
-    
     // TODO: decide on how frequent this should be
     func startTransferTimer() {
       if transferTimer == nil {
@@ -76,13 +67,6 @@ class CollectorController: NSObject {
             transferTimer!.invalidate()
             transferTimer = nil
         }
-    }
-
-    func stopTimer() {
-      if timer != nil {
-        timer!.invalidate()
-        timer = nil
-      }
     }
     
     // Based on Auhenticated/Not Authenticated, display appropriate menu
@@ -254,7 +238,6 @@ class CollectorController: NSObject {
         }
         
         stopMetricCollection()
-        stopTimer()
         stopTransferTimer()
         
         sendingIndicator.isHidden = false
@@ -315,14 +298,6 @@ class CollectorController: NSObject {
                 context.delete(session)
             }
             
-            let measurementsFetch: NSFetchRequest<EnergyMeasurement> = EnergyMeasurement.fetchRequest()
-            measurementsFetch.includesPropertyValues = false
-            let measurementsToDelete = try context.fetch(measurementsFetch as! NSFetchRequest<NSFetchRequestResult>) as! [NSManagedObject]
-            
-            for energyMeasurement in measurementsToDelete {
-                context.delete(energyMeasurement)
-            }
-            
             // Save Changes
             try context.save()
             
@@ -355,13 +330,11 @@ class CollectorController: NSObject {
         batteryPercentageMeasurement.alternativeLabel = "EstimatedChargeRemaining"
         batteryPercentageMeasurement.measurementTypeId = "1"
         batteryPercentageMeasurement.value = estimatedChargeRemaining
-        batteryPercentageMeasurement.metric = metric
         
         // 2. battery status (charging or not)
         batteryStatusMeasurement.alternativeLabel = "BatteryStatus"
         batteryStatusMeasurement.measurementTypeId = "2"
         batteryStatusMeasurement.value = usesAcPower ? "2" : "1"
-        batteryStatusMeasurement.metric = metric
         
         // 3. ram usage
         let ramUsage = Helpers.shell("ps -axm -o rss,pid | grep \(processID!)")
@@ -370,7 +343,6 @@ class CollectorController: NSObject {
         ramMeasurement.alternativeLabel = "RAM"
         ramMeasurement.measurementTypeId = "3"
         ramMeasurement.value = String(ramUsage.first ?? "0")
-        ramMeasurement.metric = metric
         
         // 4. vRAM usage
         let vRamUsage = Helpers.shell("ps -axm -o vsz,pid | grep \(processID!)")
@@ -379,7 +351,6 @@ class CollectorController: NSObject {
         vRamMeasurement.alternativeLabel = "vRAM"
         vRamMeasurement.measurementTypeId = "4"
         vRamMeasurement.value = String(vRamUsage.first ?? "0")
-        vRamMeasurement.metric = metric
         
         // 5. CPU usage
         let cpuUsage = Helpers.shell("ps -axm -o %cpu,pid | grep \(processID!)")
@@ -388,7 +359,6 @@ class CollectorController: NSObject {
         cpuMeasurement.alternativeLabel = "CPU"
         cpuMeasurement.measurementTypeId = "5"
         cpuMeasurement.value = String(cpuUsage.first ?? "0.0")
-        cpuMeasurement.metric = metric
         
         measurements.insert(batteryPercentageMeasurement)
         measurements.insert(batteryStatusMeasurement)
@@ -432,7 +402,6 @@ class CollectorController: NSObject {
             try self.context.save()
             prevMetric = currentMetric
             currentMetric = metric
-            startTimer(processID: processID, metric: metric)
             startTransferTimer()
         } catch {
             print("An error occurred")
@@ -447,8 +416,6 @@ class CollectorController: NSObject {
                 metric.timestampEnd = endTime
                 
                 metric.duration = (metric.timestampEnd?.timeIntervalSinceReferenceDate)! - (metric.timestampStart?.timeIntervalSinceReferenceDate)!
-                metric.measurements = measurements
-                measurements.removeAll()
                 
                 do {
                     try context.save()

@@ -78,6 +78,7 @@
 		25D57A901E1D6F7700B2265D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		25D57A931E1D6F7700B2265D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		25D57A951E1D6F7700B2265D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C1B0FD1241B9DA60092F0AD /* InnoMetricsCollector 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "InnoMetricsCollector 5.xcdatamodel"; sourceTree = "<group>"; };
 		2C1EAF1F2406AEAC00A34585 /* MergedMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MergedMetrics.swift; path = ../../InnometricsTransfer/InnometricsTransfer/MergedMetrics.swift; sourceTree = "<group>"; };
 		2C1EAF212406AEB700A34585 /* MetricsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MetricsController.swift; path = ../../InnometricsTransfer/InnometricsTransfer/MetricsController.swift; sourceTree = "<group>"; };
 		2C1EAF232406AEC000A34585 /* UserPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserPrefs.swift; path = ../../InnometricsTransfer/InnometricsTransfer/UserPrefs.swift; sourceTree = "<group>"; };
@@ -539,7 +540,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.2;
+				CURRENT_PROJECT_VERSION = 3.0.0;
 				DEVELOPMENT_TEAM = AR494XTABA;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = InnoMetricsCollector/Info.plist;
@@ -548,7 +549,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 3.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.innometrics.InnoMetricsCollector;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -568,7 +569,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.2;
+				CURRENT_PROJECT_VERSION = 3.0.0;
 				DEVELOPMENT_TEAM = AR494XTABA;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = InnoMetricsCollector/Info.plist;
@@ -577,7 +578,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 3.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.innometrics.InnoMetricsCollector;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -614,12 +615,13 @@
 		9FACE304205C4B8A005BBB31 /* InnoMetricsCollector.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2C1B0FD1241B9DA60092F0AD /* InnoMetricsCollector 5.xcdatamodel */,
 				2C581C15240706E8009997AF /* InnoMetricsCollector 4.xcdatamodel */,
 				2CE6883923F2EA9600DD9946 /* InnoMetricsCollector 3.xcdatamodel */,
 				2CE6883823F2EA6500DD9946 /* InnoMetricsCollector 2.xcdatamodel */,
 				9FACE305205C4B8A005BBB31 /* InnoMetricsCollector1.xcdatamodel */,
 			);
-			currentVersion = 2C581C15240706E8009997AF /* InnoMetricsCollector 4.xcdatamodel */;
+			currentVersion = 2C1B0FD1241B9DA60092F0AD /* InnoMetricsCollector 5.xcdatamodel */;
 			path = InnoMetricsCollector.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

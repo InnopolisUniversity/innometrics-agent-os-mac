@@ -90,6 +90,4 @@ class UserPrefs {
         let defaults = UserDefaults.standard
         return defaults.bool(forKey: isNeededToDateAlias)
     }
-    
-    
 }

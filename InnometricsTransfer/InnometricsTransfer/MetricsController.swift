@@ -52,7 +52,7 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     }
     
     public func sendMetrics (completion: @escaping (_ response: Int) -> Void) {
-        MetricsTransfer.sendMetrics(token: AuthorizationUtils.getAuthorizationToken()!, username: AuthorizationUtils.getUsername()!, focusAppMetrics: appFocusMetrics, idleMetrics: idleMetrics, measurements: appFocusMeasurements) { (response) in
+        MetricsTransfer.sendMetrics(token: AuthorizationUtils.getAuthorizationToken()!, username: AuthorizationUtils.getUsername()!, focusAppMetrics: appFocusMetrics, idleMetrics: idleMetrics) { (response) in
             completion(response)
         }
     }

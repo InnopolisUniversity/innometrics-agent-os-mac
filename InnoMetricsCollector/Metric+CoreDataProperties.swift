@@ -24,5 +24,4 @@ extension Metric {
     @NSManaged public var timestampEnd: NSDate?
     @NSManaged public var timestampStart: NSDate?
     @NSManaged public var session: Session?
-    @NSManaged public var measurements: Set<EnergyMeasurement>?
 }
