@@ -59,7 +59,7 @@ class CollectorController: NSObject {
     
     func startProcessTransferTimer() {
         if processTransferTimer == nil {
-            processTransferTimer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.transferProcesses(sender:)), userInfo: nil, repeats: true)
+            processTransferTimer = Timer.scheduledTimer(timeInterval: 60 * 2, target: self, selector: #selector(self.transferProcesses(sender:)), userInfo: nil, repeats: true)
         }
     }
     
@@ -73,7 +73,7 @@ class CollectorController: NSObject {
     // TODO: decide on how frequent this should be
     func startTransferTimer() {
       if transferTimer == nil {
-        transferTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(self.transferAll(sender:)), userInfo: nil, repeats: true)
+        transferTimer = Timer.scheduledTimer(timeInterval: 60 * 2, target: self, selector: #selector(self.transferAll(sender:)), userInfo: nil, repeats: true)
       }
     }
     
@@ -267,7 +267,6 @@ class CollectorController: NSObject {
             newProcess.process_name = comm
             newProcess.session = self.currentSession
             
-            // TODO: add this
             // 3: get energy metrics per process
              self.measureEnergyMetrics(process: newProcess, processID: newProcess.pid!)
             
@@ -288,6 +287,7 @@ class CollectorController: NSObject {
         
         stopMetricCollection()
         stopTransferTimer()
+        stopProcessTimer()
         
         sendingIndicator.isHidden = false
         sendingIndicator.startAnimation(self)
@@ -327,11 +327,7 @@ class CollectorController: NSObject {
                 } else {
                     Helpers.dialogOK(question: "Error", text: "Something went wrong during sending the data.")
                 }
-                self.startMetricCollection()
-                self.currentMetric = nil
-                self.prevMetric = nil
             }
-            
         }
     }
     
@@ -518,13 +514,15 @@ class CollectorController: NSObject {
             if (currentMetric!.timestampEnd == nil) {
                 let metric = currentMetric!
                 let endTime = NSDate()
-                metric.timestampEnd = endTime
-                metric.duration = (metric.timestampEnd?.timeIntervalSinceReferenceDate)! - (metric.timestampStart?.timeIntervalSinceReferenceDate)!
-                
-                do {
-                    try context.save()
-                } catch {
-                    print("An error occurred \(error)")
+                if (currentMetric != nil) {
+                    metric.timestampEnd = endTime
+                    metric.duration = (metric.timestampEnd?.timeIntervalSinceReferenceDate)! - (metric.timestampStart?.timeIntervalSinceReferenceDate)!
+                    
+                    do {
+                        try context.save()
+                    } catch {
+                        print("An error occurred \(error)")
+                    }
                 }
             }
         }
