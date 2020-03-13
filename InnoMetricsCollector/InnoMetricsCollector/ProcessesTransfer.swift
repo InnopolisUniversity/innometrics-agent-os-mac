@@ -15,13 +15,25 @@ public class ProcessesTransfer {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         
-        // measurementReportList
+        var measurementReportList: [[String: String]] = []
+        if (process.measurementReportList != nil) {
+            for m in process.measurementReportList ?? Set<EnergyMeasurement>() {
+                let mJson: [String: String] = [
+                    "alternativeLabel": m.alternativeLabel ?? "CPU",
+                    "measurementTypeId": m.measurementTypeId ?? "0",
+                    "value": m.value ?? "0",
+                    "capturedDate": dateFormatter.string(from: m.capturedDate! as Date)
+                ]
+                measurementReportList.append(mJson)
+            }
+        }
         
         let p: [String: Any] = [
             "ip_address": (process.session != nil) ? process.session!.ipAddress! : "",
             "mac_address": (process.session != nil) ? process.session!.macAddress! : "",
             "processName": process.process_name!,
-            "userID": username
+            "userID": username,
+            "measurementReportList": measurementReportList
         ]
         
         return p

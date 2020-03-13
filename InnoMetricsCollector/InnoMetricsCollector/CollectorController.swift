@@ -59,7 +59,6 @@ class CollectorController: NSObject {
     
     func startProcessTransferTimer() {
         if processTransferTimer == nil {
-            // TODO: change frequency
             processTransferTimer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.transferProcesses(sender:)), userInfo: nil, repeats: true)
         }
     }
@@ -260,8 +259,7 @@ class CollectorController: NSObject {
         let startChangingDbNotificationName = Notification.Name("db_start_changing")
         let endChangingDbNotificationName = Notification.Name("db_end_changing")
         DistributedNotificationCenter.default().postNotificationName(startChangingDbNotificationName, object: Bundle.main.bundleIdentifier, deliverImmediately: true)
-        
-        print("in transfer processes")
+
         
         // 1. get all processes
         let allProcesses = Helpers.shell("ps -axm -o pid,comm").components(separatedBy: "\n").dropFirst()
@@ -315,7 +313,6 @@ class CollectorController: NSObject {
                 self.sendingIndicator.isHidden = true
                 if (response == 1) {
                     self.clearDatabase()
-                    self.startTransferTimer()
                 } else if (response == 2) {
                     Helpers.dialogOK(question: "Error", text: "You need to relogin to the system.")
                     AuthorizationUtils.saveIsAuthorized(isAuthorized: false)
@@ -327,6 +324,57 @@ class CollectorController: NSObject {
                 self.prevMetric = nil
             }
         }
+        
+        let processesController: ProcessController = ProcessController()
+        processesController.fetchNewProcesses()
+        
+        processesController.sendProcesses() { (response) in
+            DispatchQueue.main.async {
+                if (response == 1) {
+                    self.clearProcessesAndMeasurements()
+                    self.startTransferTimer()
+                } else if (response == 2) {
+                    Helpers.dialogOK(question: "Error", text: "You need to relogin to the system.")
+                    AuthorizationUtils.saveIsAuthorized(isAuthorized: false)
+                } else {
+                    Helpers.dialogOK(question: "Error", text: "Something went wrong during sending the data.")
+                }
+                self.startMetricCollection()
+            }
+            
+        }
+    }
+    
+    func clearProcessesAndMeasurements() {
+        let startChangingDbNotificationName = Notification.Name("db_start_changing")
+        let endChangingDbNotificationName = Notification.Name("db_end_changing")
+        DistributedNotificationCenter.default().postNotificationName(startChangingDbNotificationName, object: Bundle.main.bundleIdentifier, deliverImmediately: true)
+        
+        let appDelegate = NSApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.managedObjectContext
+        do {
+            let processesFetch: NSFetchRequest<ActiveProcess> = ActiveProcess.fetchRequest()
+            processesFetch.includesPropertyValues = false
+            let processesToDelete = try context.fetch(processesFetch as! NSFetchRequest<NSFetchRequestResult>) as! [NSManagedObject]
+            
+            for metric in processesToDelete {
+                context.delete(metric)
+            }
+            
+            let measurementsFetch: NSFetchRequest<EnergyMeasurement> = EnergyMeasurement.fetchRequest()
+            measurementsFetch.includesPropertyValues = false
+            let measurementToDelete = try context.fetch(measurementsFetch as! NSFetchRequest<NSFetchRequestResult>) as! [NSManagedObject]
+            
+            for metric in measurementToDelete {
+                context.delete(metric)
+            }
+            
+            try context.save()
+        } catch {
+            print (error)
+            Helpers.dialogOK(question: "Error!", text: "There has been an error whilst trying to delete the data from a local database. If the issue persists, please contact the responsible persons.")
+        }
+        DistributedNotificationCenter.default().postNotificationName(endChangingDbNotificationName, object: Bundle.main.bundleIdentifier, deliverImmediately: true)
     }
     
     func clearDatabase() {
