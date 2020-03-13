@@ -248,20 +248,19 @@ class CollectorController: NSObject {
         let startChangingDbNotificationName = Notification.Name("db_start_changing")
         let endChangingDbNotificationName = Notification.Name("db_end_changing")
         DistributedNotificationCenter.default().postNotificationName(startChangingDbNotificationName, object: Bundle.main.bundleIdentifier, deliverImmediately: true)
-
         
         // 1. get all processes
-        let allProcesses = Helpers.shell("ps -axm -o pid,comm").components(separatedBy: "\n").dropFirst()
-        var allProcessesFiltered = allProcesses.map{ $0.trimmingCharacters(in: .whitespaces) }
-        allProcessesFiltered = allProcessesFiltered.filter{ $0 != "" }
+        let apps = NSWorkspace.shared.runningApplications
         
         // 2. store all processes
-        for p in allProcessesFiltered {
-            let separated = p.split(separator: " ", maxSplits: 1)
-            let pid = String(separated[0])
-            let comm = String(separated[1].split(separator: "/").last ?? "")
+        for p in apps {
+            if p.bundleIdentifier == nil {
+                continue
+            }
             
-            // 2.1: check if exists in db
+            let pid = String(p.processIdentifier)
+            let comm = String((p.bundleIdentifier?.split(separator: ".").last)!)
+
             let newProcess = NSEntityDescription.insertNewObject(forEntityName: "ActiveProcess", into: self.context) as! ActiveProcess
         
             newProcess.pid = pid
@@ -329,6 +328,8 @@ class CollectorController: NSObject {
                     Helpers.dialogOK(question: "Error", text: "Something went wrong during sending the data.")
                 }
                 self.startMetricCollection()
+                self.currentMetric = nil
+                self.prevMetric = nil
             }
             
         }
@@ -508,7 +509,7 @@ class CollectorController: NSObject {
             currentMetric = metric
             startTransferTimer()
         } catch {
-            print("An error occurred")
+            print("An error occurred \(error)")
         }
     }
     
@@ -518,13 +519,12 @@ class CollectorController: NSObject {
                 let metric = currentMetric!
                 let endTime = NSDate()
                 metric.timestampEnd = endTime
-                
                 metric.duration = (metric.timestampEnd?.timeIntervalSinceReferenceDate)! - (metric.timestampStart?.timeIntervalSinceReferenceDate)!
                 
                 do {
                     try context.save()
                 } catch {
-                    print("An error occurred")
+                    print("An error occurred \(error)")
                 }
             }
         }
@@ -568,7 +568,6 @@ class CollectorController: NSObject {
             }
         }
     }
-    
     
     @IBAction func updateClicked(_ sender: Any) {
         let updater = SUUpdater.shared()

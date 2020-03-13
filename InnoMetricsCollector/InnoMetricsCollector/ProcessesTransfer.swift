@@ -29,8 +29,8 @@ public class ProcessesTransfer {
         }
         
         let p: [String: Any] = [
-            "ip_address": (process.session != nil) ? process.session!.ipAddress! : "",
-            "mac_address": (process.session != nil) ? process.session!.macAddress! : "",
+            "ip_address": (process.session != nil) ? process.session?.ipAddress ?? "127.0.0.1" : "",
+            "mac_address": (process.session != nil) ? process.session?.macAddress ?? "127.0.0.1" : "",
             "processName": process.process_name!,
             "userID": username,
             "measurementReportList": measurementReportList
