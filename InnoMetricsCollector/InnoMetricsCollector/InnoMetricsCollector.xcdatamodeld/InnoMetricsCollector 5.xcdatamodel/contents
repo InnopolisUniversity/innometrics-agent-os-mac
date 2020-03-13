@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="ActiveProcess" representedClassName="ActiveProcess" syncable="YES" codeGenerationType="class">
+    <entity name="ActiveProcess" representedClassName=".ActiveProcess" syncable="YES">
         <attribute name="process_name" optional="YES" attributeType="String"/>
-        <attribute name="user_id" optional="YES" attributeType="String"/>
         <relationship name="measurementReportList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="EnergyMeasurement" inverseName="process" inverseEntity="EnergyMeasurement"/>
         <relationship name="session" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Session"/>
     </entity>
@@ -46,9 +45,9 @@
     </entity>
     <elements>
         <element name="EnergyMeasurement" positionX="-45" positionY="72" width="128" height="118"/>
-        <element name="IdleMetric" positionX="-63" positionY="-18" width="128" height="180"/>
+        <element name="IdleMetric" positionX="-63" positionY="-18" width="128" height="178"/>
         <element name="Metric" positionX="-36" positionY="9" width="128" height="178"/>
         <element name="Session" positionX="-54" positionY="-9" width="128" height="148"/>
-        <element name="ActiveProcess" positionX="-45" positionY="72" width="128" height="103"/>
+        <element name="ActiveProcess" positionX="-45" positionY="72" width="128" height="88"/>
     </elements>
 </model>
