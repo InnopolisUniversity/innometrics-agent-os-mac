@@ -373,11 +373,16 @@ class CollectorController: NSObject {
         do {
             
             let metricsFetch: NSFetchRequest<Metric> = Metric.fetchRequest()
-            metricsFetch.includesPropertyValues = false
+            metricsFetch.includesPropertyValues = true
             let metricsToDelete = try context.fetch(metricsFetch as! NSFetchRequest<NSFetchRequestResult>) as! [NSManagedObject]
             
             for metric in metricsToDelete {
-                context.delete(metric)
+                if metric.value(forKey: "timestampEnd") == nil {
+                    // do not delete unfinished metrics
+                } else {
+                    // delete metrics that are finished
+                    context.delete(metric)
+                }
             }
             
             let idleMetricsFetch: NSFetchRequest<IdleMetric> = IdleMetric.fetchRequest()
