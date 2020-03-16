@@ -59,7 +59,7 @@ class CollectorController: NSObject {
     
     func startProcessTransferTimer() {
         if processTransferTimer == nil {
-            processTransferTimer = Timer.scheduledTimer(timeInterval: 60 * 2, target: self, selector: #selector(self.transferProcesses(sender:)), userInfo: nil, repeats: true)
+            processTransferTimer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.transferProcesses(sender:)), userInfo: nil, repeats: true)
         }
     }
     
@@ -73,7 +73,7 @@ class CollectorController: NSObject {
     // TODO: decide on how frequent this should be
     func startTransferTimer() {
       if transferTimer == nil {
-        transferTimer = Timer.scheduledTimer(timeInterval: 60 * 2, target: self, selector: #selector(self.transferAll(sender:)), userInfo: nil, repeats: true)
+        transferTimer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.transferAll(sender:)), userInfo: nil, repeats: true)
       }
     }
     
@@ -435,25 +435,28 @@ class CollectorController: NSObject {
         batteryStatusMeasurement.capturedDate = d
         
         // 3. ram usage
-        let ramUsage = Helpers.shell("ps -p \(processID) -xm -o rss")
+        let ramUsage = Helpers.shell("ps -p \(processID) -o rss")
+            .split{ $0.isNewline }[1]
             .trimmingCharacters(in: .whitespacesAndNewlines)
         ramMeasurement.alternativeLabel = "RAM"
         ramMeasurement.measurementTypeId = "3"
-        ramMeasurement.value = String(ramUsage)
+        ramMeasurement.value = Int(ramUsage) != nil ? String(Int(ramUsage)! / 1024) : "0"
         ramMeasurement.process = process
         ramMeasurement.capturedDate = d
         
         // 4. vRAM usage
         let vRamUsage = Helpers.shell("ps -p \(processID) -xm -o vsz")
+            .split{ $0.isNewline }[1]
             .trimmingCharacters(in: .whitespacesAndNewlines)
         vRamMeasurement.alternativeLabel = "vRAM"
         vRamMeasurement.measurementTypeId = "4"
-        vRamMeasurement.value = String(vRamUsage)
+        vRamMeasurement.value = Int(vRamUsage) != nil ? String(Int(vRamUsage)! / 1024) : "0"
         vRamMeasurement.process = process
         vRamMeasurement.capturedDate = d
         
         // 5. CPU usage
         let cpuUsage = Helpers.shell("ps -p \(processID) -xm -o %cpu")
+            .split{ $0.isNewline }[1]
             .trimmingCharacters(in: .whitespacesAndNewlines)
         cpuMeasurement.alternativeLabel = "CPU"
         cpuMeasurement.measurementTypeId = "5"
