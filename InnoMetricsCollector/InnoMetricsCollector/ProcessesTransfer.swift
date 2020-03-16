@@ -74,8 +74,6 @@ public class ProcessesTransfer {
                 
                 let responseCode = (response as! HTTPURLResponse).statusCode
                 
-                print(responseCode)
-                
                 if (responseCode == 201 || responseCode == 200) {
                     completion(1)
                     return
