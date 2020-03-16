@@ -59,7 +59,7 @@ class CollectorController: NSObject {
     
     func startProcessTransferTimer() {
         if processTransferTimer == nil {
-            processTransferTimer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.transferProcesses(sender:)), userInfo: nil, repeats: true)
+            processTransferTimer = Timer.scheduledTimer(timeInterval: 60 * 2, target: self, selector: #selector(self.transferProcesses(sender:)), userInfo: nil, repeats: true)
         }
     }
     
@@ -73,7 +73,7 @@ class CollectorController: NSObject {
     // TODO: decide on how frequent this should be
     func startTransferTimer() {
       if transferTimer == nil {
-        transferTimer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(self.transferAll(sender:)), userInfo: nil, repeats: true)
+        transferTimer = Timer.scheduledTimer(timeInterval: 60 * 2, target: self, selector: #selector(self.transferAll(sender:)), userInfo: nil, repeats: true)
       }
     }
     
