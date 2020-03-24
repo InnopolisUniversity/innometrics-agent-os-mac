@@ -23,20 +23,14 @@ class CollectorController: NSObject {
     
     // Collector Entities
     @IBOutlet weak var activeApplicationView: ActiveApplicationController!
-    @IBOutlet weak var idleView: IdleController!
-    @IBOutlet weak var pausePlayBtn: NSButton!
-    @IBOutlet weak var pausePlayLabel: NSTextField!
     @IBOutlet weak var updateBtn: NSButtonCell!
-    @IBOutlet weak var sendingIndicator: NSProgressIndicator!
     
     // Private fields
     private var context: NSManagedObjectContext!
     private var privateContext: NSManagedObjectContext!
     
     // Collection Fields
-    private var isPaused: Bool = false
     private var isCollectingBrowserInfo: Bool = false
-    private var isCollecting: Bool = true
     
     // Metrics+Session Fields
     private var currentSession: Session!
@@ -84,7 +78,7 @@ class CollectorController: NSObject {
     }
     
     func handleApplicationSwitch() {
-        if (!isCollecting || !AuthorizationUtils.isAuthorized()) {
+        if (!AuthorizationUtils.isAuthorized()) {
             return
         }
         
@@ -114,21 +108,15 @@ class CollectorController: NSObject {
             })
     }
     
-    func handleUserMovement() {
-        if !isCollecting {
-            return
-        }
-        
+    func handleUserMovement() {        
         if currentMetric != nil {
             
             if currentMetric?.isIdle == 1 {
                 handleApplicationSwitch()
-                print("went from idle to active", currentMetric?.appName)
             } else {
                 self.idleTimer.stopTimer()
                 self.idleTimer.startTimer {
                     self.markAsIdle()
-                    print("went from active to idle", self.currentMetric?.appName)
                 }
             }
         }
@@ -185,24 +173,6 @@ class CollectorController: NSObject {
         NSApp.activate(ignoringOtherApps: true)
     }
     
-    func blockUI() {
-        self.pausePlayBtn.isEnabled = false
-        if (!self.isPaused) {
-            activeApplicationView.pauseTime()
-            pausePlayBtn.image = #imageLiteral(resourceName: "playIcon")
-            pausePlayLabel.stringValue = "Start"
-        }
-    }
-    
-    func releaseUI() {
-        self.pausePlayBtn.isEnabled = true
-        if (!isPaused) {
-            pausePlayBtn.image = #imageLiteral(resourceName: "pauseIcon")
-            pausePlayLabel.stringValue = "Pause"
-            isPaused = false
-        }
-    }
-    
     func updateSession() {
         let session = SessionInfoUtils.createAndSaveCurrentSession(currentSession: currentSession, context: self.privateContext)
         self.currentSession = session
@@ -213,24 +183,6 @@ class CollectorController: NSObject {
         let updater = SUUpdater.shared()
         updater?.feedURL = URL(string: "")
         updater?.checkForUpdates(self)
-    }
-    
-    @IBAction func quitCliked(_ sender: AnyObject) {
-        setEndTimeOfPrevMetric()
-        NSApplication.shared.terminate(self)
-    }
-    
-    @IBAction func pausePlayClicked(_ sender: AnyObject) {
-        if (isPaused) {
-            pausePlayBtn.image = #imageLiteral(resourceName: "pauseIcon")
-            pausePlayLabel.stringValue = "Pause"
-            isPaused = false
-        } else {
-            activeApplicationView.pauseTime()
-            pausePlayBtn.image = #imageLiteral(resourceName: "playIcon")
-            pausePlayLabel.stringValue = "Start"
-            isPaused = true
-        }
     }
     
     deinit {

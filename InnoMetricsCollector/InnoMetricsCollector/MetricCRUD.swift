@@ -67,6 +67,8 @@ class MetricCRUD {
         
         group.enter()
         
+        if (m.bundleIdentifier == nil) { return }
+        
         let dispatchQueue = DispatchQueue(label: m.bundleIdentifier!, qos: .background)
         
         dispatchQueue.async(group: group, execute: {
@@ -89,8 +91,6 @@ class MetricCRUD {
                         callback(metric)
                     })
                 }
-                
-                
             }
         })
     }
