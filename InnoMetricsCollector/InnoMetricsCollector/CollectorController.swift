@@ -28,24 +28,23 @@ class CollectorController: NSObject {
     // Private fields
     private var context: NSManagedObjectContext!
     private var privateContext: NSManagedObjectContext!
+    private var processPrivateContext: NSManagedObjectContext!
     
     // Collection Fields
     private var isCollectingBrowserInfo: Bool = false
     
     // Metrics+Session Fields
     private var currentSession: Session!
+    private var currentProcessSession: Session!
     private var currentMetric: Metric?
     private var prevMetric: Metric?
     private var currentIdleMetric: IdleMetric?
-    
-    // Process fields
-    private var measurements = Set<EnergyMeasurement>()
-    private var dbProcesses: [ActiveProcess]?
     
     // Timers for transfer and idle
     private var processTransferTimer = CustomTimer()
     private var metricsTransferTimer = CustomTimer()
     private var idleTimer = CustomTimer(interval: 30, repeats: false)
+    private var measurementRecordTimer = CustomTimer(interval: 20)
     
     func setUpGlobalEvents() {
         let throttler = Throttler(minimumDelay: 0.05)
@@ -63,6 +62,13 @@ class CollectorController: NSObject {
                 self.handleUserMovement()
             }}
         )
+        
+        self.updateSession()
+        
+        // Add timers
+        measurementRecordTimer.startTimer {
+            self.recordProcesses()
+        }
     }
     
     override func awakeFromNib() {
@@ -108,7 +114,7 @@ class CollectorController: NSObject {
             })
     }
     
-    func handleUserMovement() {        
+    func handleUserMovement() {
         if currentMetric != nil {
             
             if currentMetric?.isIdle == 1 {
@@ -139,6 +145,12 @@ class CollectorController: NSObject {
         }
     }
     
+    // Processes + Measurements
+    func recordProcesses() {
+        ProcessCRUD.getAllProcesses(context: self.processPrivateContext, session: self.currentProcessSession, callback: { (processes) -> Void in
+        })
+    }
+    
     // UI things
     @objc func renderMenuItems() {
         statusItem.menu = loginMenu
@@ -150,12 +162,21 @@ class CollectorController: NSObject {
             
             let appDelegate = NSApplication.shared.delegate as! AppDelegate
             self.context = appDelegate.managedObjectContext
+            
             // set up bg thread for collecting data
             self.privateContext = {
                 let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
                 moc.persistentStoreCoordinator = appDelegate.persistentStoreCoordinator
                 return moc
             }()
+            
+            // set up bg thread for collecting processes and measurements
+            self.processPrivateContext = {
+                let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                moc.persistentStoreCoordinator = appDelegate.persistentStoreCoordinator
+                return moc
+            }()
+            
             self.setUpGlobalEvents()
         } else {
             CollectorHelper.updateUIUnuthorized(
@@ -175,7 +196,10 @@ class CollectorController: NSObject {
     
     func updateSession() {
         let session = SessionInfoUtils.createAndSaveCurrentSession(currentSession: currentSession, context: self.privateContext)
+        let processesSession = SessionInfoUtils.createAndSaveCurrentSession(currentSession: currentProcessSession, context: self.processPrivateContext)
+        
         self.currentSession = session
+        self.currentProcessSession = processesSession
         self.currentWorkingSessionView.updateSession(session: session!)
     }
     
