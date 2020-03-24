@@ -105,6 +105,7 @@
 		2CCEBC2123B4E360007A5903 /* InnoMetricsCollector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InnoMetricsCollector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CE6883823F2EA6500DD9946 /* InnoMetricsCollector 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "InnoMetricsCollector 2.xcdatamodel"; sourceTree = "<group>"; };
 		2CE6883923F2EA9600DD9946 /* InnoMetricsCollector 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "InnoMetricsCollector 3.xcdatamodel"; sourceTree = "<group>"; };
+		2CEFF230242A07B200F90013 /* InnoMetricsCollector 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "InnoMetricsCollector 6.xcdatamodel"; sourceTree = "<group>"; };
 		77C440B57B5DFA283CB21009 /* Pods-InnoMetricsCollector.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InnoMetricsCollector.release.xcconfig"; path = "Pods/Target Support Files/Pods-InnoMetricsCollector/Pods-InnoMetricsCollector.release.xcconfig"; sourceTree = "<group>"; };
 		9F590DC22052A44C009AC489 /* IdleController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleController.swift; sourceTree = "<group>"; };
 		9F8C169E204D53830068CB58 /* IdleMetric+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IdleMetric+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -635,13 +636,14 @@
 		9FACE304205C4B8A005BBB31 /* InnoMetricsCollector.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2CEFF230242A07B200F90013 /* InnoMetricsCollector 6.xcdatamodel */,
 				2C1B0FD1241B9DA60092F0AD /* InnoMetricsCollector 5.xcdatamodel */,
 				2C581C15240706E8009997AF /* InnoMetricsCollector 4.xcdatamodel */,
 				2CE6883923F2EA9600DD9946 /* InnoMetricsCollector 3.xcdatamodel */,
 				2CE6883823F2EA6500DD9946 /* InnoMetricsCollector 2.xcdatamodel */,
 				9FACE305205C4B8A005BBB31 /* InnoMetricsCollector1.xcdatamodel */,
 			);
-			currentVersion = 2C1B0FD1241B9DA60092F0AD /* InnoMetricsCollector 5.xcdatamodel */;
+			currentVersion = 2CEFF230242A07B200F90013 /* InnoMetricsCollector 6.xcdatamodel */;
 			path = InnoMetricsCollector.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

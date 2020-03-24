@@ -21,7 +21,7 @@ public class ServerPrefs {
     
     public static func getServerUrl() -> String {
         // this is the api v1 (https://innometric.guru:8120)
-        return "http://innometric.guru:9091"
+        return "https://innometric.guru:9091"
         // this is the dev api: return "http://10.90.137.67:9091"
     }
 }

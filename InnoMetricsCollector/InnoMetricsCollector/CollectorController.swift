@@ -226,7 +226,7 @@ class CollectorController: NSObject {
         idleMetric.timestampStart = NSDate(timeIntervalSinceNow: -idleResult.1)
         idleMetric.timestampEnd = NSDate()
         idleMetric.bundleURL = currentMetric?.bundleURL
-        idleMetric.bundleIdentifier = currentMetric?.bundleIdentifier
+        idleMetric.bundleIdentifier = String((currentMetric!.bundleIdentifier?.split(separator: ".").last)!)
         idleMetric.tabName = currentMetric?.tabName
         idleMetric.tabUrl = currentMetric?.tabUrl
         
@@ -477,7 +477,7 @@ class CollectorController: NSObject {
     }
     
     func createAndSaveMetric(frontmostApp: NSRunningApplication, processID: Int32) {
-        let foregroundWindowBundleId = frontmostApp.bundleIdentifier
+        let foregroundWindowBundleId = String((frontmostApp.bundleIdentifier?.split(separator: ".").last)!)
         
         let metric = NSEntityDescription.insertNewObject(forEntityName: "Metric", into: context) as! Metric
         metric.bundleIdentifier = foregroundWindowBundleId
@@ -491,14 +491,14 @@ class CollectorController: NSObject {
         
         metric.session = self.currentSession
         
-        if (foregroundWindowBundleId != nil && self.browsersId.contains(foregroundWindowBundleId!)) {
-            let foregroundWindowTabUrl = BrowserInfoUtils.activeTabURL(bundleIdentifier: foregroundWindowBundleId!)
+        if (self.browsersId.contains(foregroundWindowBundleId)) {
+            let foregroundWindowTabUrl = BrowserInfoUtils.activeTabURL(bundleIdentifier: foregroundWindowBundleId)
             
             if (foregroundWindowTabUrl != nil) {
                 metric.tabUrl = foregroundWindowTabUrl!
             }
             
-            let foregroundWindowTabTitle = BrowserInfoUtils.activeTabTitle(bundleIdentifier: foregroundWindowBundleId!)
+            let foregroundWindowTabTitle = BrowserInfoUtils.activeTabTitle(bundleIdentifier: foregroundWindowBundleId)
             
             if (foregroundWindowTabTitle != nil) {
                 metric.tabName = foregroundWindowTabTitle!
