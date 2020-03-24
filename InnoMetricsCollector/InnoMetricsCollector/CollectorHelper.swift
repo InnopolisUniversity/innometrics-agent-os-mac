@@ -13,7 +13,7 @@ import ServiceManagement
 class CollectorHelper {
     public static let browserIds: [String] = ["org.chromium.Chromium", "com.google.Chrome.canary", "com.google.Chrome", "com.apple.Safari", "com.operasoftware.Opera", "ru.yandex.desktop.yandex-browser", "org.mozilla.firefoxdeveloperedition"]
     
-    public static let possibleUserMovements: NSEvent.EventTypeMask = [.mouseMoved, .keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown, .scrollWheel, .smartMagnify, .swipe]
+    public static let possibleUserMovements: NSEvent.EventTypeMask = [.mouseMoved, .keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown, .scrollWheel, .smartMagnify, .swipe, .keyUp]
     
     public static func updateUIAuthorized(logInMenuItem: NSMenuItem,
                                           currentWorkingSessionMenuItem: NSMenuItem,

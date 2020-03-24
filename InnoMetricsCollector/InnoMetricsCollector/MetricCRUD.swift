@@ -10,7 +10,7 @@ import Foundation
 import Cocoa
 
 class MetricCRUD {
-    public static func createMetric(app: NSRunningApplication, pid: pid_t, context: NSManagedObjectContext, session: Session, callback: @escaping (Metric?) -> Void) {
+    public static func createMetric(app: NSRunningApplication, pid: pid_t, context: NSManagedObjectContext, session: Session, isIdle: Int16 = 0, callback: @escaping (Metric?) -> Void) {
         
         let group = DispatchGroup()
         
@@ -29,7 +29,7 @@ class MetricCRUD {
             metric.bundleURL = app.executableURL?.absoluteString
             metric.timestampStart = foregroundWindowLaunchDate
             metric.session = session
-            metric.isIdle = 0
+            metric.isIdle = isIdle
             
             if (foregroundWindowBundleId != nil && CollectorHelper.browserIds.contains(foregroundWindowBundleId!)) {
                 let foregroundWindowTabUrl = BrowserInfoUtils.activeTabURL(bundleIdentifier: foregroundWindowBundleId!)
@@ -79,7 +79,7 @@ class MetricCRUD {
                 context.perform {
                     do {
                         try context.save()
-                        print("end of", metric.appName!)
+                        // print("end of", metric.appName!)
                     } catch {
                         print("in setEndOfPrevMetric: can't set time")
                     }

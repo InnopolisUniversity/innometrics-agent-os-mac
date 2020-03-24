@@ -59,6 +59,9 @@ class CollectorController: NSObject {
         
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(applicationSwitchTriggered), name: NSWorkspace.didActivateApplicationNotification, object: nil)
         
+        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String : true]
+        let accessEnabled = AXIsProcessTrustedWithOptions(options)
+        
         NSEvent.addGlobalMonitorForEvents (
             matching: CollectorHelper.possibleUserMovements,
             handler: { (event: NSEvent) in throttler.throttle {
@@ -99,7 +102,7 @@ class CollectorController: NSObject {
         MetricCRUD.createMetric(app: frontmostApp!, pid: foregroundPID, context: self.privateContext, session: self.currentSession, callback: { (newMetric) -> Void in
                 self.setEndTimeOfPrevMetric()
                 if newMetric != nil {
-                    print("start of", newMetric!.appName!)
+                    // print("start of", newMetric!.appName!)
                     self.prevMetric = self.currentMetric
                     self.currentMetric = newMetric
                 }
@@ -111,7 +114,7 @@ class CollectorController: NSObject {
             return
         }
         
-        // print("user movement")
+        print(currentMetric?.appName ?? "no current metric")
     }
     
     
