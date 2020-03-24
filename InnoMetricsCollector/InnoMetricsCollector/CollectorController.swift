@@ -48,9 +48,10 @@ class CollectorController: NSObject {
     private var measurements = Set<EnergyMeasurement>()
     private var dbProcesses: [ActiveProcess]?
     
-    // Timers for transfer
+    // Timers for transfer and idle
     private var processTransferTimer = CustomTimer()
     private var metricsTransferTimer = CustomTimer()
+    private var idleTimer = CustomTimer(interval: 30, repeats: false)
     
     func setUpGlobalEvents() {
         let throttler = Throttler(minimumDelay: 0.05)
@@ -60,7 +61,7 @@ class CollectorController: NSObject {
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(applicationSwitchTriggered), name: NSWorkspace.didActivateApplicationNotification, object: nil)
         
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String : true]
-        let accessEnabled = AXIsProcessTrustedWithOptions(options)
+        _ = AXIsProcessTrustedWithOptions(options)
         
         NSEvent.addGlobalMonitorForEvents (
             matching: CollectorHelper.possibleUserMovements,
@@ -102,21 +103,46 @@ class CollectorController: NSObject {
         MetricCRUD.createMetric(app: frontmostApp!, pid: foregroundPID, context: self.privateContext, session: self.currentSession, callback: { (newMetric) -> Void in
                 self.setEndTimeOfPrevMetric()
                 if newMetric != nil {
-                    // print("start of", newMetric!.appName!)
                     self.prevMetric = self.currentMetric
                     self.currentMetric = newMetric
+                    
+                    // start timer to determine when it becomes idle
+                    self.idleTimer.startTimer {
+                        self.markAsIdle()
+                    }
                 }
             })
     }
     
     func handleUserMovement() {
-        if (!isCollecting) {
+        if !isCollecting {
             return
         }
         
-        print(currentMetric?.appName ?? "no current metric")
+        if currentMetric != nil {
+            
+            if currentMetric?.isIdle == 1 {
+                handleApplicationSwitch()
+                print("went from idle to active", currentMetric?.appName)
+            } else {
+                self.idleTimer.stopTimer()
+                self.idleTimer.startTimer {
+                    self.markAsIdle()
+                    print("went from active to idle", self.currentMetric?.appName)
+                }
+            }
+        }
     }
     
+    func markAsIdle() {
+        MetricCRUD.markAsIdle(app: self.currentMetric!, context: self.privateContext, callback: { (newMetric) -> Void in
+            self.setEndTimeOfPrevMetric()
+            if newMetric != nil {
+                self.prevMetric = self.currentMetric
+                self.currentMetric = newMetric
+            }
+        })
+    }
     
     func setEndTimeOfPrevMetric() {
         if currentMetric != nil {

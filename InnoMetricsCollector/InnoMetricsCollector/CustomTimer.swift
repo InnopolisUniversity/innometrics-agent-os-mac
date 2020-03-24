@@ -24,8 +24,7 @@ class CustomTimer {
     
     public func startTimer(timerEnded: @escaping () -> Void) {
         if self.timer == nil {
-            let aSelector: Selector = Selector(("executeInProgressCallback"))
-            self.timer = Timer.scheduledTimer(timeInterval: self.interval, target: self, selector: aSelector, userInfo: nil, repeats: true)
+            self.timer = Timer.scheduledTimer(timeInterval: self.interval, target: self, selector: #selector(executeInProgressCallback), userInfo: nil, repeats: repeats)
             self.timerEndedCallback = timerEnded
         }
     }
@@ -37,7 +36,7 @@ class CustomTimer {
         }
     }
     
-    private func executeInProgressCallback() {
+    @objc private func executeInProgressCallback() {
         self.timerEndedCallback()
     }
 }
