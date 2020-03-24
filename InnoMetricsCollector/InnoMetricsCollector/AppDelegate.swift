@@ -9,6 +9,7 @@
 
 import Cocoa
 import Sparkle
+import CoreData
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {

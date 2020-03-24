@@ -1,0 +1,96 @@
+//
+//  MetricCRUD.swift
+//  InnoMetricsCollector
+//
+//  Created by Dragos Strugar on 24.03.2020.
+//  Copyright © 2020 Innopolis University. All rights reserved.
+//
+
+import Foundation
+import Cocoa
+
+class MetricCRUD {
+    public static func createMetric(app: NSRunningApplication, pid: pid_t, context: NSManagedObjectContext, session: Session, callback: @escaping (Metric?) -> Void) {
+        
+        let group = DispatchGroup()
+        
+        var returnVal: Metric?
+        group.enter()
+        
+        let dispatchQueue = DispatchQueue(label: app.bundleIdentifier!, qos: .background)
+        
+        dispatchQueue.async(group: group, execute: {
+            let foregroundWindowBundleId = app.bundleIdentifier
+            let foregroundWindowLaunchDate =  NSDate()
+            
+            let metric = NSEntityDescription.insertNewObject(forEntityName: "Metric", into: context) as! Metric
+            metric.bundleIdentifier = foregroundWindowBundleId
+            metric.appName = app.localizedName
+            metric.bundleURL = app.executableURL?.absoluteString
+            metric.timestampStart = foregroundWindowLaunchDate
+            metric.session = session
+            
+            if (foregroundWindowBundleId != nil && CollectorHelper.browserIds.contains(foregroundWindowBundleId!)) {
+                let foregroundWindowTabUrl = BrowserInfoUtils.activeTabURL(bundleIdentifier: foregroundWindowBundleId!)
+                
+                if (foregroundWindowTabUrl != nil) {
+                    metric.tabUrl = foregroundWindowTabUrl!
+                }
+                
+                let foregroundWindowTabTitle = BrowserInfoUtils.activeTabTitle(bundleIdentifier: foregroundWindowBundleId!)
+                
+                if (foregroundWindowTabTitle != nil) {
+                    metric.tabName = foregroundWindowTabTitle!
+                }
+            }
+            
+            context.perform {
+                do {
+                    try context.save()
+                    returnVal = metric
+                } catch {
+                    print("in createMetric: can't save context")
+                }
+                
+                group.leave()
+                group.notify(queue: DispatchQueue.main, execute: {
+                    callback(returnVal)
+                })
+            }
+        })
+    }
+    
+    public static func setEndTimeOfPrevMetric(m: Metric, context: NSManagedObjectContext, callback: @escaping (Metric?) -> Void) {
+        
+        let group = DispatchGroup()
+        
+        group.enter()
+        
+        let dispatchQueue = DispatchQueue(label: m.appName!, qos: .background)
+        
+        dispatchQueue.async(group: group, execute: {
+            if (m.timestampEnd == nil) {
+                let metric = m
+                let endTime = NSDate()
+                metric.timestampEnd = endTime
+                metric.duration = (metric.timestampEnd?.timeIntervalSinceReferenceDate)! - (metric.timestampStart?.timeIntervalSinceReferenceDate)!
+                
+                context.perform {
+                    do {
+                        try context.save()
+                        print("done setting end time of", metric.appName!)
+                    } catch {
+                        print("in setEndOfPrevMetric: can't set time")
+                    }
+                    
+                    group.leave()
+                    group.notify(queue: DispatchQueue.main, execute: {
+                        callback(metric)
+                    })
+                }
+                
+                
+            }
+        })
+    }
+}

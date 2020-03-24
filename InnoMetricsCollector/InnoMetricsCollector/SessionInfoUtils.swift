@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Cocoa
 
 class SessionInfoUtils {
     
@@ -90,5 +91,53 @@ class SessionInfoUtils {
         
         return macAddress
     }
-
+    
+    static func createAndSaveCurrentSession(currentSession: Session?, context: NSManagedObjectContext) -> Session? {
+        let session = NSEntityDescription.insertNewObject(forEntityName: "Session", into: context) as! Session
+        
+        session.operatingSystem = "macOS " + ProcessInfo().operatingSystemVersionString
+        if #available(OSX 10.12, *) {
+            session.userName = ProcessInfo().fullUserName
+        } else {
+            session.userName = NSUserName()
+        }
+        
+        session.userLogin = NSUserName()
+        session.ipAddress = SessionInfoUtils.getIPAddress()
+        
+        if let intfIterator = SessionInfoUtils.findEthernetInterfaces() {
+            if let macAddress = SessionInfoUtils.getMACAddress(intfIterator) {
+                let macAddressAsString = macAddress.map( { String(format:"%02x", $0) } )
+                    .joined(separator: ":")
+                session.macAddress = macAddressAsString
+            } else {
+                session.macAddress = ""
+            }
+            
+            IOObjectRelease(intfIterator)
+        }
+        
+        if (currentSession == nil) {
+            do {
+                try context.save()
+                return session
+            } catch {
+                print("in session create: can't create new session")
+                return nil
+            }
+        }
+        
+        let isNotSameAsOldSession = currentSession != nil && session.operatingSystem != currentSession?.operatingSystem || session.userName != currentSession?.userName || session.userLogin != currentSession?.userLogin || session.ipAddress != currentSession?.ipAddress || session.macAddress != currentSession?.macAddress
+        
+        if (isNotSameAsOldSession) {
+            do {
+                try context.save()
+                return session
+            } catch {
+                print("in session create: can't create new session")
+            }
+        }
+        
+        return currentSession
+    }
 }

@@ -25,7 +25,6 @@
 		2C1B0FDA241BAB360092F0AD /* ProcessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1B0FD9241BAB360092F0AD /* ProcessController.swift */; };
 		2C1B0FDC241BABFB0092F0AD /* ProcessesTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1B0FDB241BABFB0092F0AD /* ProcessesTransfer.swift */; };
 		2C1B0FDF241C1DBD0092F0AD /* CollectorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1B0FDE241C1DBD0092F0AD /* CollectorHelper.swift */; };
-		2C1EAF202406AEAC00A34585 /* MergedMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1EAF1F2406AEAC00A34585 /* MergedMetrics.swift */; };
 		2C1EAF222406AEB700A34585 /* MetricsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1EAF212406AEB700A34585 /* MetricsController.swift */; };
 		2C1EAF242406AEC000A34585 /* UserPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1EAF232406AEC000A34585 /* UserPrefs.swift */; };
 		2C1EAF262406AEC800A34585 /* MetricsTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1EAF252406AEC800A34585 /* MetricsTransfer.swift */; };
@@ -36,6 +35,9 @@
 		2C581C132406F4C5009997AF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C581C122406F4C5009997AF /* LoginViewController.swift */; };
 		2C581C18240707AC009997AF /* EnergyMeasurement+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C581C17240707AC009997AF /* EnergyMeasurement+CoreDataClass.swift */; };
 		2C581C1A2407080A009997AF /* EnergyMeasurement+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C581C192407080A009997AF /* EnergyMeasurement+CoreDataProperties.swift */; };
+		2CEFF233242A0A2E00F90013 /* CustomTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEFF232242A0A2E00F90013 /* CustomTimer.swift */; };
+		2CEFF236242A169300F90013 /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEFF235242A169300F90013 /* Throttler.swift */; };
+		2CEFF23A242A1E7600F90013 /* MetricCRUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEFF239242A1E7600F90013 /* MetricCRUD.swift */; };
 		3630E8EBEB2F835EF98392C1 /* Pods_InnoMetricsCollector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA14428BFD802AB8F60FE76A /* Pods_InnoMetricsCollector.framework */; };
 		9F590DC32052A44C009AC489 /* IdleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F590DC22052A44C009AC489 /* IdleController.swift */; };
 		9F8C169F204D53830068CB58 /* IdleMetric+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8C169E204D53830068CB58 /* IdleMetric+CoreDataClass.swift */; };
@@ -89,7 +91,6 @@
 		2C1B0FD9241BAB360092F0AD /* ProcessController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessController.swift; sourceTree = "<group>"; };
 		2C1B0FDB241BABFB0092F0AD /* ProcessesTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessesTransfer.swift; sourceTree = "<group>"; };
 		2C1B0FDE241C1DBD0092F0AD /* CollectorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectorHelper.swift; sourceTree = "<group>"; };
-		2C1EAF1F2406AEAC00A34585 /* MergedMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MergedMetrics.swift; path = ../../InnometricsTransfer/InnometricsTransfer/MergedMetrics.swift; sourceTree = "<group>"; };
 		2C1EAF212406AEB700A34585 /* MetricsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MetricsController.swift; path = ../../InnometricsTransfer/InnometricsTransfer/MetricsController.swift; sourceTree = "<group>"; };
 		2C1EAF232406AEC000A34585 /* UserPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserPrefs.swift; path = ../../InnometricsTransfer/InnometricsTransfer/UserPrefs.swift; sourceTree = "<group>"; };
 		2C1EAF252406AEC800A34585 /* MetricsTransfer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MetricsTransfer.swift; path = ../../InnometricsTransfer/InnometricsTransfer/MetricsTransfer.swift; sourceTree = "<group>"; };
@@ -106,6 +107,9 @@
 		2CE6883823F2EA6500DD9946 /* InnoMetricsCollector 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "InnoMetricsCollector 2.xcdatamodel"; sourceTree = "<group>"; };
 		2CE6883923F2EA9600DD9946 /* InnoMetricsCollector 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "InnoMetricsCollector 3.xcdatamodel"; sourceTree = "<group>"; };
 		2CEFF230242A07B200F90013 /* InnoMetricsCollector 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "InnoMetricsCollector 6.xcdatamodel"; sourceTree = "<group>"; };
+		2CEFF232242A0A2E00F90013 /* CustomTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTimer.swift; sourceTree = "<group>"; };
+		2CEFF235242A169300F90013 /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
+		2CEFF239242A1E7600F90013 /* MetricCRUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricCRUD.swift; sourceTree = "<group>"; };
 		77C440B57B5DFA283CB21009 /* Pods-InnoMetricsCollector.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InnoMetricsCollector.release.xcconfig"; path = "Pods/Target Support Files/Pods-InnoMetricsCollector/Pods-InnoMetricsCollector.release.xcconfig"; sourceTree = "<group>"; };
 		9F590DC22052A44C009AC489 /* IdleController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleController.swift; sourceTree = "<group>"; };
 		9F8C169E204D53830068CB58 /* IdleMetric+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "IdleMetric+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -139,6 +143,8 @@
 			children = (
 				25AB378C1E2FAF1400174767 /* BrowserInfoUtils.swift */,
 				25C5B4F91E26A9AC007FF799 /* SessionInfoUtils.swift */,
+				2CEFF232242A0A2E00F90013 /* CustomTimer.swift */,
+				2CEFF235242A169300F90013 /* Throttler.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -157,6 +163,7 @@
 				2C581C192407080A009997AF /* EnergyMeasurement+CoreDataProperties.swift */,
 				2C1B0FD5241BA40D0092F0AD /* ActiveProcess+CoreDataClass.swift */,
 				2C1B0FD7241BA42A0092F0AD /* ActiveProcess+CoreDataProperties.swift */,
+				2CEFF239242A1E7600F90013 /* MetricCRUD.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -196,7 +203,6 @@
 			isa = PBXGroup;
 			children = (
 				2C1EAF2A2406B08C00A34585 /* ServerPrefs.swift */,
-				2C1EAF1F2406AEAC00A34585 /* MergedMetrics.swift */,
 				2C1EAF212406AEB700A34585 /* MetricsController.swift */,
 				2C1EAF232406AEC000A34585 /* UserPrefs.swift */,
 				2C1EAF252406AEC800A34585 /* MetricsTransfer.swift */,
@@ -403,6 +409,7 @@
 				2C1EAF2B2406B08C00A34585 /* ServerPrefs.swift in Sources */,
 				255312D91E27C13100674DF3 /* CurrentWorkingSessionController.swift in Sources */,
 				2C1B0FD6241BA40D0092F0AD /* ActiveProcess+CoreDataClass.swift in Sources */,
+				2CEFF233242A0A2E00F90013 /* CustomTimer.swift in Sources */,
 				2C1B0FDF241C1DBD0092F0AD /* CollectorHelper.swift in Sources */,
 				9F8C169F204D53830068CB58 /* IdleMetric+CoreDataClass.swift in Sources */,
 				2C1B0FD8241BA42A0092F0AD /* ActiveProcess+CoreDataProperties.swift in Sources */,
@@ -419,7 +426,8 @@
 				25C5B4F21E2684DF007FF799 /* Session+CoreDataClass.swift in Sources */,
 				9F590DC32052A44C009AC489 /* IdleController.swift in Sources */,
 				2C1EAF242406AEC000A34585 /* UserPrefs.swift in Sources */,
-				2C1EAF202406AEAC00A34585 /* MergedMetrics.swift in Sources */,
+				2CEFF23A242A1E7600F90013 /* MetricCRUD.swift in Sources */,
+				2CEFF236242A169300F90013 /* Throttler.swift in Sources */,
 				2C1EAF222406AEB700A34585 /* MetricsController.swift in Sources */,
 				25C5B4FA1E26A9AC007FF799 /* SessionInfoUtils.swift in Sources */,
 				9FACE306205C4B8A005BBB31 /* InnoMetricsCollector.xcdatamodeld in Sources */,
