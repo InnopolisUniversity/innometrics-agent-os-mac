@@ -29,6 +29,7 @@ class MetricCRUD {
             metric.bundleURL = app.executableURL?.absoluteString
             metric.timestampStart = foregroundWindowLaunchDate
             metric.session = session
+            metric.isIdle = 0
             
             if (foregroundWindowBundleId != nil && CollectorHelper.browserIds.contains(foregroundWindowBundleId!)) {
                 let foregroundWindowTabUrl = BrowserInfoUtils.activeTabURL(bundleIdentifier: foregroundWindowBundleId!)
@@ -49,7 +50,7 @@ class MetricCRUD {
                     try context.save()
                     returnVal = metric
                 } catch {
-                    print("in createMetric: can't save context")
+                    print("in createMetric: can't save context\nerror: \(error)")
                 }
                 
                 group.leave()
@@ -78,7 +79,7 @@ class MetricCRUD {
                 context.perform {
                     do {
                         try context.save()
-                        print("done setting end time of", metric.appName!)
+                        print("end of", metric.appName!)
                     } catch {
                         print("in setEndOfPrevMetric: can't set time")
                     }

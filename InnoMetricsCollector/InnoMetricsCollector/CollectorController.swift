@@ -97,10 +97,12 @@ class CollectorController: NSObject {
         self.updateSession()
         
         MetricCRUD.createMetric(app: frontmostApp!, pid: foregroundPID, context: self.privateContext, session: self.currentSession, callback: { (newMetric) -> Void in
-                print("got a new metric", newMetric!.appName!)
                 self.setEndTimeOfPrevMetric()
-                self.prevMetric = self.currentMetric
-                self.currentMetric = newMetric
+                if newMetric != nil {
+                    print("start of", newMetric!.appName!)
+                    self.prevMetric = self.currentMetric
+                    self.currentMetric = newMetric
+                }
             })
     }
     
