@@ -12,49 +12,39 @@ import Cocoa
 class ProcessCRUD {
     public static func getAllProcesses(context: NSManagedObjectContext, session: Session, callback: @escaping (Set<ActiveProcess>?) -> Void) {
         
-        let group = DispatchGroup()
-        
-        group.enter()
-        
         var processes = Set<ActiveProcess>()
         
         let apps = NSWorkspace.shared.runningApplications
-        let dispatchQueue = DispatchQueue(label: "processes", qos: .background)
         
-        dispatchQueue.async(group: group, execute: {
-            for p in apps {
-                if p.bundleIdentifier == nil {
-                    continue
-                }
-                
-                let pid = String(p.processIdentifier)
-                let comm = String((p.bundleIdentifier?.split(separator: ".").last)!)
-
-                let newProcess = NSEntityDescription.insertNewObject(forEntityName: "ActiveProcess", into: context) as! ActiveProcess
-  
-                newProcess.pid = pid
-                newProcess.process_name = comm
-                newProcess.session = session
-                
-                processes.insert(newProcess)
-                
-                // 3: get energy metrics per process
-                let _ = ProcessCRUD.measureEnergyMetrics(process: newProcess, processID: pid, context: context)
+        for p in apps {
+            if p.bundleIdentifier == nil {
+                continue
             }
             
-            context.perform {
-                do {
-                    try context.save()
-                } catch {
-                    print("error in getAllProcesses: can't save\n\(error)")
-                }
-                
-                group.leave()
-                group.notify(queue: DispatchQueue.main, execute: {
-                    callback(processes)
-                })
+            let pid = String(p.processIdentifier)
+            let comm = String((p.bundleIdentifier?.split(separator: ".").last)!)
+
+            let newProcess = NSEntityDescription.insertNewObject(forEntityName: "ActiveProcess", into: context) as! ActiveProcess
+
+            newProcess.pid = pid
+            newProcess.process_name = comm
+            newProcess.session = session
+            
+            processes.insert(newProcess)
+            
+            // 3: get energy metrics per process
+            let _ = ProcessCRUD.measureEnergyMetrics(process: newProcess, processID: pid, context: context)
+        }
+        
+        context.perform {
+            do {
+                try context.save()
+            } catch {
+                print("error in getAllProcesses: can't save\n\(error)")
             }
-        })
+            
+            callback(processes)
+        }
     }
     
     public static func measureEnergyMetrics(process: ActiveProcess, processID: String, context: NSManagedObjectContext) -> Set<EnergyMeasurement> {

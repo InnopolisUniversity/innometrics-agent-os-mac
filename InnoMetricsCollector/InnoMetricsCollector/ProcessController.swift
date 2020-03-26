@@ -19,33 +19,23 @@ class ProcessController: NSViewController, NSTableViewDataSource, NSTableViewDel
         
         self.context = context
         
-        let group = DispatchGroup()
-        group.enter()
+        self.processes = []
+        self.measurements = []
         
-        let dispatchQueue = DispatchQueue(label: "fetchProcesses", qos: .background)
-        
-        dispatchQueue.async(group: group, execute: {
-            self.processes = []
-            self.measurements = []
-            
-            self.context?.perform {
-                do {
-                    // Fetch the processes
-                    let processesFetch: NSFetchRequest<ActiveProcess> = ActiveProcess.fetchRequest()
-                    let measurementsFetch: NSFetchRequest<EnergyMeasurement> = EnergyMeasurement.fetchRequest()
-                    
-                    self.processes = try context.fetch(processesFetch)
-                    self.measurements = try context.fetch(measurementsFetch)
-                } catch {
-                    print("in fetchNewProcesses: can't fetch\nerror: \(error)")
-                }
+        self.context?.perform {
+            do {
+                // Fetch the processes
+                let processesFetch: NSFetchRequest<ActiveProcess> = ActiveProcess.fetchRequest()
+                let measurementsFetch: NSFetchRequest<EnergyMeasurement> = EnergyMeasurement.fetchRequest()
                 
-                group.leave()
-                group.notify(queue: DispatchQueue.main, execute: {
-                    callback()
-                })
+                self.processes = try context.fetch(processesFetch)
+                self.measurements = try context.fetch(measurementsFetch)
+            } catch {
+                print("in fetchNewProcesses: can't fetch\nerror: \(error)")
             }
-        })
+            
+            callback()
+        }
     }
     
     public func sendProcesses (completion: @escaping (_ response: Int) -> Void) {

@@ -16,33 +16,21 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     var context: NSManagedObjectContext? = nil
     
     public func fetchNewMetrics(context: NSManagedObjectContext, callback: @escaping () -> Void) {
-        
         self.context = context
+        self.metrics = []
         
-        let group = DispatchGroup()
-        group.enter()
-        
-        let dispatchQueue = DispatchQueue(label: "fetchMetrics", qos: .background)
-        
-        dispatchQueue.async(group: group, execute: {
-            self.metrics = []
-            
-            self.context?.perform {
-                do {
-                    let metricsFetch: NSFetchRequest<Metric> = Metric.fetchRequest()
-                    metricsFetch.sortDescriptors = [NSSortDescriptor(key: "timestampStart", ascending: false)]
-                    
-                    self.metrics = try self.context!.fetch(metricsFetch)
-                } catch {
-                    print("in fetchNewMetrics: can't fetch\nerror: \(error)")
-                }
+        self.context?.perform {
+            do {
+                let metricsFetch: NSFetchRequest<Metric> = Metric.fetchRequest()
+                metricsFetch.sortDescriptors = [NSSortDescriptor(key: "timestampStart", ascending: false)]
                 
-                group.leave()
-                group.notify(queue: DispatchQueue.main, execute: {
-                    callback()
-                })
+                self.metrics = try self.context!.fetch(metricsFetch)
+            } catch {
+                print("in fetchNewMetrics: can't fetch\nerror: \(error)")
             }
-        })
+            
+            callback()
+        }
     }
     
     public func sendMetrics (completion: @escaping (_ response: Int) -> Void) {
