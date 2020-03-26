@@ -101,6 +101,8 @@ class MetricCRUD {
         var returnVal: Metric?
         group.enter()
         
+        if app.bundleIdentifier == nil { return }
+        
         let dispatchQueue = DispatchQueue(label: app.bundleIdentifier!, qos: .background)
         
         dispatchQueue.async(group: group, execute: {

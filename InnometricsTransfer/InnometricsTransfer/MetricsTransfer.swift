@@ -16,7 +16,7 @@ public class MetricsTransfer {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         
         let activity: [String: Any] = [
-            "idle_activity": idle,
+            "idle_activity": metric.isIdle == 1 ? true : false,
             "start_time": dateFormatter.string(from: metric.timestampStart! as Date),
             "end_time": (metric.timestampEnd != nil) ? dateFormatter.string(from: metric.timestampEnd! as Date) : dateFormatter.string(from: Date()),
             "executable_name": metric.bundleURL != nil ? metric.bundleURL!.split(separator: "/").last! : "",
@@ -32,16 +32,14 @@ public class MetricsTransfer {
         return activity
     }
     
-    public static func sendMetrics(token: String, username: String, focusAppMetrics: [Metric], idleMetrics: [IdleMetric], completion: @escaping (_ response: Int) -> Void) {
+    public static func sendMetrics(token: String, username: String, metrics: [Metric], completion: @escaping (_ response: Int) -> Void) {
         
         var activitiesArrayJson: [[String: Any]] = []
         
-        for metric in focusAppMetrics {
-            activitiesArrayJson.append(extractDataFromMetric(metric: metric, username: username))
-        }
-        
-        for metric in idleMetrics {
-            activitiesArrayJson.append(extractDataFromMetric(metric: metric, username: username, idle: true))
+        for metric in metrics {
+            if (metric.timestampEnd != nil) {
+                activitiesArrayJson.append(extractDataFromMetric(metric: metric, username: username))
+            }
         }
         
         let activities: [String: [Any]] = ["activities": activitiesArrayJson]
@@ -52,10 +50,6 @@ public class MetricsTransfer {
              let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
              print("jsonData: \(String(describing: jsonString))")
             */
-            
-            // TODO: remove return
-            print("not sending data for metrics...")
-            return
  
             // create post request
             var request = URLRequest(url: URL(string: "\(ServerPrefs.getServerUrl())/V1/activity")!)
@@ -74,6 +68,8 @@ public class MetricsTransfer {
                 }
                 
                 let responseCode = (response as! HTTPURLResponse).statusCode
+                
+                print("response code =>", responseCode)
                 
                 if (responseCode == 201 || responseCode == 200) {
                     completion(1)

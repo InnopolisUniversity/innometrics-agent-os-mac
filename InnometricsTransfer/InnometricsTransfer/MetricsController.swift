@@ -12,43 +12,72 @@ import Foundation
 
 class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     
-    var appFocusMetrics: [Metric] = []
-    var idleMetrics: [IdleMetric] = []
+    var metrics: [Metric] = []
+    var context: NSManagedObjectContext? = nil
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let appDelegate = NSApplication.shared.delegate as! AppDelegate
-        // TODO: update later
-        // appDelegate.logOutMenuItem.isEnabled = true
+    public func fetchNewMetrics(context: NSManagedObjectContext, callback: @escaping () -> Void) {
         
-        fetchNewMetrics()
-    }
-    
-    public func fetchNewMetrics() {
-        appFocusMetrics = []
-        idleMetrics = []
+        let group = DispatchGroup()
+        group.enter()
         
-        do {
-            let appDelegate = NSApplication.shared.delegate as! AppDelegate
-            let context = appDelegate.managedObjectContext
-
-            // Fetch the metrics
-            let metricsFetch: NSFetchRequest<Metric> = Metric.fetchRequest()
-            metricsFetch.sortDescriptors = [NSSortDescriptor(key: "timestampStart", ascending: false)]
+        let dispatchQueue = DispatchQueue(label: "fetchMetrics", qos: .background)
+        
+        dispatchQueue.async(group: group, execute: {
+            self.metrics = []
+            self.context = context
             
-            let idleMetricsFetch: NSFetchRequest<IdleMetric> = IdleMetric.fetchRequest()
-            idleMetricsFetch.sortDescriptors = [NSSortDescriptor(key: "timestampStart", ascending: false)]
-            
-            appFocusMetrics = try context.fetch(metricsFetch)
-            idleMetrics = try context.fetch(idleMetricsFetch)
-        } catch {
-            print(error)
-        }
+            self.context?.perform {
+                do {
+                    let metricsFetch: NSFetchRequest<Metric> = Metric.fetchRequest()
+                    metricsFetch.sortDescriptors = [NSSortDescriptor(key: "timestampStart", ascending: false)]
+                    
+                    self.metrics = try context.fetch(metricsFetch)
+                } catch {
+                    print("in fetchNewMetrics: can't fetch\nerror: \(error)")
+                }
+                
+                group.leave()
+                group.notify(queue: DispatchQueue.main, execute: {
+                    callback()
+                })
+            }
+        })
     }
     
     public func sendMetrics (completion: @escaping (_ response: Int) -> Void) {
-        MetricsTransfer.sendMetrics(token: AuthorizationUtils.getAuthorizationToken()!, username: AuthorizationUtils.getUsername()!, focusAppMetrics: appFocusMetrics, idleMetrics: idleMetrics) { (response) in
-            completion(response)
+        if (AuthorizationUtils.isAuthorized()) {
+            MetricsTransfer.sendMetrics(token: AuthorizationUtils.getAuthorizationToken()!, username: AuthorizationUtils.getUsername()!, metrics: metrics) { (response) in
+                completion(response)
+            }
+        } else {
+            DispatchQueue.main.async {
+                Helpers.dialogOK(question: "Error", text: "You need to relogin to the system.")
+                AuthorizationUtils.saveIsAuthorized(isAuthorized: false)
+            }
+        }
+    }
+    
+    public func clearDB() {
+        do {
+            let metricsFetch: NSFetchRequest<Metric> = Metric.fetchRequest()
+            metricsFetch.includesPropertyValues = true
+            let metricsToDelete = try self.context!.fetch(metricsFetch as! NSFetchRequest<NSFetchRequestResult>) as! [NSManagedObject]
+            
+            for metric in metricsToDelete {
+                if metric.value(forKey: "timestampEnd") == nil {
+                    // do not delete unfinished metrics
+                } else {
+                    // delete metrics that are finished
+                    context!.delete(metric)
+                }
+            }
+            
+            // Save Changes
+            try self.context!.save()
+            
+            print("deleted metrics...")
+        } catch {
+            print("clearDB: errros :( \n\(error)")
         }
     }
     

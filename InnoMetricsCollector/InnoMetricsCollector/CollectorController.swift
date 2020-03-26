@@ -41,8 +41,8 @@ class CollectorController: NSObject {
     private var currentIdleMetric: IdleMetric?
     
     // Timers for transfer and idle
-    private var processTransferTimer = CustomTimer()
-    private var metricsTransferTimer = CustomTimer()
+    private var processTransferTimer = CustomTimer(interval: 10)
+    private var metricsTransferTimer = CustomTimer(interval: 10)
     private var idleTimer = CustomTimer(interval: 30, repeats: false)
     private var measurementRecordTimer = CustomTimer(interval: 20)
     
@@ -68,6 +68,14 @@ class CollectorController: NSObject {
         // Add timers
         measurementRecordTimer.startTimer {
             self.recordProcesses()
+        }
+        
+        processTransferTimer.startTimer {
+            self.transferProcessesAndMeasurements()
+        }
+        
+        metricsTransferTimer.startTimer {
+            self.transferMetrics()
         }
     }
     
@@ -148,6 +156,31 @@ class CollectorController: NSObject {
     // Processes + Measurements
     func recordProcesses() {
         ProcessCRUD.getAllProcesses(context: self.processPrivateContext, session: self.currentProcessSession, callback: { (processes) -> Void in
+        })
+    }
+    
+    // Transfer
+    func transferProcessesAndMeasurements() {
+        
+    }
+    
+    func transferMetrics() {
+        let metricsController: MetricsController = MetricsController()
+        metricsController.fetchNewMetrics(context: self.privateContext, callback: {
+            metricsController.sendMetrics() { (response) in
+                if (response == 1) {
+                    metricsController.clearDB()
+                } else if (response == 2) {
+                    DispatchQueue.main.async {
+                        Helpers.dialogOK(question: "Error", text: "You need to relogin to the system.")
+                        AuthorizationUtils.saveIsAuthorized(isAuthorized: false)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        Helpers.dialogOK(question: "Error", text: "Something went wrong during sending the data.")
+                    }
+                }
+            }
         })
     }
     
