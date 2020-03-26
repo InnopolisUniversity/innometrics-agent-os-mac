@@ -165,7 +165,7 @@ class CollectorController: NSObject {
     // Transfer
     func transferProcessesAndMeasurements() {
         let processController: ProcessController = ProcessController()
-        processController.fetchNewProcesses(context: self.processPrivateContext, callback: {
+        processController.fetchNewProcesses(context: self.context, callback: {
             processController.sendProcesses() { (response) in
                 if (response == 1) {
                     processController.clearDB()
@@ -185,7 +185,7 @@ class CollectorController: NSObject {
     
     func transferMetrics() {
         let metricsController: MetricsController = MetricsController()
-        metricsController.fetchNewMetrics(context: self.privateContext, callback: {
+        metricsController.fetchNewMetrics(context: self.context, callback: {
             metricsController.sendMetrics() { (response) in
                 if (response == 1) {
                     metricsController.clearDB()

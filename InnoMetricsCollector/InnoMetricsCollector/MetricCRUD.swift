@@ -12,7 +12,8 @@ import Cocoa
 class MetricCRUD {
     public static func createMetric(app: NSRunningApplication, pid: pid_t, context: NSManagedObjectContext, session: Session, isIdle: Int16 = 0, callback: @escaping (Metric?) -> Void) {
         
-        if app.bundleIdentifier == nil && app.localizedName == nil { return }
+        if app.bundleIdentifier == nil && app.localizedName == nil && app.executableURL?.absoluteURL != nil { return }
+        if app.bundleIdentifier == "ru.innometrics.InnoMetricsCollector" { return }
         
         var returnVal: Metric?
         

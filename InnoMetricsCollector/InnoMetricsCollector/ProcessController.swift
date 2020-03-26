@@ -64,8 +64,6 @@ class ProcessController: NSViewController, NSTableViewDataSource, NSTableViewDel
                 }
                 
                 try self.context?.save()
-                
-                print("deleted processes and measurements...")
             } catch {
                 print("in clearDB of processes: can't clear\nerror: \(error)")
             }

@@ -64,8 +64,6 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
                 
                 // Save Changes
                 try self.context!.save()
-                
-                print("deleted metrics...")
             } catch {
                 print("clearDB: errros :( \n\(error)")
             }
