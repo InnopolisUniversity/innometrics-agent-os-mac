@@ -12,6 +12,8 @@ import Cocoa
 class MetricCRUD {
     public static func createMetric(app: NSRunningApplication, pid: pid_t, context: NSManagedObjectContext, session: Session, isIdle: Int16 = 0, callback: @escaping (Metric?) -> Void) {
         
+        if app.bundleIdentifier == nil && app.localizedName == nil { return }
+        
         let group = DispatchGroup()
         
         var returnVal: Metric?

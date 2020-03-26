@@ -17,6 +17,8 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     
     public func fetchNewMetrics(context: NSManagedObjectContext, callback: @escaping () -> Void) {
         
+        self.context = context
+        
         let group = DispatchGroup()
         group.enter()
         
@@ -24,14 +26,13 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
         
         dispatchQueue.async(group: group, execute: {
             self.metrics = []
-            self.context = context
             
             self.context?.perform {
                 do {
                     let metricsFetch: NSFetchRequest<Metric> = Metric.fetchRequest()
                     metricsFetch.sortDescriptors = [NSSortDescriptor(key: "timestampStart", ascending: false)]
                     
-                    self.metrics = try context.fetch(metricsFetch)
+                    self.metrics = try self.context!.fetch(metricsFetch)
                 } catch {
                     print("in fetchNewMetrics: can't fetch\nerror: \(error)")
                 }
@@ -58,26 +59,28 @@ class MetricsController: NSViewController, NSTableViewDataSource, NSTableViewDel
     }
     
     public func clearDB() {
-        do {
-            let metricsFetch: NSFetchRequest<Metric> = Metric.fetchRequest()
-            metricsFetch.includesPropertyValues = true
-            let metricsToDelete = try self.context!.fetch(metricsFetch as! NSFetchRequest<NSFetchRequestResult>) as! [NSManagedObject]
-            
-            for metric in metricsToDelete {
-                if metric.value(forKey: "timestampEnd") == nil {
-                    // do not delete unfinished metrics
-                } else {
-                    // delete metrics that are finished
-                    context!.delete(metric)
+        self.context?.perform {
+            do {
+                let metricsFetch: NSFetchRequest<Metric> = Metric.fetchRequest()
+                metricsFetch.includesPropertyValues = true
+                let metricsToDelete = try self.context!.fetch(metricsFetch as! NSFetchRequest<NSFetchRequestResult>) as! [NSManagedObject]
+                
+                for metric in metricsToDelete {
+                    if metric.value(forKey: "timestampEnd") == nil {
+                        // do not delete unfinished metrics
+                    } else {
+                        // delete metrics that are finished
+                        self.context!.delete(metric)
+                    }
                 }
+                
+                // Save Changes
+                try self.context!.save()
+                
+                print("deleted metrics...")
+            } catch {
+                print("clearDB: errros :( \n\(error)")
             }
-            
-            // Save Changes
-            try self.context!.save()
-            
-            print("deleted metrics...")
-        } catch {
-            print("clearDB: errros :( \n\(error)")
         }
     }
     

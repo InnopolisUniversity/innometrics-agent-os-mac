@@ -55,10 +55,6 @@ public class ProcessesTransfer {
              let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
              print("jsonData: \(String(describing: jsonString))")
             */
-            
-            // TODO: remove return
-            print("not sending data for processes...")
-            return
  
             // create post request
             var request = URLRequest(url: URL(string: "\(ServerPrefs.getServerUrl())/V1/process")!)

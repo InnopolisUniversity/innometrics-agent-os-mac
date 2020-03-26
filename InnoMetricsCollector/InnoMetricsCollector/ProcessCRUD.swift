@@ -31,15 +31,15 @@ class ProcessCRUD {
                 let comm = String((p.bundleIdentifier?.split(separator: ".").last)!)
 
                 let newProcess = NSEntityDescription.insertNewObject(forEntityName: "ActiveProcess", into: context) as! ActiveProcess
-                
+  
                 newProcess.pid = pid
                 newProcess.process_name = comm
                 newProcess.session = session
                 
+                processes.insert(newProcess)
+                
                 // 3: get energy metrics per process
                 let _ = ProcessCRUD.measureEnergyMetrics(process: newProcess, processID: pid, context: context)
-                
-                processes.insert(newProcess)
             }
             
             context.perform {

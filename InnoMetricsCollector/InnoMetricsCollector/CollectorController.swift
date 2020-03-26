@@ -41,10 +41,11 @@ class CollectorController: NSObject {
     private var currentIdleMetric: IdleMetric?
     
     // Timers for transfer and idle
-    private var processTransferTimer = CustomTimer(interval: 10)
-    private var metricsTransferTimer = CustomTimer(interval: 10)
+    private var processTransferTimer = CustomTimer(interval: 20)
+    private var metricsTransferTimer = CustomTimer(interval: 20)
     private var idleTimer = CustomTimer(interval: 30, repeats: false)
-    private var measurementRecordTimer = CustomTimer(interval: 20)
+    private let submissionFrequency = 5
+    private var runningNumberOfMeasurements = 0
     
     func setUpGlobalEvents() {
         let throttler = Throttler(minimumDelay: 0.05)
@@ -66,12 +67,15 @@ class CollectorController: NSObject {
         self.updateSession()
         
         // Add timers
-        measurementRecordTimer.startTimer {
-            self.recordProcesses()
-        }
-        
         processTransferTimer.startTimer {
-            self.transferProcessesAndMeasurements()
+            self.recordProcesses {
+                self.runningNumberOfMeasurements = (self.runningNumberOfMeasurements + 1) % 5
+                if self.runningNumberOfMeasurements % self.submissionFrequency == 0 {
+                    print("hit, sending...")
+                } else {
+                    print("no hit, passing...", self.runningNumberOfMeasurements)
+                }
+            }
         }
         
         metricsTransferTimer.startTimer {
@@ -154,14 +158,29 @@ class CollectorController: NSObject {
     }
     
     // Processes + Measurements
-    func recordProcesses() {
-        ProcessCRUD.getAllProcesses(context: self.processPrivateContext, session: self.currentProcessSession, callback: { (processes) -> Void in
-        })
+    func recordProcesses(cb: @escaping () -> Void) {
+        ProcessCRUD.getAllProcesses(context: self.processPrivateContext, session: self.currentProcessSession, callback: { (processes) -> Void in cb() })
     }
     
     // Transfer
     func transferProcessesAndMeasurements() {
-        
+        let processController: ProcessController = ProcessController()
+        processController.fetchNewProcesses(context: self.processPrivateContext, callback: {
+            processController.sendProcesses() { (response) in
+                if (response == 1) {
+                    processController.clearDB()
+                } else if (response == 2) {
+                    DispatchQueue.main.async {
+                        Helpers.dialogOK(question: "Error", text: "You need to relogin to the system.")
+                        AuthorizationUtils.saveIsAuthorized(isAuthorized: false)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        Helpers.dialogOK(question: "Error", text: "Something went wrong during sending the data.")
+                    }
+                }
+            }
+        })
     }
     
     func transferMetrics() {
