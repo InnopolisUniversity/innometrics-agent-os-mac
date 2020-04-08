@@ -19,7 +19,7 @@ public class MetricsTransfer {
             "idle_activity": metric.isIdle == 1 ? true : false,
             "start_time": dateFormatter.string(from: metric.timestampStart! as Date),
             "end_time": (metric.timestampEnd != nil) ? dateFormatter.string(from: metric.timestampEnd! as Date) : dateFormatter.string(from: Date()),
-            "executable_name": metric.bundleURL != nil ? metric.bundleURL!.split(separator: "/").last! : "",
+            "executable_name": (metric.appName != nil) ? metric.appName : (metric.bundleURL != nil ? metric.bundleURL!.split(separator: "/").last! : ""),
             "browser_url": metric.tabUrl ?? "",
             "browser_title": metric.tabName ?? "",
             "ip_address": (metric.session != nil) ? metric.session?.ipAddress : "",

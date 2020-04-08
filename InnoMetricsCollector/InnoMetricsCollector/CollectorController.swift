@@ -36,6 +36,7 @@ class CollectorController: NSObject {
     // Metrics+Session Fields
     private var currentSession: Session!
     private var currentProcessSession: Session!
+    private var regularSession: Session!
     private var currentMetric: Metric?
     private var prevMetric: Metric?
     private var currentIdleMetric: IdleMetric?
@@ -68,13 +69,9 @@ class CollectorController: NSObject {
         
         // Add timers
         processTransferTimer.startTimer {
-            self.recordProcesses {
-                self.runningNumberOfMeasurements = (self.runningNumberOfMeasurements + 1) % 5
-                if self.runningNumberOfMeasurements % self.submissionFrequency == 0 {
-                    print("hit, sending...")
-                } else {
-                    print("no hit, passing...", self.runningNumberOfMeasurements)
-                }
+            self.runningNumberOfMeasurements = (self.runningNumberOfMeasurements + 1) % 5
+            if self.runningNumberOfMeasurements % self.submissionFrequency == 0 {
+                self.recordProcesses { }
             }
         }
         
@@ -106,13 +103,12 @@ class CollectorController: NSObject {
         if frontmostApp?.bundleIdentifier == nil { return }
         
         let foregroundPID = frontmostApp!.processIdentifier
-        let foregroundWindowBundleId = frontmostApp!.bundleIdentifier!
         
         activeApplicationView.update(application: frontmostApp!)
         
         self.updateSession()
         
-        MetricCRUD.createMetric(app: frontmostApp!, pid: foregroundPID, context: self.privateContext, session: self.currentSession, callback: { (newMetric) -> Void in
+        MetricCRUD.createMetric(app: frontmostApp!, pid: foregroundPID, context: self.context, session: self.currentSession, callback: { (newMetric) -> Void in
                 self.setEndTimeOfPrevMetric()
                 if newMetric != nil {
                     self.prevMetric = self.currentMetric
@@ -141,7 +137,7 @@ class CollectorController: NSObject {
     }
     
     func markAsIdle() {
-        MetricCRUD.markAsIdle(app: self.currentMetric!, context: self.privateContext, callback: { (newMetric) -> Void in
+        MetricCRUD.markAsIdle(app: self.currentMetric!, context: self.context, callback: { (newMetric) -> Void in
             self.setEndTimeOfPrevMetric()
             if newMetric != nil {
                 self.prevMetric = self.currentMetric
@@ -152,14 +148,14 @@ class CollectorController: NSObject {
     
     func setEndTimeOfPrevMetric() {
         if currentMetric != nil {
-            MetricCRUD.setEndTimeOfPrevMetric(m: currentMetric!, context: self.privateContext, callback: { (modifiedMetric) -> Void in
+            MetricCRUD.setEndTimeOfPrevMetric(m: currentMetric!, context: self.context, callback: { (modifiedMetric) -> Void in
             })
         }
     }
     
     // Processes + Measurements
     func recordProcesses(cb: @escaping () -> Void) {
-        ProcessCRUD.getAllProcesses(context: self.processPrivateContext, session: self.currentProcessSession, callback: { (processes) -> Void in cb() })
+        ProcessCRUD.getAllProcesses(context: self.context, session: self.currentProcessSession, callback: { (processes) -> Void in cb() })
     }
     
     // Transfer
@@ -248,10 +244,11 @@ class CollectorController: NSObject {
     
     func updateSession() {
         let session = SessionInfoUtils.createAndSaveCurrentSession(currentSession: currentSession, context: self.privateContext)
-        let processesSession = SessionInfoUtils.createAndSaveCurrentSession(currentSession: currentProcessSession, context: self.processPrivateContext)
+        let regularSession = SessionInfoUtils.createAndSaveCurrentSession(currentSession: currentSession, context: self.context)
         
-        self.currentSession = session
-        self.currentProcessSession = processesSession
+        self.currentSession = regularSession
+        self.currentProcessSession = regularSession
+        self.regularSession = regularSession
         self.currentWorkingSessionView.updateSession(session: session!)
     }
     
