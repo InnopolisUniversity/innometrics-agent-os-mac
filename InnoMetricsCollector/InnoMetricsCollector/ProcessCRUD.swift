@@ -8,6 +8,7 @@
 
 import Foundation
 import Cocoa
+import IOKit.ps
 
 class ProcessCRUD {
     public static func getAllProcesses(context: NSManagedObjectContext, session: Session, callback: @escaping (Set<ActiveProcess>?) -> Void) {
@@ -39,79 +40,79 @@ class ProcessCRUD {
         context.perform {
             do {
                 try context.save()
-            } catch {
-                print("error in getAllProcesses: can't save\n\(error)")
-            }
+            } catch { }
             
             callback(processes)
         }
     }
     
     public static func measureEnergyMetrics(process: ActiveProcess, processID: String, context: NSManagedObjectContext) -> Set<EnergyMeasurement> {
-        
         var measurements = Set<EnergyMeasurement>()
         
-        let usesAcPower = Helpers.shell("pmset -g ps").contains("AC Power") ? true : false
-        
-        let batteryPercentageMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
-        let batteryStatusMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
-        let ramMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
-        let vRamMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
-        let cpuMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
-        
-        let d = NSDate()
-        // 1. battery percentage
-        let estimatedChargeRemaining = usesAcPower ? "-1" : Helpers.shell("pmset -g batt | grep -Eo \"\\d+%\" | cut -d% -f1")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-        batteryPercentageMeasurement.alternativeLabel = "EstimatedChargeRemaining"
-        batteryPercentageMeasurement.measurementTypeId = "1"
-        batteryPercentageMeasurement.value = estimatedChargeRemaining
-        batteryPercentageMeasurement.process = process
-        batteryPercentageMeasurement.capturedDate = NSDate()
-        
-        // 2. battery status (charging or not)
-        batteryStatusMeasurement.alternativeLabel = "BatteryStatus"
-        batteryStatusMeasurement.measurementTypeId = "2"
-        batteryStatusMeasurement.value = usesAcPower ? "2" : "1"
-        batteryStatusMeasurement.process = process
-        batteryStatusMeasurement.capturedDate = d
-        
-        // 3. ram usage
-        let ramUsage = Helpers.shell("ps -p \(processID) -o rss")
-            .split{ $0.isNewline }[1]
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-        ramMeasurement.alternativeLabel = "RAM"
-        ramMeasurement.measurementTypeId = "3"
-        ramMeasurement.value = Int(ramUsage) != nil ? String(Int(ramUsage)! / 1024) : "0"
-        ramMeasurement.process = process
-        ramMeasurement.capturedDate = d
-        
-        // 4. vRAM usage
-        let vRamUsage = Helpers.shell("ps -p \(processID) -xm -o vsz")
-            .split{ $0.isNewline }[1]
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-        vRamMeasurement.alternativeLabel = "vRAM"
-        vRamMeasurement.measurementTypeId = "4"
-        vRamMeasurement.value = Int(vRamUsage) != nil ? String(Int(vRamUsage)! / 1024) : "0"
-        vRamMeasurement.process = process
-        vRamMeasurement.capturedDate = d
-        
-        // 5. CPU usage
-        let cpuUsage = Helpers.shell("ps -p \(processID) -xm -o %cpu")
-            .split{ $0.isNewline }[1]
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-        cpuMeasurement.alternativeLabel = "CPU"
-        cpuMeasurement.measurementTypeId = "5"
-        cpuMeasurement.value = String(cpuUsage)
-        cpuMeasurement.process = process
-        cpuMeasurement.capturedDate = d
-        
-        measurements.insert(batteryPercentageMeasurement)
-        measurements.insert(batteryStatusMeasurement)
-        measurements.insert(ramMeasurement)
-        measurements.insert(vRamMeasurement)
-        measurements.insert(cpuMeasurement)
-        
-        return measurements
+        let finder = InternalFinder()
+        if let internalBattery = finder.getInternalBattery() {
+            let usesAcPower = internalBattery.acPowered
+            
+            let batteryPercentageMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
+            let batteryStatusMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
+            let ramMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
+            let vRamMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
+            let cpuMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
+            
+            let d = NSDate()
+            // 1. battery percentage
+            let estimatedChargeRemaining = usesAcPower! ? "-1" : String(internalBattery.charge!)
+            batteryPercentageMeasurement.alternativeLabel = "EstimatedChargeRemaining"
+            batteryPercentageMeasurement.measurementTypeId = "1"
+            batteryPercentageMeasurement.value = estimatedChargeRemaining
+            batteryPercentageMeasurement.process = process
+            batteryPercentageMeasurement.capturedDate = NSDate()
+            
+            // 2. battery status (charging or not)
+            batteryStatusMeasurement.alternativeLabel = "BatteryStatus"
+            batteryStatusMeasurement.measurementTypeId = "2"
+            batteryStatusMeasurement.value = usesAcPower! ? "2" : "1"
+            batteryStatusMeasurement.process = process
+            batteryStatusMeasurement.capturedDate = d
+            
+            // 3. ram usage
+            let ramUsage = Helpers.shell("ps -p \(processID) -o rss")
+                .split{ $0.isNewline }[1]
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            ramMeasurement.alternativeLabel = "RAM"
+            ramMeasurement.measurementTypeId = "3"
+            ramMeasurement.value = Int(ramUsage) != nil ? String(Int(ramUsage)! / 1024) : "0"
+            ramMeasurement.process = process
+            ramMeasurement.capturedDate = d
+            
+            // 4. vRAM usage
+            let vRamUsage = Helpers.shell("ps -p \(processID) -xm -o vsz")
+                .split{ $0.isNewline }[1]
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            vRamMeasurement.alternativeLabel = "vRAM"
+            vRamMeasurement.measurementTypeId = "4"
+            vRamMeasurement.value = Int(vRamUsage) != nil ? String(Int(vRamUsage)! / 1024) : "0"
+            vRamMeasurement.process = process
+            vRamMeasurement.capturedDate = d
+            
+            // 5. CPU usage
+            let cpuUsage = Helpers.shell("ps -p \(processID) -xm -o %cpu")
+                .split{ $0.isNewline }[1]
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            cpuMeasurement.alternativeLabel = "CPU"
+            cpuMeasurement.measurementTypeId = "5"
+            cpuMeasurement.value = String(cpuUsage)
+            cpuMeasurement.process = process
+            cpuMeasurement.capturedDate = d
+            
+            measurements.insert(batteryPercentageMeasurement)
+            measurements.insert(batteryStatusMeasurement)
+            measurements.insert(ramMeasurement)
+            measurements.insert(vRamMeasurement)
+            measurements.insert(cpuMeasurement)
+            
+            return measurements
+        }
+        return Set()
     }
 }

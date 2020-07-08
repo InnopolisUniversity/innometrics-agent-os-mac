@@ -45,7 +45,7 @@ class CollectorController: NSObject {
     private var processTransferTimer = CustomTimer(interval: 20)
     private var metricsTransferTimer = CustomTimer(interval: 20)
     private var idleTimer = CustomTimer(interval: 30, repeats: false)
-    private let submissionFrequency = 5
+    private let submissionFrequency = 1
     private var runningNumberOfMeasurements = 0
     
     func setUpGlobalEvents() {
@@ -71,7 +71,9 @@ class CollectorController: NSObject {
         processTransferTimer.startTimer {
             self.runningNumberOfMeasurements = (self.runningNumberOfMeasurements + 1) % 5
             if self.runningNumberOfMeasurements % self.submissionFrequency == 0 {
-                self.recordProcesses { }
+                self.recordProcesses {
+                    self.transferProcessesAndMeasurements()
+                }
             }
         }
         
@@ -158,18 +160,41 @@ class CollectorController: NSObject {
         ProcessCRUD.getAllProcesses(context: self.context, session: self.currentProcessSession, callback: { (processes) -> Void in cb() })
     }
     
+    func checkLogin() {
+        let defaults = UserDefaults.standard
+        if let userId = defaults.string(forKey: AuthorizationUtils.userIdAlias) {
+            if let userPw = defaults.string(forKey: AuthorizationUtils.userPw) {
+                AuthorizationUtils.authorization(username: userId, password: userPw) { (token) in
+                    if (token == nil) {
+                        DispatchQueue.main.async {
+                            Helpers.dialogOK(question: "Error", text: "You need to relogin to the system.")
+                            AuthorizationUtils.saveIsAuthorized(isAuthorized: false)
+                        }
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    Helpers.dialogOK(question: "Error", text: "You need to relogin to the system.")
+                    AuthorizationUtils.saveIsAuthorized(isAuthorized: false)
+                }
+            }
+        } else {
+            DispatchQueue.main.async {
+                Helpers.dialogOK(question: "Error", text: "You need to relogin to the system.")
+                AuthorizationUtils.saveIsAuthorized(isAuthorized: false)
+            }
+        }
+    }
+    
     // Transfer
     func transferProcessesAndMeasurements() {
         let processController: ProcessController = ProcessController()
         processController.fetchNewProcesses(context: self.context, callback: {
-            processController.sendProcesses() { (response) in
+            processController.sendProcesses() { [self] (response) in
                 if (response == 1) {
                     processController.clearDB()
                 } else if (response == 2) {
-                    DispatchQueue.main.async {
-                        Helpers.dialogOK(question: "Error", text: "You need to relogin to the system.")
-                        AuthorizationUtils.saveIsAuthorized(isAuthorized: false)
-                    }
+                    self.checkLogin()
                 } else {
                     DispatchQueue.main.async {
                         Helpers.dialogOK(question: "Error", text: "Something went wrong during sending the data.")
@@ -186,10 +211,7 @@ class CollectorController: NSObject {
                 if (response == 1) {
                     metricsController.clearDB()
                 } else if (response == 2) {
-                    DispatchQueue.main.async {
-                        Helpers.dialogOK(question: "Error", text: "You need to relogin to the system.")
-                        AuthorizationUtils.saveIsAuthorized(isAuthorized: false)
-                    }
+                    self.checkLogin()
                 } else {
                     DispatchQueue.main.async {
                         Helpers.dialogOK(question: "Error", text: "Something went wrong during sending the data.")
@@ -208,24 +230,26 @@ class CollectorController: NSObject {
                 currentWorkingSessionView: currentWorkingSessionView, collectorView: collectorView
             )
             
-            let appDelegate = NSApplication.shared.delegate as! AppDelegate
-            self.context = appDelegate.managedObjectContext
-            
-            // set up bg thread for collecting data
-            self.privateContext = {
-                let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-                moc.persistentStoreCoordinator = appDelegate.persistentStoreCoordinator
-                return moc
-            }()
-            
-            // set up bg thread for collecting processes and measurements
-            self.processPrivateContext = {
-                let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-                moc.persistentStoreCoordinator = appDelegate.persistentStoreCoordinator
-                return moc
-            }()
-            
-            self.setUpGlobalEvents()
+            DispatchQueue.main.async {
+                let appDelegate = NSApplication.shared.delegate as! AppDelegate
+                self.context = appDelegate.managedObjectContext
+                
+                // set up bg thread for collecting data
+                self.privateContext = {
+                    let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                    moc.persistentStoreCoordinator = appDelegate.persistentStoreCoordinator
+                    return moc
+                }()
+                
+                // set up bg thread for collecting processes and measurements
+                self.processPrivateContext = {
+                    let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                    moc.persistentStoreCoordinator = appDelegate.persistentStoreCoordinator
+                    return moc
+                }()
+                
+                self.setUpGlobalEvents()
+            }
         } else {
             CollectorHelper.updateUIUnuthorized(
                 logInMenuItem: logInMenuItem, currentWorkingSessionMenuItem: currentWorkingSessionMenuItem, metricsCollectorMenuItem: metricsCollectorMenuItem,

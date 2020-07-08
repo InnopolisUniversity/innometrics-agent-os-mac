@@ -18,25 +18,27 @@ class CurrentWorkingSessionController: NSView {
     @IBOutlet weak var macAddress: NSTextField!
     
     func updateSession(session: Session) {
-        if (session.operatingSystem != nil) {
-            operatingSystem.stringValue = session.operatingSystem!
-            operatingSystem.sizeToFit()
-        }
-        if (session.userName != nil) {
-            userName.stringValue = session.userName!
-            userName.sizeToFit()
-        }
-        if (session.userLogin != nil) {
-            userLogin.stringValue = session.userLogin!
-            userLogin.sizeToFit()
-        }
-        if (session.ipAddress != nil) {
-            ipAddress.stringValue = session.ipAddress!
-            ipAddress.sizeToFit()
-        }
-        if (session.macAddress != nil) {
-            macAddress.stringValue = session.macAddress!
-            macAddress.sizeToFit()
+        DispatchQueue.main.async {
+            if (session.operatingSystem != nil) {
+                self.operatingSystem.stringValue = session.operatingSystem!
+                self.operatingSystem.sizeToFit()
+            }
+            if (session.userName != nil) {
+                self.userName.stringValue = session.userName!
+                self.userName.sizeToFit()
+            }
+            if (session.userLogin != nil) {
+                self.userLogin.stringValue = session.userLogin!
+                self.userLogin.sizeToFit()
+            }
+            if (session.ipAddress != nil) {
+                self.ipAddress.stringValue = session.ipAddress!
+                self.ipAddress.sizeToFit()
+            }
+            if (session.macAddress != nil) {
+                self.macAddress.stringValue = session.macAddress!
+                self.macAddress.sizeToFit()
+            }
         }
     }
 }

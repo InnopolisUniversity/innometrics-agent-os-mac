@@ -49,8 +49,8 @@ public class ProcessesTransfer {
         
         let processesArray: [String: [Any]] = ["processesReport": processesArrayJSON]
         do {
-            let jsonData = try! JSONSerialization.data(withJSONObject: processesArray, options: .prettyPrinted)
             
+            let jsonData = try! JSONSerialization.data(withJSONObject: processesArray, options: .prettyPrinted)
             /*
              let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
              print("jsonData: \(String(describing: jsonString))")

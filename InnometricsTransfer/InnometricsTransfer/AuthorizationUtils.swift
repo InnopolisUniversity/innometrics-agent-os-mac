@@ -10,10 +10,11 @@
 import Foundation
 
 public class AuthorizationUtils {
-    private static var isAuthorizedAlias: String = "isAuthorized"
-    private static var authorizationTokenAlias: String = "authorizationToken"
-    private static var userIdAlias: String = "userId"
-    private static var offlineModeIsEnabled: Bool = false
+    public static var isAuthorizedAlias: String = "isAuthorized"
+    public static var authorizationTokenAlias: String = "authorizationToken"
+    public static var userIdAlias: String = "userId"
+    public static var userPw: String = "userPw"
+    public static var offlineModeIsEnabled: Bool = false
 
     public static func authorization(username: String, password: String, completion: @escaping (_ token: String?) -> Void) {
         let authorizationJson: [String: String] = ["email": username, "password": password]
@@ -42,6 +43,9 @@ public class AuthorizationUtils {
                     if data != nil {
                         if let responseJson = try? JSONSerialization.jsonObject(with: data!) as? [String: Any] {
                             if let token = responseJson["token"] as? String {
+                                // save credentials for future use
+                                saveUsername(username: username)
+                                savePassword(pw: password)
                                 completion(token)
                                 return
                             }
@@ -75,6 +79,11 @@ public class AuthorizationUtils {
     public static func saveUsername(username: String?) {
         let defaults = UserDefaults.standard
         defaults.set(username, forKey: userIdAlias)
+    }
+    
+    public static func savePassword(pw: String?) {
+        let defaults = UserDefaults.standard
+        defaults.set(pw, forKey: userPw)
     }
     
     public static func getAuthorizationToken() -> String? {
