@@ -196,9 +196,7 @@ class CollectorController: NSObject {
                 } else if (response == 2) {
                     self.checkLogin()
                 } else {
-                    DispatchQueue.main.async {
-                        Helpers.dialogOK(question: "Error", text: "Something went wrong during sending the data.")
-                    }
+                    // do nothing, internet down
                 }
             }
         })
@@ -213,9 +211,7 @@ class CollectorController: NSObject {
                 } else if (response == 2) {
                     self.checkLogin()
                 } else {
-                    DispatchQueue.main.async {
-                        Helpers.dialogOK(question: "Error", text: "Something went wrong during sending the data.")
-                    }
+                    // do nothing, internet down
                 }
             }
         })
@@ -280,6 +276,10 @@ class CollectorController: NSObject {
         let updater = SUUpdater.shared()
         updater?.feedURL = URL(string: "")
         updater?.checkForUpdates(self)
+    }
+    
+    @IBAction func quitClicked(_sender: Any) {
+        NSApplication.shared.terminate(self)
     }
     
     deinit {
