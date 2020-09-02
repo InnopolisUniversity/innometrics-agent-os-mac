@@ -42,8 +42,8 @@ class CollectorController: NSObject {
     private var currentIdleMetric: IdleMetric?
     
     // Timers for transfer and idle
-    private var processTransferTimer = CustomTimer(interval: 20)
-    private var metricsTransferTimer = CustomTimer(interval: 20)
+    private var processTransferTimer = CustomTimer(interval: 5*60)
+    private var metricsTransferTimer = CustomTimer(interval: 5*60)
     private var idleTimer = CustomTimer(interval: 30, repeats: false)
     private let submissionFrequency = 1
     private var runningNumberOfMeasurements = 0
@@ -111,10 +111,13 @@ class CollectorController: NSObject {
         self.updateSession()
         
         MetricCRUD.createMetric(app: frontmostApp!, pid: foregroundPID, context: self.context, session: self.currentSession, callback: { (newMetric) -> Void in
+            
                 self.setEndTimeOfPrevMetric()
                 if newMetric != nil {
                     self.prevMetric = self.currentMetric
                     self.currentMetric = newMetric
+                    
+                    print("new metric => \(newMetric?.appName)")
                     
                     // start timer to determine when it becomes idle
                     self.idleTimer.startTimer {
@@ -142,6 +145,7 @@ class CollectorController: NSObject {
         MetricCRUD.markAsIdle(app: self.currentMetric!, context: self.context, callback: { (newMetric) -> Void in
             self.setEndTimeOfPrevMetric()
             if newMetric != nil {
+                
                 self.prevMetric = self.currentMetric
                 self.currentMetric = newMetric
             }
