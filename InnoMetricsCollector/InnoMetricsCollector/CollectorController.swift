@@ -106,6 +106,8 @@ class CollectorController: NSObject {
         
         let foregroundPID = frontmostApp!.processIdentifier
         
+        if frontmostApp?.bundleIdentifier == self.currentMetric?.bundleIdentifier { return }
+        
         activeApplicationView.update(application: frontmostApp!)
         
         self.updateSession()
@@ -116,8 +118,6 @@ class CollectorController: NSObject {
                 if newMetric != nil {
                     self.prevMetric = self.currentMetric
                     self.currentMetric = newMetric
-                    
-                    print("new metric => \(newMetric?.appName)")
                     
                     // start timer to determine when it becomes idle
                     self.idleTimer.startTimer {
