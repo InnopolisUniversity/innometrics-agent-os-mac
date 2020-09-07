@@ -16,6 +16,9 @@ class CurrentWorkingSessionController: NSView {
     @IBOutlet weak var userLogin: NSTextField!
     @IBOutlet weak var ipAddress: NSTextField!
     @IBOutlet weak var macAddress: NSTextField!
+    @IBOutlet weak var cpuModel: NSTextField!
+    @IBOutlet weak var systemType: NSTextField!
+    @IBOutlet weak var noOfThreads: NSTextField!
     
     func updateSession(session: Session) {
         DispatchQueue.main.async {
@@ -39,6 +42,14 @@ class CurrentWorkingSessionController: NSView {
                 self.macAddress.stringValue = session.macAddress!
                 self.macAddress.sizeToFit()
             }
+
+            self.cpuModel.stringValue = Helpers.shell("sysctl -n machdep.cpu.brand_string").split{ $0.isNewline }[0]
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            self.cpuModel.sizeToFit()
+            
+            self.systemType.stringValue = Helpers.shell("sysctl -n hw.model | grep \"Book\"").split{ $0.isNewline }[0].trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            self.noOfThreads.stringValue = Helpers.shell("sysctl -n hw.ncpu").split{ $0.isNewline }[0].trimmingCharacters(in: .whitespacesAndNewlines)
         }
     }
 }

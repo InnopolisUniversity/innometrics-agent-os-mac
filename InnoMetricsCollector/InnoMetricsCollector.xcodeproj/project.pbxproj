@@ -201,8 +201,8 @@
 				25D57A8B1E1D6F7700B2265D /* AppDelegate.swift */,
 				25D57A901E1D6F7700B2265D /* Assets.xcassets */,
 				25D57A921E1D6F7700B2265D /* MainMenu.xib */,
-				25D57A951E1D6F7700B2265D /* Info.plist */,
 				2C29E7D523F56E2F003D3612 /* InnoMetricsCollector.entitlements */,
+				25D57A951E1D6F7700B2265D /* Info.plist */,
 				25C5B4F81E26A593007FF799 /* InnoMetricsCollector_Bridging_Header.h */,
 			);
 			path = InnoMetricsCollector;
