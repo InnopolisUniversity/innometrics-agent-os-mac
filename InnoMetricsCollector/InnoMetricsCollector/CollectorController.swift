@@ -42,8 +42,8 @@ class CollectorController: NSObject {
     private var currentIdleMetric: IdleMetric?
     
     // Timers for transfer and idle
-    private var processTransferTimer = CustomTimer(interval: 5*60)
-    private var metricsTransferTimer = CustomTimer(interval: 5*60)
+    private var processTransferTimer = CustomTimer(interval: 60)
+    private var metricsTransferTimer = CustomTimer(interval: 60)
     private var idleTimer = CustomTimer(interval: 30, repeats: false)
     private let submissionFrequency = 1
     private var runningNumberOfMeasurements = 0
