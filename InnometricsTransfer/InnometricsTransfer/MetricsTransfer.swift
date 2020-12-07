@@ -47,8 +47,8 @@ public class MetricsTransfer {
             let jsonData = try! JSONSerialization.data(withJSONObject: activities, options: .prettyPrinted)
             
             /*
-             let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
-             print("jsonData: \(String(describing: jsonString))")
+            let jsonString = NSString(data: jsonData, encoding: String.Encoding.ascii.rawValue)
+            print("jsonData: \(String(describing: jsonString))")
             */
  
             // create post request
