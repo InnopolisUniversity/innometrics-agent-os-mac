@@ -15,19 +15,30 @@ public class MetricsTransfer {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         
-        let activity: [String: Any] = [
+        let systemVersion = ProcessInfo.processInfo.operatingSystemVersion
+        let systemStr = "macOS \(systemVersion.majorVersion).\(systemVersion.minorVersion).\(systemVersion.patchVersion)"
+        
+        var activity: [String: Any] = [
             "idle_activity": metric.isIdle == 1 ? true : false,
             "start_time": dateFormatter.string(from: metric.timestampStart! as Date),
             "end_time": (metric.timestampEnd != nil) ? dateFormatter.string(from: metric.timestampEnd! as Date) : dateFormatter.string(from: Date()),
-            "executable_name": (metric.appName != nil) ? metric.appName : (metric.bundleURL != nil ? metric.bundleURL!.split(separator: "/").last! : ""),
+            "executable_name": (metric.appName != nil) ? metric.appName! : (metric.bundleURL != nil ? metric.bundleURL!.split(separator: "/").last! : ""),
             "browser_url": metric.tabUrl ?? "",
             "browser_title": metric.tabName ?? "",
-            "ip_address": (metric.session != nil) ? metric.session?.ipAddress : "",
-            "mac_address": (metric.session != nil) ? metric.session?.macAddress : "",
             "activityType": "os",
             "activityID": 0,
-            "userID": username
+            "userID": username,
+            "osversion": systemStr
         ]
+        if let ipAdr = metric.session?.ipAddress {
+            activity["ip_address"] = ipAdr
+        }
+        if let macAdr = metric.session?.macAddress {
+            activity["mac_address"] = macAdr.uppercased()
+        }
+        if let pid = metric.pid {
+            activity["pid"] = pid
+        }
         
         return activity
     }
@@ -36,12 +47,16 @@ public class MetricsTransfer {
         
         var activitiesArrayJson: [[String: Any]] = []
         
-        for metric in metrics {
+        for metric in metrics.prefix(1000) {
             if (metric.timestampEnd != nil) {
                 activitiesArrayJson.append(extractDataFromMetric(metric: metric, username: username))
             }
         }
         
+        print("Sending activities....", activitiesArrayJson.count)
+        print("Example:", activitiesArrayJson.first)
+        
+ 
         let activities: [String: [Any]] = ["activities": activitiesArrayJson]
         do {
             let jsonData = try! JSONSerialization.data(withJSONObject: activities, options: .prettyPrinted)

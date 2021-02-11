@@ -108,6 +108,7 @@
 		2C581C15240706E8009997AF /* InnoMetricsCollector 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "InnoMetricsCollector 4.xcdatamodel"; sourceTree = "<group>"; };
 		2C581C17240707AC009997AF /* EnergyMeasurement+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnergyMeasurement+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2C581C192407080A009997AF /* EnergyMeasurement+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnergyMeasurement+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		2C93669625D52C83005FE8E8 /* InnoMetricsCollector 7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "InnoMetricsCollector 7.xcdatamodel"; sourceTree = "<group>"; };
 		2CCEBC2123B4E360007A5903 /* InnoMetricsCollector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InnoMetricsCollector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CE6883823F2EA6500DD9946 /* InnoMetricsCollector 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "InnoMetricsCollector 2.xcdatamodel"; sourceTree = "<group>"; };
 		2CE6883923F2EA9600DD9946 /* InnoMetricsCollector 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "InnoMetricsCollector 3.xcdatamodel"; sourceTree = "<group>"; };
@@ -302,7 +303,6 @@
 				TargetAttributes = {
 					25D57A871E1D6F7600B2265D = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = AR494XTABA;
 						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 					};
@@ -567,7 +567,7 @@
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = InnoMetricsCollector/InnoMetricsCollector.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -597,7 +597,7 @@
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = InnoMetricsCollector/InnoMetricsCollector.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -647,6 +647,7 @@
 		9FACE304205C4B8A005BBB31 /* InnoMetricsCollector.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2C93669625D52C83005FE8E8 /* InnoMetricsCollector 7.xcdatamodel */,
 				2CEFF230242A07B200F90013 /* InnoMetricsCollector 6.xcdatamodel */,
 				2C1B0FD1241B9DA60092F0AD /* InnoMetricsCollector 5.xcdatamodel */,
 				2C581C15240706E8009997AF /* InnoMetricsCollector 4.xcdatamodel */,
@@ -654,7 +655,7 @@
 				2CE6883823F2EA6500DD9946 /* InnoMetricsCollector 2.xcdatamodel */,
 				9FACE305205C4B8A005BBB31 /* InnoMetricsCollector1.xcdatamodel */,
 			);
-			currentVersion = 2CEFF230242A07B200F90013 /* InnoMetricsCollector 6.xcdatamodel */;
+			currentVersion = 2C93669625D52C83005FE8E8 /* InnoMetricsCollector 7.xcdatamodel */;
 			path = InnoMetricsCollector.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

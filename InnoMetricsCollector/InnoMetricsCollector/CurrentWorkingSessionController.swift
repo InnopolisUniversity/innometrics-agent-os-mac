@@ -39,7 +39,7 @@ class CurrentWorkingSessionController: NSView {
                 self.ipAddress.sizeToFit()
             }
             if (session.macAddress != nil) {
-                self.macAddress.stringValue = session.macAddress!
+                self.macAddress.stringValue = session.macAddress!.uppercased()
                 self.macAddress.sizeToFit()
             }
 

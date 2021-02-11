@@ -27,6 +27,7 @@ class MetricCRUD {
         metric.timestampStart = foregroundWindowLaunchDate
         metric.session = session
         metric.isIdle = isIdle
+        metric.pid = String(app.processIdentifier)
         
         if (foregroundWindowBundleId != nil && CollectorHelper.browserIds.contains(foregroundWindowBundleId!)) {
             let foregroundWindowTabUrl = BrowserInfoUtils.activeTabURL(bundleIdentifier: foregroundWindowBundleId!)

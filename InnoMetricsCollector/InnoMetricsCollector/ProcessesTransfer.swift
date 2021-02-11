@@ -28,13 +28,20 @@ public class ProcessesTransfer {
             }
         }
         
-        let p: [String: Any] = [
+        let systemVersion = ProcessInfo.processInfo.operatingSystemVersion
+        let systemStr = "macOS \(systemVersion.majorVersion).\(systemVersion.minorVersion).\(systemVersion.patchVersion)"
+        
+        var p: [String: Any] = [
             "ip_address": (process.session != nil) ? process.session?.ipAddress ?? "127.0.0.1" : "",
-            "mac_address": (process.session != nil) ? process.session?.macAddress ?? "127.0.0.1" : "",
             "processName": process.process_name!,
             "userID": username,
-            "measurementReportList": measurementReportList
+            "measurementReportList": measurementReportList,
+            "pid": (process.pid != nil) ? process.pid! : "",
+            "osversion": systemStr
         ]
+        if let macAdr = process.session?.macAddress {
+            p["mac_address"] = process.session?.macAddress?.uppercased()
+        }
         
         return p
     }
@@ -43,9 +50,13 @@ public class ProcessesTransfer {
         
         var processesArrayJSON: [[String: Any]] = []
         
-        for process in processes {
+        
+        for process in processes.prefix(1000) {
             processesArrayJSON.append(extractDataFromProcess(process: process, username: username))
         }
+        
+        print("Sending processes....", processesArrayJSON.count)
+        print("Example:", processesArrayJSON.first)
         
         let processesArray: [String: [Any]] = ["processesReport": processesArrayJSON]
         do {
