@@ -55,9 +55,11 @@ public class ProcessesTransfer {
             processesArrayJSON.append(extractDataFromProcess(process: process, username: username))
         }
         
+        /*
         print("Sending processes....", processesArrayJSON.count)
         print("Example:", processesArrayJSON.first)
-        
+        */
+ 
         let processesArray: [String: [Any]] = ["processesReport": processesArrayJSON]
         do {
             
