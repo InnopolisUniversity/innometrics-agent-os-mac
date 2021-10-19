@@ -105,6 +105,20 @@ class ProcessCRUD {
             cpuMeasurement.process = process
             cpuMeasurement.capturedDate = d
             
+            // 6. battery current capacity
+            batteryStatusMeasurement.alternativeLabel = "BatteryCurrentCapacity"
+            batteryStatusMeasurement.measurementTypeId = "6"
+            batteryStatusMeasurement.value = String(internalBattery.currentCapacity)
+            batteryStatusMeasurement.process = process
+            batteryStatusMeasurement.capturedDate = d
+
+            // 7. battery design capacity
+            batteryStatusMeasurement.alternativeLabel = "BatteryDesignCapacity"
+            batteryStatusMeasurement.measurementTypeId = "7"
+            batteryStatusMeasurement.value = String(internalBattery.designCapacity)
+            batteryStatusMeasurement.process = process
+            batteryStatusMeasurement.capturedDate = d
+
             measurements.insert(batteryPercentageMeasurement)
             measurements.insert(batteryStatusMeasurement)
             measurements.insert(ramMeasurement)
