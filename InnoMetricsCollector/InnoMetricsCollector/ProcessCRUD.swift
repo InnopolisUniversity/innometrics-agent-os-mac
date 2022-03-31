@@ -59,6 +59,9 @@ class ProcessCRUD {
             let vRamMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
             let cpuMeasurement = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
             
+            let batteryCurrentCapacity = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
+            let batteryDesignCapacity = NSEntityDescription.insertNewObject(forEntityName: "EnergyMeasurement", into: context) as! EnergyMeasurement
+            
             let d = NSDate()
             // 1. battery percentage
             let estimatedChargeRemaining = usesAcPower! ? "-1" : String(internalBattery.charge!)
@@ -106,24 +109,26 @@ class ProcessCRUD {
             cpuMeasurement.capturedDate = d
             
             // 6. battery current capacity
-            batteryStatusMeasurement.alternativeLabel = "BatteryCurrentCapacity"
-            batteryStatusMeasurement.measurementTypeId = "6"
-            batteryStatusMeasurement.value = String(internalBattery.currentCapacity)
-            batteryStatusMeasurement.process = process
-            batteryStatusMeasurement.capturedDate = d
+            batteryCurrentCapacity.alternativeLabel = "BatteryCurrentCapacity"
+            batteryCurrentCapacity.measurementTypeId = "11"
+            batteryCurrentCapacity.value = "\(internalBattery.currentCapacity ?? 0)"
+            batteryCurrentCapacity.process = process
+            batteryCurrentCapacity.capturedDate = d
 
             // 7. battery design capacity
-            batteryStatusMeasurement.alternativeLabel = "BatteryDesignCapacity"
-            batteryStatusMeasurement.measurementTypeId = "7"
-            batteryStatusMeasurement.value = String(internalBattery.designCapacity)
-            batteryStatusMeasurement.process = process
-            batteryStatusMeasurement.capturedDate = d
+            batteryDesignCapacity.alternativeLabel = "BatteryDesignCapacity"
+            batteryDesignCapacity.measurementTypeId = "13"
+            batteryDesignCapacity.value = "\(internalBattery.designCapacity ?? 0)"
+            batteryDesignCapacity.process = process
+            batteryDesignCapacity.capturedDate = d
 
             measurements.insert(batteryPercentageMeasurement)
             measurements.insert(batteryStatusMeasurement)
             measurements.insert(ramMeasurement)
             measurements.insert(vRamMeasurement)
             measurements.insert(cpuMeasurement)
+            measurements.insert(batteryCurrentCapacity)
+            measurements.insert(batteryDesignCapacity)
             
             return measurements
         }
